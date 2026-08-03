@@ -30,6 +30,8 @@
 	<string>Камера нужна, чтобы сфотографировать твой лук для проверки (CHECK-01)</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Доступ к галерее нужен, чтобы выбрать фото лука для проверки (CHECK-01)</string>
+	<key>GIDClientID</key>
+	<string>296414004775-6s3s19gg135jv47fjoce4166ki07ph4t.apps.googleusercontent.com</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -40,6 +42,16 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>trendylook</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>google-signin</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.296414004775-6s3s19gg135jv47fjoce4166ki07ph4t</string>
 			</array>
 		</dict>
 	</array>

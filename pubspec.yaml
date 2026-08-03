@@ -53,7 +53,7 @@ dependencies:
   app_links: ^7.2.1
   intl: ^0.20.3
   posthog_flutter: ^5.33.3
-  sentry_flutter: ^8.14.2
+  sentry_flutter: ^9.26.0
   google_fonts: ^8.2.0
   crypto: ^3.0.7
   uuid: ^4.6.0
