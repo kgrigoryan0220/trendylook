@@ -219,7 +219,7 @@ Deno.serve(async (req: Request) => {
   const callOpenAI = () =>
     openai.chat.completions.create(
       {
-        model: "gpt-4o",
+        model: "gpt-4.1-mini",
         response_format: { type: "json_schema", json_schema: LOOK_ANALYSIS_SCHEMA },
         messages: [
           { role: "system", content: systemPrompt(locale) },
