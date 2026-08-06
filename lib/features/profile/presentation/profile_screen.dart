@@ -135,43 +135,49 @@ Future<void> _showLanguagePicker(BuildContext context, WidgetRef ref) async {
   await showModalBottomSheet<void>(
     context: context,
     backgroundColor: AppColors.surface,
+    isScrollControlled: true,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
     builder: (sheetContext) {
       return SafeArea(
-        child: RadioGroup<Locale?>(
-          groupValue: current,
-          onChanged: (value) {
-            ref.read(localeControllerProvider.notifier).setLocale(value);
-            Navigator.of(sheetContext).pop();
-          },
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    l10n.languagePickerTitle,
-                    style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(sheetContext).size.height * 0.8,
+          ),
+          child: RadioGroup<Locale?>(
+            groupValue: current,
+            onChanged: (value) {
+              ref.read(localeControllerProvider.notifier).setLocale(value);
+              Navigator.of(sheetContext).pop();
+            },
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      l10n.languagePickerTitle,
+                      style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                    ),
                   ),
                 ),
-              ),
-              RadioListTile<Locale?>(
-                value: null,
-                title: Text(l10n.languageSystemDefault),
-                activeColor: AppColors.pink,
-              ),
-              for (final locale in AppLocalizations.supportedLocales)
                 RadioListTile<Locale?>(
-                  value: locale,
-                  title: Text(_localeEndonyms[locale.languageCode] ?? locale.languageCode),
+                  value: null,
+                  title: Text(l10n.languageSystemDefault),
                   activeColor: AppColors.pink,
                 ),
-              const SizedBox(height: 8),
-            ],
+                for (final locale in AppLocalizations.supportedLocales)
+                  RadioListTile<Locale?>(
+                    value: locale,
+                    title: Text(_localeEndonyms[locale.languageCode] ?? locale.languageCode),
+                    activeColor: AppColors.pink,
+                  ),
+                const SizedBox(height: 8),
+              ],
+            ),
           ),
         ),
       );
