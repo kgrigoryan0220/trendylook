@@ -92,25 +92,6 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
         child: SafeArea(
           child: Stack(
             children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: InkWell(
-                    customBorder: const CircleBorder(),
-                    onTap: () => context.canPop() ? context.pop() : context.go('/home'),
-                    child: Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white.withValues(alpha: 0.08),
-                      ),
-                      child: const Icon(Icons.close, size: 14, color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
               if (_success)
                 _SuccessView(onDone: () => context.go('/home'))
               else
@@ -185,6 +166,27 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                     ),
                   ),
                 ),
+              // Крестик — последним в Stack, чтобы быть поверх скролл-контента
+              // и реально ловить тапы (иначе SingleChildScrollView перехватывает их).
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: InkWell(
+                    customBorder: const CircleBorder(),
+                    onTap: () => context.canPop() ? context.pop() : context.go('/home'),
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white.withValues(alpha: 0.08),
+                      ),
+                      child: const Icon(Icons.close, size: 14, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -199,7 +201,6 @@ class _BenefitsList extends StatelessWidget {
   static const _items = [
     'Безлимитные проверки образов',
     'Приоритетный AI-анализ',
-    'Экспорт без водяного знака',
     'Ранний доступ к трендам',
   ];
 

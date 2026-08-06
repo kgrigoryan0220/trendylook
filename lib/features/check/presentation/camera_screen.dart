@@ -103,7 +103,7 @@ class _CameraScreenState extends ConsumerState<CameraScreen> {
         fit: StackFit.expand,
         children: [
           if (controller != null && controller.value.isInitialized)
-            CameraPreview(controller)
+            _FullScreenCameraPreview(controller: controller)
           else
             const Center(child: CircularProgressIndicator(color: AppColors.pink)),
           SafeArea(
@@ -216,6 +216,37 @@ class _CameraPermissionError extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Масштабирует превью камеры (с сохранением его нативного aspect ratio) так,
+/// чтобы заполнить весь экран без искажений — вместо растягивания
+/// CameraPreview на весь Stack, которое сжимает картинку по бокам.
+class _FullScreenCameraPreview extends StatelessWidget {
+  const _FullScreenCameraPreview({required this.controller});
+
+  final CameraController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final size = constraints.biggest;
+        var scale = size.aspectRatio * controller.value.aspectRatio;
+        if (scale < 1) scale = 1 / scale;
+        return ClipRect(
+          child: Transform.scale(
+            scale: scale,
+            child: Center(
+              child: AspectRatio(
+                aspectRatio: controller.value.aspectRatio,
+                child: CameraPreview(controller),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
