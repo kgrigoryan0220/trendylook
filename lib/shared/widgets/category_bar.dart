@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/l10n/category_names.dart';
 import '../../core/theme/app_colors.dart';
 import '../../features/check/data/models/look_analysis.dart';
 
@@ -20,7 +21,7 @@ class CategoryBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              category.displayName,
+              localizedCategoryName(context, category.name),
               style: TextStyle(
                 fontSize: compact ? 9.5 : 13,
                 fontWeight: FontWeight.w600,

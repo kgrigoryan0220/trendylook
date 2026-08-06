@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/gen/app_localizations.dart';
 import '../../check/data/models/check_record.dart';
 
 /// Share-карточка — MVP: 1 шаблон (Bold), формат 9:16 (TECH_SPEC_v1.2.md 4.3,
@@ -88,9 +89,9 @@ class ShareCard extends StatelessWidget {
                     ),
                   ],
                   const SizedBox(height: 8),
-                  const Text(
-                    'Проверь свой лук и отметь друга 👀',
-                    style: TextStyle(fontSize: 10.5, color: Colors.white70),
+                  Text(
+                    AppLocalizations.of(context).shareChallengeHook,
+                    style: const TextStyle(fontSize: 10.5, color: Colors.white70),
                   ),
                   const SizedBox(height: 6),
                   Row(

@@ -64,22 +64,6 @@ class LookCategory {
   final int score;
   final String comment;
 
-  /// Русское название категории (TECH_SPEC_v1.2.md 4.3 / 5.3).
-  String get displayName {
-    switch (name) {
-      case 'color_palette':
-        return 'Цветовая палитра';
-      case 'silhouette':
-        return 'Силуэт и посадка';
-      case 'accessories':
-        return 'Аксессуары';
-      case 'footwear':
-        return 'Обувь';
-      default:
-        return name;
-    }
-  }
-
   Map<String, dynamic> toJson() => {'name': name, 'score': score, 'comment': comment};
 }
 

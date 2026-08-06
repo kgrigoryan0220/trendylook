@@ -1,0 +1,147 @@
+{
+  "@@locale": "en",
+
+  "splashTagline": "AI stylist in your pocket",
+  "@splashTagline": {},
+
+  "onboardingSlide1Title": "Take a photo\nof your look",
+  "onboardingSlide1Subtitle": "One photo — and AI will break down your style",
+  "onboardingSlide2Title": "Discover your trend %",
+  "onboardingSlide2Subtitle": "An honest outfit rating in seconds",
+  "onboardingSlide3Title": "Get AI style advice",
+  "onboardingSlide3Subtitle": "Personalized recommendations for your style",
+  "onboardingNext": "Next",
+  "onboardingStart": "Start",
+  "onboardingSkip": "Skip",
+
+  "authSubtitle": "Sign in to get started",
+  "authTerms": "By continuing, you agree to the Terms and Privacy Policy",
+  "authAppleButton": "Sign in with Apple",
+  "authGoogleButton": "Sign in with Google",
+  "authSignInError": "Couldn't sign in: {error}",
+  "@authSignInError": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+
+  "homeTitle": "Home",
+  "homeRecentChecks": "Recent checks",
+  "homeRecentChecksEmpty": "Your history will appear here",
+  "homeHeroTitle": "Check your look",
+  "homeHeroSubtitle": "Discover your trend % and get AI advice",
+  "ctaCamera": "Take a photo",
+  "ctaGallery": "From gallery",
+  "freeChecksLeft": "Free checks left: {count}",
+  "@freeChecksLeft": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "graceBannerText": "Your subscription is expiring — update your payment method",
+  "graceBannerUpdate": "Update",
+
+  "cameraPermissionTitle": "No camera access",
+  "cameraPermissionMessage": "Allow camera access in Settings to check your looks",
+  "cameraUnavailableMessage": "Camera is not available on this device",
+  "openSettings": "Open Settings",
+  "cancel": "Cancel",
+
+  "retake": "Retake",
+  "confirm": "Confirm",
+
+  "loadingPhrase1": "Analyzing colors…",
+  "loadingPhrase2": "Comparing with 2026 trends…",
+  "loadingPhrase3": "Evaluating silhouette…",
+  "loadingPhrase4": "Calculating final score…",
+
+  "analysisErrorGeneric": "Couldn't analyze the photo. Try again — this check wasn't used.",
+  "rateLimitedMessage": "Too many checks in a row. Wait a bit and try again.",
+  "fileTooLarge": "File is too large (max 10 MB)",
+  "retry": "Retry",
+
+  "recommendationsTitle": "💡 Recommendations",
+  "share": "Share",
+  "checkAgain": "Check again",
+  "back": "Back",
+
+  "historyTitle": "History",
+  "historyLoadError": "Couldn't load history: {error}",
+  "@historyLoadError": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "deleteCheckTitle": "Delete this check?",
+  "delete": "Delete",
+  "historyEmpty": "Your check history will appear here",
+  "historyEmptyCta": "Do your first check",
+  "checkLoadError": "Couldn't load the check: {error}",
+  "@checkLoadError": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+
+  "profileTitle": "Profile",
+  "defaultUserName": "User",
+  "subscriptionStatusLabel": "Subscription status",
+  "proUntil": "Pro until {date}",
+  "@proUntil": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "proStatus": "Pro",
+  "freeStatus": "Free",
+  "graceStatus": "Grace period",
+  "notifications": "Notifications",
+  "comingSoon": "Coming soon",
+  "language": "Language",
+  "support": "Support",
+  "privacyPolicy": "Privacy Policy",
+  "termsOfService": "Terms of Service",
+  "upgradeToPro": "Upgrade to Pro",
+  "logoutConfirmTitle": "Log out of your account?",
+  "logout": "Log out",
+  "languagePickerTitle": "Choose language",
+  "languageSystemDefault": "System default",
+
+  "shareNothingToShare": "Nothing to share",
+  "shareChallengeHook": "Check your look and tag a friend 👀",
+  "shareMessageText": "My look got {score}% trendiness on Trendy Look! Check yours: trendylook://check/{id}",
+  "@shareMessageText": {
+    "placeholders": { "score": { "type": "int" }, "id": { "type": "String" } }
+  },
+
+  "paywallTitle": "Unlock unlimited",
+  "paywallSubtitle": "Unlimited outfit checks every day",
+  "paywallSocialProof": "12,000+ checks today",
+  "paywallContinue": "Continue",
+  "paywallRestore": "Restore purchases",
+  "paywallNotConfigured": "Payments aren't set up yet — add RevenueCat keys",
+  "paywallPurchaseError": "Couldn't complete the purchase: {error}",
+  "@paywallPurchaseError": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "paywallRestoreSuccess": "Purchases restored",
+  "paywallRestoreError": "Couldn't restore purchases: {error}",
+  "@paywallRestoreError": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "paywallOfferError": "Error: {error}",
+  "@paywallOfferError": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "paywallSuccessTitle": "Done! You now have unlimited access 🎉",
+  "paywallSuccessCta": "Great",
+  "paywallPlanWeekly": "Weekly",
+  "paywallPlanHalfyear": "Half-year",
+  "paywallPeriodWeek": "7 days",
+  "paywallPeriodHalfyear": "6 months",
+  "paywallBenefit1": "Unlimited outfit checks",
+  "paywallBenefit2": "Priority AI analysis",
+  "paywallBenefit3": "Early access to trends",
+  "paywallBestValue": "BEST VALUE",
+
+  "offlineBanner": "No connection",
+
+  "bottomTabHome": "Home",
+  "bottomTabHistory": "History",
+  "bottomTabProfile": "Profile",
+
+  "categoryColorPalette": "Color palette",
+  "categorySilhouette": "Silhouette & fit",
+  "categoryAccessories": "Accessories",
+  "categoryFootwear": "Footwear"
+}

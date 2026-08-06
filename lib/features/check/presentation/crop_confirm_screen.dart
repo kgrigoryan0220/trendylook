@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../l10n/gen/app_localizations.dart';
 import '../../../shared/widgets/primary_button.dart';
 import '../../../shared/widgets/secondary_button.dart';
 import 'check_flow_controller.dart';
@@ -12,6 +13,7 @@ class CropConfirmScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final photo = ref.watch(checkFlowControllerProvider).photo;
 
     return Scaffold(
@@ -38,14 +40,14 @@ class CropConfirmScreen extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: SecondaryButton(
-                      label: 'Пересъёмка',
+                      label: l10n.retake,
                       onPressed: () => context.pop(),
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: PrimaryButton(
-                      label: 'Подтвердить',
+                      label: l10n.confirm,
                       onPressed: photo == null
                           ? null
                           : () {

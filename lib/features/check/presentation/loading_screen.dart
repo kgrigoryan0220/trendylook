@@ -6,15 +6,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/gen/app_localizations.dart';
 import '../data/check_exceptions.dart';
 import 'check_flow_controller.dart';
 
-const _phrases = [
-  'Анализируем цвета…',
-  'Сверяем с трендами 2026…',
-  'Оцениваем силуэт…',
-  'Считаем итоговый score…',
-];
+const _phraseCount = 4;
+
+List<String> _phrases(AppLocalizations l10n) => [
+      l10n.loadingPhrase1,
+      l10n.loadingPhrase2,
+      l10n.loadingPhrase3,
+      l10n.loadingPhrase4,
+    ];
 
 /// 4.7 Loading/Анализ — blur превью, scan-line, ротация фраз, progress bar.
 class LoadingScreen extends ConsumerStatefulWidget {
@@ -39,7 +42,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen>
       duration: const Duration(milliseconds: 2200),
     )..repeat(reverse: true);
     _phraseTimer = Timer.periodic(const Duration(milliseconds: 1800), (_) {
-      setState(() => _phraseIndex = (_phraseIndex + 1) % _phrases.length);
+      setState(() => _phraseIndex = (_phraseIndex + 1) % _phraseCount);
     });
   }
 
@@ -67,6 +70,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen>
     ref.listen(checkFlowControllerProvider, (previous, next) => _handleState(next));
 
     final photo = ref.read(checkFlowControllerProvider).photo;
+    final phrases = _phrases(AppLocalizations.of(context));
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -109,7 +113,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    _phrases[_phraseIndex],
+                    phrases[_phraseIndex],
                     textAlign: TextAlign.center,
                     style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 17),
                   ),

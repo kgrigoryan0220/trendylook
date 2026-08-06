@@ -65,7 +65,8 @@ class HistoryItemTile extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      DateFormat('d MMM', 'ru').format(check.createdAt),
+                      DateFormat('d MMM', Localizations.localeOf(context).languageCode)
+                          .format(check.createdAt),
                       style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
                     ),
                   ],

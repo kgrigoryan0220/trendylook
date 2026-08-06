@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/analytics/analytics_service.dart';
+import '../../../l10n/gen/app_localizations.dart';
 import '../../check/data/models/check_record.dart';
 import '../../check/presentation/check_flow_controller.dart';
 import '../../check/presentation/result_view.dart';
@@ -27,12 +28,13 @@ class HistoryDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final checkAsync = ref.watch(_checkByIdProvider(checkId));
 
     return checkAsync.when(
       loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (e, _) => Scaffold(
-        body: Center(child: Text('Не удалось загрузить проверку: $e')),
+        body: Center(child: Text(l10n.checkLoadError(e.toString()))),
       ),
       data: (record) {
         ref.read(analyticsServiceProvider).track('history_viewed', {'check_id': record.id});
@@ -53,7 +55,7 @@ class HistoryDetailScreen extends ConsumerWidget {
             );
             context.push('/share');
           },
-          primaryActionLabel: 'Назад',
+          primaryActionLabel: l10n.back,
           onPrimaryAction: () => context.pop(),
         );
       },

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../l10n/gen/app_localizations.dart';
 import '../../../shared/providers/billing_provider.dart';
 import '../../share/presentation/share_target.dart';
 import 'check_flow_controller.dart';
@@ -36,7 +37,7 @@ class CheckResultScreen extends ConsumerWidget {
         );
         context.push('/share');
       },
-      primaryActionLabel: 'Ещё раз',
+      primaryActionLabel: AppLocalizations.of(context).checkAgain,
       onPrimaryAction: () async {
         final billing = ref.read(billingControllerProvider).valueOrNull;
         final canCheck = billing?.isPro == true || (billing?.freeChecksLeft ?? 0) > 0;

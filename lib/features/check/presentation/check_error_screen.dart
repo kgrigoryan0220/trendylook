@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/gen/app_localizations.dart';
 import '../../../shared/widgets/primary_button.dart';
 import '../data/check_exceptions.dart';
 import 'check_flow_controller.dart';
@@ -14,12 +15,13 @@ class CheckErrorScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final error = ref.watch(checkFlowControllerProvider).error;
     final message = error is RateLimitedException
-        ? 'Слишком много проверок подряд. Подожди немного и попробуй снова.'
+        ? l10n.rateLimitedMessage
         : error is AnalysisFailedException
             ? error.message
-            : 'Не получилось проанализировать фото. Попробуй ещё раз — проверка не списана.';
+            : l10n.analysisErrorGeneric;
 
     return Scaffold(
       backgroundColor: AppColors.background,

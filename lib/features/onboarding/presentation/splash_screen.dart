@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/supabase/supabase_providers.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/gen/app_localizations.dart';
 import 'onboarding_prefs.dart';
 
 /// 4.1 Splash — авто-переход в Onboarding/Auth/Home по auth-состоянию (UC-03).
@@ -72,9 +73,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                   ),
                 ),
                 const SizedBox(height: 14),
-                const Text(
-                  'AI-стилист в кармане',
-                  style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                Text(
+                  AppLocalizations.of(context).splashTagline,
+                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
                 ),
               ],
             ),

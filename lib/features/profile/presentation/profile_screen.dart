@@ -3,35 +3,50 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/l10n/locale_controller.dart';
 import '../../../core/supabase/supabase_providers.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/gen/app_localizations.dart';
 import '../../../shared/providers/billing_provider.dart';
 import '../../../shared/widgets/confirm_bottom_sheet.dart';
 import '../../auth/presentation/auth_controller.dart';
+
+const _localeEndonyms = {
+  'en': 'English',
+  'ru': 'Русский',
+  'es': 'Español',
+  'it': 'Italiano',
+  'de': 'Deutsch',
+  'fr': 'Français',
+  'pt': 'Português',
+};
 
 /// 4.14 Профиль.
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
-  String _subStatusText(dynamic billing) {
+  String _subStatusText(AppLocalizations l10n, String languageCode, dynamic billing) {
     if (billing == null) return '—';
-    if (billing.isGrace) return 'Grace period';
+    if (billing.isGrace) return l10n.graceStatus;
     if (billing.isPro && billing.expiresAt != null) {
-      return 'Pro до ${DateFormat('d MMM yyyy', 'ru').format(billing.expiresAt!)}';
+      return l10n.proUntil(
+          DateFormat('d MMM yyyy', languageCode).format(billing.expiresAt!));
     }
-    if (billing.isPro) return 'Pro';
-    return 'Free';
+    if (billing.isPro) return l10n.proStatus;
+    return l10n.freeStatus;
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final languageCode = Localizations.localeOf(context).languageCode;
     final user = ref.watch(currentUserProvider);
     final billingAsync = ref.watch(billingControllerProvider);
     final billing = billingAsync.valueOrNull;
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(title: const Text('Профиль'), automaticallyImplyLeading: false),
+      appBar: AppBar(title: Text(l10n.profileTitle), automaticallyImplyLeading: false),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
         children: [
@@ -53,7 +68,7 @@ class ProfileScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      (user?.userMetadata?['full_name'] as String?) ?? 'Пользователь',
+                      (user?.userMetadata?['full_name'] as String?) ?? l10n.defaultUserName,
                       style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                     ),
                     Text(
@@ -75,19 +90,19 @@ class ProfileScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Статус подписки',
-                  style: TextStyle(fontSize: 12, color: AppColors.textSecondary, fontWeight: FontWeight.w600),
+                Text(
+                  l10n.subscriptionStatusLabel,
+                  style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  _subStatusText(billing),
+                  _subStatusText(l10n, languageCode, billing),
                   style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                 ),
                 if (billing != null && !billing.isPro) ...[
                   const SizedBox(height: 6),
                   Text(
-                    'Осталось бесплатных проверок: ${billing.freeChecksLeft}',
+                    l10n.freeChecksLeft(billing.freeChecksLeft),
                     style: const TextStyle(color: AppColors.textSecondary, fontSize: 12.5),
                   ),
                 ],
@@ -103,7 +118,7 @@ class ProfileScreen extends ConsumerWidget {
             _UpgradeBanner(onTap: () => context.push('/paywall')),
           ],
           const SizedBox(height: 20),
-          _SettingsList(),
+          const _SettingsList(),
           const SizedBox(height: 24),
           _LogoutButton(
             onLoggedOut: () => context.go('/auth'),
@@ -114,12 +129,63 @@ class ProfileScreen extends ConsumerWidget {
   }
 }
 
+Future<void> _showLanguagePicker(BuildContext context, WidgetRef ref) async {
+  final l10n = AppLocalizations.of(context);
+  final current = ref.read(localeControllerProvider).valueOrNull;
+  await showModalBottomSheet<void>(
+    context: context,
+    backgroundColor: AppColors.surface,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (sheetContext) {
+      return SafeArea(
+        child: RadioGroup<Locale?>(
+          groupValue: current,
+          onChanged: (value) {
+            ref.read(localeControllerProvider.notifier).setLocale(value);
+            Navigator.of(sheetContext).pop();
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    l10n.languagePickerTitle,
+                    style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                ),
+              ),
+              RadioListTile<Locale?>(
+                value: null,
+                title: Text(l10n.languageSystemDefault),
+                activeColor: AppColors.pink,
+              ),
+              for (final locale in AppLocalizations.supportedLocales)
+                RadioListTile<Locale?>(
+                  value: locale,
+                  title: Text(_localeEndonyms[locale.languageCode] ?? locale.languageCode),
+                  activeColor: AppColors.pink,
+                ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
 class _GraceBanner extends StatelessWidget {
   const _GraceBanner({required this.onTap});
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
@@ -130,15 +196,16 @@ class _GraceBanner extends StatelessWidget {
           border: Border.all(color: AppColors.warning.withValues(alpha: 0.4)),
           borderRadius: BorderRadius.circular(16),
         ),
-        child: const Row(
+        child: Row(
           children: [
             Expanded(
               child: Text(
-                'Подписка истекает — обнови способ оплаты',
-                style: TextStyle(color: AppColors.warning, fontWeight: FontWeight.w600, fontSize: 12.5),
+                l10n.graceBannerText,
+                style: const TextStyle(color: AppColors.warning, fontWeight: FontWeight.w600, fontSize: 12.5),
               ),
             ),
-            Text('Обновить', style: TextStyle(color: AppColors.warning, fontWeight: FontWeight.w800, fontSize: 12.5)),
+            Text(l10n.graceBannerUpdate,
+                style: const TextStyle(color: AppColors.warning, fontWeight: FontWeight.w800, fontSize: 12.5)),
           ],
         ),
       ),
@@ -167,11 +234,12 @@ class _UpgradeBanner extends StatelessWidget {
           border: Border.all(color: AppColors.pink.withValues(alpha: 0.3)),
           borderRadius: BorderRadius.circular(16),
         ),
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Перейти на Pro', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
-            Icon(Icons.arrow_forward_ios, size: 14, color: Colors.white),
+            Text(AppLocalizations.of(context).upgradeToPro,
+                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+            const Icon(Icons.arrow_forward_ios, size: 14, color: Colors.white),
           ],
         ),
       ),
@@ -179,23 +247,37 @@ class _UpgradeBanner extends StatelessWidget {
   }
 }
 
-class _SettingsList extends StatelessWidget {
+class _SettingsList extends ConsumerWidget {
   const _SettingsList();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final selectedLocale = ref.watch(localeControllerProvider).valueOrNull;
+    final languageLabel = selectedLocale != null
+        ? (_localeEndonyms[selectedLocale.languageCode] ?? selectedLocale.languageCode)
+        : l10n.languageSystemDefault;
+
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Column(
-        children: const [
-          _SettingsRow(label: 'Уведомления', trailing: Text('Скоро', style: TextStyle(color: AppColors.textSecondary, fontSize: 12))),
-          _SettingsRow(label: 'Язык', trailing: Text('RU', style: TextStyle(color: AppColors.textSecondary))),
-          _SettingsRow(label: 'Поддержка'),
-          _SettingsRow(label: 'Privacy Policy'),
-          _SettingsRow(label: 'Terms of Service'),
+        children: [
+          _SettingsRow(
+            label: l10n.notifications,
+            trailing: Text(l10n.comingSoon,
+                style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+          ),
+          _SettingsRow(
+            label: l10n.language,
+            trailing: Text(languageLabel, style: const TextStyle(color: AppColors.textSecondary)),
+            onTap: () => _showLanguagePicker(context, ref),
+          ),
+          _SettingsRow(label: l10n.support),
+          _SettingsRow(label: l10n.privacyPolicy),
+          _SettingsRow(label: l10n.termsOfService),
         ],
       ),
     );
@@ -203,25 +285,29 @@ class _SettingsList extends StatelessWidget {
 }
 
 class _SettingsRow extends StatelessWidget {
-  const _SettingsRow({required this.label, this.trailing});
+  const _SettingsRow({required this.label, this.trailing, this.onTap});
 
   final String label;
   final Widget? trailing;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Color(0x0FFFFFFF))),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: const TextStyle(fontSize: 14.5)),
-          trailing ??
-              const Icon(Icons.arrow_forward_ios, size: 14, color: AppColors.textSecondary),
-        ],
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+        decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: Color(0x0FFFFFFF))),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(label, style: const TextStyle(fontSize: 14.5)),
+            trailing ??
+                const Icon(Icons.arrow_forward_ios, size: 14, color: AppColors.textSecondary),
+          ],
+        ),
       ),
     );
   }
@@ -234,13 +320,14 @@ class _LogoutButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return InkWell(
       borderRadius: BorderRadius.circular(999),
       onTap: () async {
         final confirmed = await showConfirmBottomSheet(
           context,
-          title: 'Выйти из аккаунта?',
-          confirmLabel: 'Выйти',
+          title: l10n.logoutConfirmTitle,
+          confirmLabel: l10n.logout,
         );
         if (!confirmed) return;
         await ref.read(authRepositoryProvider).signOut();
@@ -252,10 +339,10 @@ class _LogoutButton extends ConsumerWidget {
           borderRadius: BorderRadius.circular(999),
           border: Border.all(color: AppColors.error.withValues(alpha: 0.4), width: 1.5),
         ),
-        child: const Center(
+        child: Center(
           child: Text(
-            'Выйти',
-            style: TextStyle(color: AppColors.error, fontWeight: FontWeight.w700, fontSize: 14.5),
+            l10n.logout,
+            style: const TextStyle(color: AppColors.error, fontWeight: FontWeight.w700, fontSize: 14.5),
           ),
         ),
       ),

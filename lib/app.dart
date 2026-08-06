@@ -1,11 +1,14 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/analytics/analytics_service.dart';
 import 'core/deep_links/deep_link_service.dart';
+import 'core/l10n/locale_controller.dart';
 import 'core/supabase/supabase_providers.dart';
 import 'core/theme/app_theme.dart';
 import 'features/paywall/presentation/paywall_controller.dart';
+import 'l10n/gen/app_localizations.dart';
 import 'routing/app_router.dart';
 import 'shared/widgets/offline_banner.dart';
 
@@ -52,6 +55,8 @@ class _TrendyLookAppState extends ConsumerState<TrendyLookApp> {
     });
     _bootstrapForUser();
 
+    final explicitLocale = ref.watch(localeControllerProvider).valueOrNull;
+
     return MaterialApp.router(
       title: 'Trendy Look',
       debugShowCheckedModeBanner: false,
@@ -59,6 +64,17 @@ class _TrendyLookAppState extends ConsumerState<TrendyLookApp> {
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.dark,
       routerConfig: router,
+      // 4.3 Профиль: язык выбирается вручную и переживает системную локаль.
+      // Пока не выбран явно (null) — резолвим из системной локали с фолбэком
+      // на английский (а не первый по алфавиту supportedLocale).
+      locale: explicitLocale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localeResolutionCallback: (deviceLocale, supportedLocales) {
+        final match = supportedLocales
+            .firstWhereOrNull((l) => l.languageCode == deviceLocale?.languageCode);
+        return match ?? const Locale('en');
+      },
       builder: (context, child) => OfflineBanner(child: child ?? const SizedBox.shrink()),
     );
   }

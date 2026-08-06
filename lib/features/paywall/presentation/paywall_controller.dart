@@ -18,16 +18,21 @@ final purchasesRepositoryProvider = Provider<PurchasesRepository>((ref) {
 class PlanOffer {
   const PlanOffer({
     required this.planId,
-    required this.title,
     required this.priceText,
-    required this.subtitleText,
+    required this.hasPackage,
+    this.fallbackPriceLabel,
     this.package,
   });
 
   final String planId; // 'weekly' | 'halfyear'
-  final String title;
   final String priceText;
-  final String subtitleText;
+  final bool hasPackage;
+
+  /// Локальная (₽) цена, показываемая рядом с периодом, пока оффер
+  /// RevenueCat не настроен — заголовок/период локализуются в UI-слое
+  /// (title/subtitle строит виджет через AppLocalizations, у контроллера
+  /// нет BuildContext).
+  final String? fallbackPriceLabel;
   final Package? package;
 }
 
@@ -57,16 +62,16 @@ class PaywallController extends AsyncNotifier<PaywallData> {
     return PaywallData(
       weekly: PlanOffer(
         planId: 'weekly',
-        title: 'Weekly',
         priceText: weeklyPkg?.storeProduct.priceString ?? '\$4.99',
-        subtitleText: weeklyPkg != null ? '7 дней' : '399₽ / 7 дней',
+        hasPackage: weeklyPkg != null,
+        fallbackPriceLabel: '399₽',
         package: weeklyPkg,
       ),
       halfyear: PlanOffer(
         planId: 'halfyear',
-        title: 'Half-year',
         priceText: halfyearPkg?.storeProduct.priceString ?? '\$29.99',
-        subtitleText: halfyearPkg != null ? '6 месяцев' : '1990₽ / 6 месяцев',
+        hasPackage: halfyearPkg != null,
+        fallbackPriceLabel: '1990₽',
         package: halfyearPkg,
       ),
     );

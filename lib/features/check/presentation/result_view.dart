@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/gen/app_localizations.dart';
 import '../../../shared/widgets/category_bar.dart';
 import '../../../shared/widgets/confetti_overlay.dart';
 import '../../../shared/widgets/primary_button.dart';
@@ -33,6 +34,7 @@ class ResultView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final isIconStatus = record.trendScore >= 80;
 
     return Scaffold(
@@ -104,9 +106,9 @@ class ResultView extends StatelessWidget {
                               .toList(),
                         ),
                         const SizedBox(height: 8),
-                        const Text(
-                          '💡 Рекомендации',
-                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                        Text(
+                          l10n.recommendationsTitle,
+                          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                         ),
                         const SizedBox(height: 10),
                         ...record.analysis.recommendations.map(
@@ -122,7 +124,7 @@ class ResultView extends StatelessWidget {
                         Row(
                           children: [
                             Expanded(
-                              child: SecondaryButton(label: 'Поделиться', onPressed: onShare),
+                              child: SecondaryButton(label: l10n.share, onPressed: onShare),
                             ),
                             const SizedBox(width: 10),
                             Expanded(

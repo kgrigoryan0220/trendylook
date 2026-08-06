@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/gen/app_localizations.dart';
 import '../../../shared/widgets/primary_button.dart';
 import 'check_flow_controller.dart';
 
@@ -93,7 +94,7 @@ class _CameraScreenState extends ConsumerState<CameraScreen> {
     if (_initFailed) {
       return _CameraPermissionError(
         onRetry: _init,
-        message: 'Камера недоступна на этом устройстве',
+        message: AppLocalizations.of(context).cameraUnavailableMessage,
       );
     }
 
@@ -180,16 +181,14 @@ class _RoundIconButton extends StatelessWidget {
 }
 
 class _CameraPermissionError extends StatelessWidget {
-  const _CameraPermissionError({
-    required this.onRetry,
-    this.message = 'Разреши доступ к камере в настройках, чтобы проверять образы',
-  });
+  const _CameraPermissionError({required this.onRetry, this.message});
 
   final VoidCallback onRetry;
-  final String message;
+  final String? message;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Center(
@@ -198,20 +197,20 @@ class _CameraPermissionError extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('Нет доступа к камере',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17)),
+              Text(l10n.cameraPermissionTitle,
+                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 17)),
               const SizedBox(height: 10),
               Text(
-                message,
+                message ?? l10n.cameraPermissionMessage,
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: AppColors.textSecondary, fontSize: 13.5),
               ),
               const SizedBox(height: 20),
-              PrimaryButton(label: 'Открыть настройки', onPressed: openAppSettings),
+              PrimaryButton(label: l10n.openSettings, onPressed: openAppSettings),
               const SizedBox(height: 10),
               TextButton(
                 onPressed: () => context.pop(),
-                child: const Text('Отмена', style: TextStyle(color: Colors.white)),
+                child: Text(l10n.cancel, style: const TextStyle(color: Colors.white)),
               ),
             ],
           ),

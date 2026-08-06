@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../core/constants/app_constants.dart';
+import '../../../l10n/gen/app_localizations.dart';
 import 'check_exceptions.dart';
 import 'models/check_record.dart';
 
@@ -18,7 +20,7 @@ class CheckRepository {
   static const _uuid = Uuid();
 
   /// CHECK-02: resize max 2048px, JPEG quality 85%, EXIF strip.
-  Future<String> uploadPhoto(File file) async {
+  Future<String> uploadPhoto(File file, {String locale = 'en'}) async {
     final user = _client.auth.currentUser;
     if (user == null) throw StateError('Не авторизован');
 
@@ -33,7 +35,7 @@ class CheckRepository {
 
     final Uint8List bytes = compressed ?? await file.readAsBytes();
     if (bytes.lengthInBytes > AppConstants.maxUploadBytes) {
-      throw const AnalysisFailedException('Файл слишком большой (макс. 10 MB)');
+      throw AnalysisFailedException(lookupAppLocalizations(Locale(locale)).fileTooLarge);
     }
 
     final path = '${user.id}/${_uuid.v4()}.jpg';
@@ -49,7 +51,7 @@ class CheckRepository {
   /// rate_limited/analysis_failed на типизированные исключения.
   Future<CheckRecord> analyzeLook({
     required String imagePath,
-    String locale = 'ru',
+    String locale = 'en',
   }) async {
     try {
       final response = await _client.functions.invoke(
@@ -69,8 +71,7 @@ class CheckRepository {
         default:
           final message = details is Map ? details['message'] as String? : null;
           throw AnalysisFailedException(
-            message ??
-                'Не получилось проанализировать фото. Попробуй ещё раз — проверка не списана.',
+            message ?? lookupAppLocalizations(Locale(locale)).analysisErrorGeneric,
           );
       }
     }

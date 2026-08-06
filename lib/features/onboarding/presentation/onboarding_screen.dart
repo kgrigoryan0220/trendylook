@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/analytics/analytics_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/gen/app_localizations.dart';
 import '../../../shared/widgets/score_ring.dart';
 import 'onboarding_prefs.dart';
 
@@ -19,23 +20,23 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final _pageController = PageController();
   int _page = 0;
 
-  static const _slides = [
-    _SlideData(
-      title: 'Сфотографируй\nсвой лук',
-      subtitle: 'Одно фото — и AI разберёт твой стиль',
-      icon: Icons.camera_alt_outlined,
-    ),
-    _SlideData(
-      title: 'Узнай % трендовости',
-      subtitle: 'Честная оценка образа за секунды',
-      icon: null,
-    ),
-    _SlideData(
-      title: 'Получи советы от AI',
-      subtitle: 'Персональные рекомендации по стилю',
-      icon: Icons.auto_awesome_outlined,
-    ),
-  ];
+  List<_SlideData> _slides(AppLocalizations l10n) => [
+        _SlideData(
+          title: l10n.onboardingSlide1Title,
+          subtitle: l10n.onboardingSlide1Subtitle,
+          icon: Icons.camera_alt_outlined,
+        ),
+        _SlideData(
+          title: l10n.onboardingSlide2Title,
+          subtitle: l10n.onboardingSlide2Subtitle,
+          icon: null,
+        ),
+        _SlideData(
+          title: l10n.onboardingSlide3Title,
+          subtitle: l10n.onboardingSlide3Subtitle,
+          icon: Icons.auto_awesome_outlined,
+        ),
+      ];
 
   Future<void> _finish() async {
     await ref.read(onboardingPrefsProvider).markSeen();
@@ -43,8 +44,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     if (mounted) context.go('/auth');
   }
 
+  static const _slideCount = 3;
+
   void _next() {
-    if (_page == _slides.length - 1) {
+    if (_page == _slideCount - 1) {
       _finish();
     } else {
       _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
@@ -59,6 +62,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final slides = _slides(l10n);
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -71,14 +76,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   Expanded(
                     child: PageView.builder(
                       controller: _pageController,
-                      itemCount: _slides.length,
+                      itemCount: slides.length,
                       onPageChanged: (i) => setState(() => _page = i),
-                      itemBuilder: (context, index) => _SlideView(data: _slides[index]),
+                      itemBuilder: (context, index) => _SlideView(data: slides[index]),
                     ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(_slides.length, (i) {
+                    children: List.generate(slides.length, (i) {
                       final active = i == _page;
                       return AnimatedContainer(
                         duration: const Duration(milliseconds: 200),
@@ -109,7 +114,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             padding: const EdgeInsets.symmetric(vertical: 17),
                             child: Center(
                               child: Text(
-                                _page == _slides.length - 1 ? 'Начать' : 'Далее',
+                                _page == slides.length - 1
+                                    ? l10n.onboardingStart
+                                    : l10n.onboardingNext,
                                 style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                               ),
                             ),
@@ -126,7 +133,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               right: 0,
               child: TextButton(
                 onPressed: _finish,
-                child: const Text('Пропустить', style: TextStyle(color: AppColors.textSecondary)),
+                child: Text(l10n.onboardingSkip, style: const TextStyle(color: AppColors.textSecondary)),
               ),
             ),
           ],

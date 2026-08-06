@@ -12,8 +12,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
-  // Требуется для DateFormat(..., 'ru') в history_item_tile/profile_screen.
-  await initializeDateFormatting('ru');
+  // Требуется для DateFormat(..., locale) в history_item_tile/profile_screen —
+  // по одному вызову на каждый поддерживаемый язык (см. lib/l10n).
+  for (final code in ['ru', 'en', 'es', 'it', 'de', 'fr', 'pt']) {
+    await initializeDateFormatting(code);
+  }
 
   await Supabase.initialize(
     url: AppConfig.supabaseUrl,

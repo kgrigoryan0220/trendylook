@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/analytics/analytics_service.dart';
+import '../../../core/l10n/locale_controller.dart';
 import '../../../core/supabase/supabase_providers.dart';
 import '../../../shared/providers/billing_provider.dart';
 import '../data/check_repository.dart';
@@ -66,8 +67,9 @@ class CheckFlowController extends Notifier<CheckFlowState> {
 
     try {
       final repo = ref.read(checkRepositoryProvider);
-      final imagePath = await repo.uploadPhoto(photo);
-      final result = await repo.analyzeLook(imagePath: imagePath);
+      final locale = ref.read(currentLanguageCodeProvider);
+      final imagePath = await repo.uploadPhoto(photo, locale: locale);
+      final result = await repo.analyzeLook(imagePath: imagePath, locale: locale);
       state = state.copyWith(isSubmitting: false, result: result);
       analytics.track('check_completed', {
         'score': result.trendScore,

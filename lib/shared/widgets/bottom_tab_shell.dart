@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../l10n/gen/app_localizations.dart';
 
 /// 4.3.0 Навигационная оболочка — bottom tab bar (Главная/История/Профиль).
 class BottomTabShell extends StatelessWidget {
@@ -11,6 +12,7 @@ class BottomTabShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       body: shell,
       bottomNavigationBar: DecoratedBox(
@@ -26,19 +28,19 @@ class BottomTabShell extends StatelessWidget {
               children: [
                 _TabItem(
                   icon: Icons.home_outlined,
-                  label: 'Главная',
+                  label: l10n.bottomTabHome,
                   selected: shell.currentIndex == 0,
                   onTap: () => shell.goBranch(0),
                 ),
                 _TabItem(
                   icon: Icons.history,
-                  label: 'История',
+                  label: l10n.bottomTabHistory,
                   selected: shell.currentIndex == 1,
                   onTap: () => shell.goBranch(1),
                 ),
                 _TabItem(
                   icon: Icons.person_outline,
-                  label: 'Профиль',
+                  label: l10n.bottomTabProfile,
                   selected: shell.currentIndex == 2,
                   onTap: () => shell.goBranch(2),
                 ),

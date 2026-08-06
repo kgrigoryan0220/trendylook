@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/gen/app_localizations.dart';
 import '../../../shared/widgets/primary_button.dart';
 import 'auth_controller.dart';
 
@@ -11,13 +12,14 @@ class AuthScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final authState = ref.watch(authControllerProvider);
     final isLoading = authState.isLoading;
 
     ref.listen(authControllerProvider, (previous, next) {
       if (next.hasError) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Не получилось войти: ${next.error}')),
+          SnackBar(content: Text(l10n.authSignInError(next.error.toString()))),
         );
       }
     });
@@ -49,12 +51,13 @@ class AuthScreen extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'Войди, чтобы начать',
-                  style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                Text(
+                  l10n.authSubtitle,
+                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
                 ),
                 const SizedBox(height: 40),
                 _AppleSignInButton(
+                  label: l10n.authAppleButton,
                   isLoading: isLoading,
                   onPressed: () =>
                       ref.read(authControllerProvider.notifier).signIn(
@@ -63,6 +66,7 @@ class AuthScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 12),
                 _GoogleSignInButton(
+                  label: l10n.authGoogleButton,
                   isLoading: isLoading,
                   onPressed: () =>
                       ref.read(authControllerProvider.notifier).signIn(
@@ -70,10 +74,10 @@ class AuthScreen extends ConsumerWidget {
                           ),
                 ),
                 const SizedBox(height: 24),
-                const Text(
-                  'Продолжая, ты соглашаешься с Условиями и Конфиденциальностью',
+                Text(
+                  l10n.authTerms,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: AppColors.textSecondary, fontSize: 11),
+                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 11),
                 ),
               ],
             ),
@@ -85,8 +89,13 @@ class AuthScreen extends ConsumerWidget {
 }
 
 class _AppleSignInButton extends StatelessWidget {
-  const _AppleSignInButton({required this.isLoading, required this.onPressed});
+  const _AppleSignInButton({
+    required this.label,
+    required this.isLoading,
+    required this.onPressed,
+  });
 
+  final String label;
   final bool isLoading;
   final VoidCallback onPressed;
 
@@ -102,15 +111,20 @@ class _AppleSignInButton extends StatelessWidget {
           side: BorderSide(color: Colors.white.withValues(alpha: 0.15)),
         ),
         icon: const Icon(Icons.apple, size: 20),
-        label: const Text('Войти через Apple'),
+        label: Text(label),
       ),
     );
   }
 }
 
 class _GoogleSignInButton extends StatelessWidget {
-  const _GoogleSignInButton({required this.isLoading, required this.onPressed});
+  const _GoogleSignInButton({
+    required this.label,
+    required this.isLoading,
+    required this.onPressed,
+  });
 
+  final String label;
   final bool isLoading;
   final VoidCallback onPressed;
 
@@ -119,7 +133,7 @@ class _GoogleSignInButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: PrimaryButton(
-        label: 'Войти через Google',
+        label: label,
         onPressed: isLoading ? null : onPressed,
         background: Colors.white,
         foregroundColor: AppColors.background,

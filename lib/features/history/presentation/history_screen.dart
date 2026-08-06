@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/gen/app_localizations.dart';
 import '../../../shared/widgets/confirm_bottom_sheet.dart';
 import '../../../shared/widgets/history_item_tile.dart';
 import '../../../shared/widgets/primary_button.dart';
@@ -52,17 +53,18 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final historyAsync = ref.watch(historyControllerProvider);
 
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('История'),
+        title: Text(l10n.historyTitle),
         automaticallyImplyLeading: false,
       ),
       body: historyAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Не удалось загрузить историю: $e')),
+        error: (e, _) => Center(child: Text(l10n.historyLoadError(e.toString()))),
         data: (data) {
           if (data.items.isEmpty) {
             return _EmptyHistory(
@@ -100,8 +102,8 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                   ),
                   confirmDismiss: (_) => showConfirmBottomSheet(
                     context,
-                    title: 'Удалить эту проверку?',
-                    confirmLabel: 'Удалить',
+                    title: l10n.deleteCheckTitle,
+                    confirmLabel: l10n.delete,
                   ),
                   onDismissed: (_) =>
                       ref.read(historyControllerProvider.notifier).delete(item.id),
@@ -127,6 +129,7 @@ class _EmptyHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -148,13 +151,13 @@ class _EmptyHistory extends StatelessWidget {
               child: const Icon(Icons.history, size: 48, color: AppColors.textSecondary),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Здесь появится твоя история проверок',
+            Text(
+              l10n.historyEmpty,
               textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.textSecondary, fontSize: 14.5),
+              style: const TextStyle(color: AppColors.textSecondary, fontSize: 14.5),
             ),
             const SizedBox(height: 20),
-            PrimaryButton(label: 'Сделать первую проверку', onPressed: onStart),
+            PrimaryButton(label: l10n.historyEmptyCta, onPressed: onStart),
           ],
         ),
       ),

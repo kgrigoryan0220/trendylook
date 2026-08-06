@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../core/analytics/analytics_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/gen/app_localizations.dart';
 import '../../../shared/providers/billing_provider.dart';
 import '../../../shared/widgets/history_item_tile.dart';
 import '../../../shared/widgets/primary_button.dart';
@@ -59,6 +60,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final billingAsync = ref.watch(billingControllerProvider);
     final billing = billingAsync.valueOrNull;
     final recentAsync = ref.watch(_recentChecksProvider);
@@ -74,7 +76,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Главная', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 22)),
+                    Text(l10n.homeTitle, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 22)),
                     if (billing?.isPro == true)
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -111,7 +113,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
                 child: Text(
-                  'Последние проверки',
+                  l10n.homeRecentChecks,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 16),
                 ),
               ),
@@ -125,11 +127,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 error: (_, _) => const SizedBox.shrink(),
                 data: (items) {
                   if (items.isEmpty) {
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
-                        'Здесь появится твоя история',
-                        style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                        l10n.homeRecentChecksEmpty,
+                        style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
                       ),
                     );
                   }
@@ -189,6 +191,7 @@ class _HeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 28, 20, 24),
       decoration: BoxDecoration(
@@ -202,21 +205,21 @@ class _HeroCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Text(
-            'Проверь свой лук',
+          Text(
+            l10n.homeHeroTitle,
             textAlign: TextAlign.center,
-            style: TextStyle(fontWeight: FontWeight.w800, fontSize: 22),
+            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 22),
           ),
           const SizedBox(height: 6),
-          const Text(
-            'Узнай % трендовости и получи советы от AI',
+          Text(
+            l10n.homeHeroSubtitle,
             textAlign: TextAlign.center,
-            style: TextStyle(color: AppColors.textSecondary, fontSize: 13.5),
+            style: const TextStyle(color: AppColors.textSecondary, fontSize: 13.5),
           ),
           const SizedBox(height: 20),
-          PrimaryButton(label: 'Сфотографировать', onPressed: onCamera),
+          PrimaryButton(label: l10n.ctaCamera, onPressed: onCamera),
           const SizedBox(height: 12),
-          SecondaryButton(label: 'Из галереи', onPressed: onGallery),
+          SecondaryButton(label: l10n.ctaGallery, onPressed: onGallery),
           if (!isPro && freeChecksLeft != null) ...[
             const SizedBox(height: 16),
             Container(
@@ -226,7 +229,7 @@ class _HeroCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(999),
               ),
               child: Text(
-                'Осталось бесплатных проверок: $freeChecksLeft',
+                l10n.freeChecksLeft(freeChecksLeft!),
                 style: const TextStyle(color: AppColors.textSecondary, fontSize: 12.5, fontWeight: FontWeight.w600),
               ),
             ),
@@ -253,9 +256,9 @@ class _GraceBanner extends StatelessWidget {
           border: Border.all(color: AppColors.warning.withValues(alpha: 0.4)),
           borderRadius: BorderRadius.circular(16),
         ),
-        child: const Text(
-          'Подписка истекает — обнови способ оплаты',
-          style: TextStyle(color: AppColors.warning, fontWeight: FontWeight.w600, fontSize: 12.5),
+        child: Text(
+          AppLocalizations.of(context).graceBannerText,
+          style: const TextStyle(color: AppColors.warning, fontWeight: FontWeight.w600, fontSize: 12.5),
         ),
       ),
     );

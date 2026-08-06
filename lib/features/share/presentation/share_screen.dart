@@ -9,6 +9,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../core/analytics/analytics_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/gen/app_localizations.dart';
 import '../../../shared/widgets/primary_button.dart';
 import 'share_card.dart';
 import 'share_target.dart';
@@ -39,12 +40,12 @@ class _ShareScreenState extends ConsumerState<ShareScreen> {
         'score': target.record.trendScore,
       });
 
+      if (!mounted) return;
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(file.path)],
-          text:
-              'Мой лук получил ${target.record.trendScore}% трендовости в Trendy Look! '
-              'Проверь свой: trendylook://check/${target.record.id}',
+          text: AppLocalizations.of(context)
+              .shareMessageText(target.record.trendScore, target.record.id),
         ),
       );
     } finally {
@@ -54,9 +55,10 @@ class _ShareScreenState extends ConsumerState<ShareScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final target = ref.watch(shareTargetProvider);
     if (target == null) {
-      return const Scaffold(body: Center(child: Text('Нечем делиться')));
+      return Scaffold(body: Center(child: Text(l10n.shareNothingToShare)));
     }
 
     final photo = target.localPhoto != null
@@ -72,7 +74,7 @@ class _ShareScreenState extends ConsumerState<ShareScreen> {
           icon: const Icon(Icons.arrow_back_ios_new, size: 18),
           onPressed: () => context.pop(),
         ),
-        title: const Text('Поделиться'),
+        title: Text(l10n.share),
       ),
       body: SafeArea(
         child: Column(
@@ -91,7 +93,7 @@ class _ShareScreenState extends ConsumerState<ShareScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
               child: PrimaryButton(
-                label: 'Поделиться',
+                label: l10n.share,
                 isLoading: _sharing,
                 onPressed: _sharing ? null : () => _share(target),
               ),

@@ -94,8 +94,53 @@ const LOOK_ANALYSIS_SCHEMA = {
   },
 };
 
+// Tier-1 языки, поддерживаемые клиентским l10n (см. lib/l10n/*.arb) —
+// локаль приходит от клиента вместе с запросом и должна определять язык
+// ответа нейронки, а не только язык интерфейса.
+const LANGUAGE_NAMES: Record<string, string> = {
+  en: "English",
+  ru: "Russian",
+  es: "Spanish",
+  it: "Italian",
+  de: "German",
+  fr: "French",
+  pt: "Portuguese",
+};
+
+const USER_PROMPT_TEXT: Record<string, string> = {
+  en: "Analyze my outfit and rate its trendiness.",
+  ru: "Проанализируй мой outfit и оцени трендовость.",
+  es: "Analiza mi look y evalúa su nivel de tendencia.",
+  it: "Analizza il mio outfit e valuta la sua trendiness.",
+  de: "Analysiere mein Outfit und bewerte den Trend-Score.",
+  fr: "Analyse ma tenue et évalue son niveau de tendance.",
+  pt: "Analise meu look e avalie a trendiness dele.",
+};
+
+const ANALYSIS_FAILED_MESSAGES: Record<string, string> = {
+  en: "Couldn't analyze the photo. Try again — this check wasn't used.",
+  ru: "Не получилось проанализировать фото. Попробуй ещё раз — проверка не списана.",
+  es: "No se pudo analizar la foto. Inténtalo de nuevo — esta comprobación no se ha descontado.",
+  it: "Impossibile analizzare la foto. Riprova — questo controllo non è stato conteggiato.",
+  de: "Das Foto konnte nicht analysiert werden. Versuch es noch mal — dieser Check wurde nicht verbraucht.",
+  fr: "Impossible d'analyser la photo. Réessaie — cette analyse n'a pas été décomptée.",
+  pt: "Não foi possível analisar a foto. Tente novamente — esta verificação não foi descontada.",
+};
+
+function languageFor(locale: string): string {
+  return LANGUAGE_NAMES[locale] ?? LANGUAGE_NAMES.en;
+}
+
+function userPromptFor(locale: string): string {
+  return USER_PROMPT_TEXT[locale] ?? USER_PROMPT_TEXT.en;
+}
+
+function analysisFailedMessageFor(locale: string): string {
+  return ANALYSIS_FAILED_MESSAGES[locale] ?? ANALYSIS_FAILED_MESSAGES.en;
+}
+
 function systemPrompt(locale: string): string {
-  const lang = locale === "en" ? "English" : "Russian";
+  const lang = languageFor(locale);
   return `Ты — AI-стилист приложения Trendy Look. Анализируй фото outfit пользователя.
 
 Правила:
@@ -153,7 +198,7 @@ Deno.serve(async (req: Request) => {
   }
 
   const imagePath = body.image_path;
-  const locale = body.locale ?? "ru";
+  const locale = body.locale ?? "en";
   if (!imagePath || typeof imagePath !== "string") {
     return jsonResponse({ error: "invalid_body", message: "image_path is required" }, 400);
   }
@@ -226,7 +271,7 @@ Deno.serve(async (req: Request) => {
           {
             role: "user",
             content: [
-              { type: "text", text: "Проанализируй мой outfit и оцени трендовость." },
+              { type: "text", text: userPromptFor(locale) },
               { type: "image_url", image_url: { url: signed.signedUrl, detail: "high" } },
             ],
           },
@@ -248,8 +293,7 @@ Deno.serve(async (req: Request) => {
       return jsonResponse(
         {
           error: "analysis_failed",
-          message:
-            "Не получилось проанализировать фото. Попробуй ещё раз — проверка не списана.",
+          message: analysisFailedMessageFor(locale),
         },
         502,
       );
@@ -263,7 +307,7 @@ Deno.serve(async (req: Request) => {
     return jsonResponse(
       {
         error: "analysis_failed",
-        message: "Не получилось проанализировать фото. Попробуй ещё раз — проверка не списана.",
+        message: analysisFailedMessageFor(locale),
       },
       502,
     );

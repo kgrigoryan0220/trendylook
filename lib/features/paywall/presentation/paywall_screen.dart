@@ -4,9 +4,18 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/analytics/analytics_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/gen/app_localizations.dart';
 import '../../../shared/widgets/plan_card.dart';
 import '../../../shared/widgets/primary_button.dart';
 import 'paywall_controller.dart';
+
+String _planTitle(AppLocalizations l10n, PlanOffer plan) =>
+    plan.planId == 'weekly' ? l10n.paywallPlanWeekly : l10n.paywallPlanHalfyear;
+
+String _planSubtitle(AppLocalizations l10n, PlanOffer plan) {
+  final period = plan.planId == 'weekly' ? l10n.paywallPeriodWeek : l10n.paywallPeriodHalfyear;
+  return plan.hasPackage ? period : '${plan.fallbackPriceLabel} / $period';
+}
 
 /// 4.9 Paywall — PAY-01/02/06.
 class PaywallScreen extends ConsumerStatefulWidget {
@@ -41,15 +50,13 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
       if (!mounted) return;
       setState(() => _purchasing = false);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Оплата ещё не настроена — добавьте ключи RevenueCat'),
-        ),
+        SnackBar(content: Text(AppLocalizations.of(context).paywallNotConfigured)),
       );
     } catch (e) {
       if (!mounted) return;
       setState(() => _purchasing = false);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Не получилось оформить подписку: $e')),
+        SnackBar(content: Text(AppLocalizations.of(context).paywallPurchaseError(e.toString()))),
       );
     }
   }
@@ -59,23 +66,24 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
       await ref.read(paywallControllerProvider.notifier).restore();
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Покупки восстановлены')),
+        SnackBar(content: Text(AppLocalizations.of(context).paywallRestoreSuccess)),
       );
     } on PurchasesNotConfiguredException {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Оплата ещё не настроена — добавьте ключи RevenueCat')),
+        SnackBar(content: Text(AppLocalizations.of(context).paywallNotConfigured)),
       );
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Не получилось восстановить покупки: $e')),
+        SnackBar(content: Text(AppLocalizations.of(context).paywallRestoreError(e.toString()))),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final offerAsync = ref.watch(paywallControllerProvider);
     final selectedPlan = ref.watch(selectedPlanProvider);
 
@@ -97,40 +105,40 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
               else
                 offerAsync.when(
                   loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (e, _) => Center(child: Text('Ошибка: $e')),
+                  error: (e, _) => Center(child: Text(l10n.paywallOfferError(e.toString()))),
                   data: (offer) => SingleChildScrollView(
                     padding: const EdgeInsets.fromLTRB(24, 64, 24, 32),
                     child: Column(
                       children: [
                         Text(
-                          'Открой безлимит',
+                          l10n.paywallTitle,
                           style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontSize: 26),
                         ),
                         const SizedBox(height: 6),
-                        const Text(
-                          'Безграничные проверки образов каждый день',
+                        Text(
+                          l10n.paywallSubtitle,
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: AppColors.textSecondary, fontSize: 13.5),
+                          style: const TextStyle(color: AppColors.textSecondary, fontSize: 13.5),
                         ),
                         const SizedBox(height: 20),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             PlanCard(
-                              title: offer.weekly.title,
+                              title: _planTitle(l10n, offer.weekly),
                               price: offer.weekly.priceText,
-                              subtitle: offer.weekly.subtitleText,
+                              subtitle: _planSubtitle(l10n, offer.weekly),
                               selected: selectedPlan == 'weekly',
                               onTap: () =>
                                   ref.read(selectedPlanProvider.notifier).state = 'weekly',
                             ),
                             const SizedBox(width: 12),
                             PlanCard(
-                              title: offer.halfyear.title,
+                              title: _planTitle(l10n, offer.halfyear),
                               price: offer.halfyear.priceText,
-                              subtitle: offer.halfyear.subtitleText,
+                              subtitle: _planSubtitle(l10n, offer.halfyear),
                               selected: selectedPlan == 'halfyear',
-                              badgeText: 'BEST VALUE',
+                              badgeText: l10n.paywallBestValue,
                               onTap: () =>
                                   ref.read(selectedPlanProvider.notifier).state = 'halfyear',
                             ),
@@ -139,28 +147,28 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                         const SizedBox(height: 24),
                         const _BenefitsList(),
                         const SizedBox(height: 20),
-                        const Text(
-                          '12 000+ проверок сегодня',
-                          style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                        Text(
+                          l10n.paywallSocialProof,
+                          style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
                         ),
                         const SizedBox(height: 20),
                         PrimaryButton(
-                          label: 'Продолжить',
+                          label: l10n.paywallContinue,
                           isLoading: _purchasing,
                           onPressed: _purchasing ? null : _continue,
                         ),
                         const SizedBox(height: 14),
                         TextButton(
                           onPressed: _restore,
-                          child: const Text(
-                            'Восстановить покупки',
-                            style: TextStyle(color: AppColors.textSecondary),
+                          child: Text(
+                            l10n.paywallRestore,
+                            style: const TextStyle(color: AppColors.textSecondary),
                           ),
                         ),
                         const SizedBox(height: 4),
-                        const Text(
-                          'Terms · Privacy',
-                          style: TextStyle(color: Color(0xFF5C5C68), fontSize: 11),
+                        Text(
+                          '${l10n.termsOfService} · ${l10n.privacyPolicy}',
+                          style: const TextStyle(color: Color(0xFF5C5C68), fontSize: 11),
                         ),
                       ],
                     ),
@@ -198,17 +206,13 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
 class _BenefitsList extends StatelessWidget {
   const _BenefitsList();
 
-  static const _items = [
-    'Безлимитные проверки образов',
-    'Приоритетный AI-анализ',
-    'Ранний доступ к трендам',
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final items = [l10n.paywallBenefit1, l10n.paywallBenefit2, l10n.paywallBenefit3];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: _items
+      children: items
           .map(
             (text) => Padding(
               padding: const EdgeInsets.symmetric(vertical: 6),
@@ -233,19 +237,20 @@ class _SuccessView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'Готово! Теперь у тебя безлимит 🎉',
+            Text(
+              l10n.paywallSuccessTitle,
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 22),
+              style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 22),
             ),
             const SizedBox(height: 20),
-            PrimaryButton(label: 'Отлично', onPressed: onDone),
+            PrimaryButton(label: l10n.paywallSuccessCta, onPressed: onDone),
           ],
         ),
       ),
