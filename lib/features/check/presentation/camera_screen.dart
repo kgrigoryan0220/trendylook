@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -220,30 +221,42 @@ class _CameraPermissionError extends StatelessWidget {
   }
 }
 
-/// Масштабирует превью камеры (с сохранением его нативного aspect ratio) так,
-/// чтобы заполнить весь экран без искажений — вместо растягивания
-/// CameraPreview на весь Stack, которое сжимает картинку по бокам.
+/// Масштабирует превью камеры так, чтобы заполнить весь экран без искажений
+/// и без чёрных полос — вместо растягивания CameraPreview на весь Stack
+/// (сжимало картинку по бокам) и вместо повторного AspectRatio поверх нее
+/// (CameraPreview уже оборачивает себя в AspectRatio с учётом поворота
+/// устройства — 1/aspectRatio в портрете, aspectRatio в ландшафте, см.
+/// package:camera/src/camera_preview.dart — оборачивать её ещё раз своим
+/// AspectRatio с сырым controller.value.aspectRatio даёт двойное,
+/// рассогласованное соотношение сторон и как раз вызывало этот баг).
 class _FullScreenCameraPreview extends StatelessWidget {
   const _FullScreenCameraPreview({required this.controller});
 
   final CameraController controller;
+
+  bool get _isLandscape {
+    final orientation = controller.value.isRecordingVideo
+        ? controller.value.recordingOrientation
+        : (controller.value.previewPauseOrientation ??
+            controller.value.lockedCaptureOrientation ??
+            controller.value.deviceOrientation);
+    return orientation == DeviceOrientation.landscapeLeft ||
+        orientation == DeviceOrientation.landscapeRight;
+  }
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final size = constraints.biggest;
-        var scale = size.aspectRatio * controller.value.aspectRatio;
+        final previewRatio =
+            _isLandscape ? controller.value.aspectRatio : 1 / controller.value.aspectRatio;
+        var scale = size.aspectRatio / previewRatio;
         if (scale < 1) scale = 1 / scale;
         return ClipRect(
           child: Transform.scale(
             scale: scale,
-            child: Center(
-              child: AspectRatio(
-                aspectRatio: controller.value.aspectRatio,
-                child: CameraPreview(controller),
-              ),
-            ),
+            child: Center(child: CameraPreview(controller)),
           ),
         );
       },
