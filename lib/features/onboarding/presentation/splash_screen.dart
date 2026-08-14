@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/supabase/supabase_providers.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../l10n/gen/app_localizations.dart';
 import 'onboarding_prefs.dart';
 
@@ -67,9 +68,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
               children: [
                 ShaderMask(
                   shaderCallback: (bounds) => AppColors.gradientPrimary.createShader(bounds),
-                  child: const Text(
+                  child: Text(
                     'Trendy Look',
-                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 36, color: Colors.white),
+                    style: AppTheme.heading(context, fontSize: 36, color: Colors.white),
                   ),
                 ),
                 const SizedBox(height: 14),

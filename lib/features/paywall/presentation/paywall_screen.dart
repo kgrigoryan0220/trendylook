@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/analytics/analytics_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../l10n/gen/app_localizations.dart';
 import '../../../shared/widgets/plan_card.dart';
 import '../../../shared/widgets/primary_button.dart';
@@ -247,7 +248,7 @@ class _SuccessView extends StatelessWidget {
             Text(
               l10n.paywallSuccessTitle,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 22),
+              style: AppTheme.heading(context, fontSize: 22),
             ),
             const SizedBox(height: 20),
             PrimaryButton(label: l10n.paywallSuccessCta, onPressed: onDone),

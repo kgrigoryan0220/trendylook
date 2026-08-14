@@ -56,12 +56,14 @@ class _TrendyLookAppState extends ConsumerState<TrendyLookApp> {
     _bootstrapForUser();
 
     final explicitLocale = ref.watch(localeControllerProvider).valueOrNull;
+    final languageCode = ref.watch(currentLanguageCodeProvider);
+    final theme = AppTheme.darkForLanguage(languageCode);
 
     return MaterialApp.router(
       title: 'Trendy Look',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.dark,
-      darkTheme: AppTheme.dark,
+      theme: theme,
+      darkTheme: theme,
       themeMode: ThemeMode.dark,
       routerConfig: router,
       // 4.3 Профиль: язык выбирается вручную и переживает системную локаль.
@@ -75,7 +77,13 @@ class _TrendyLookAppState extends ConsumerState<TrendyLookApp> {
             .firstWhereOrNull((l) => l.languageCode == deviceLocale?.languageCode);
         return match ?? const Locale('en');
       },
-      builder: (context, child) => OfflineBanner(child: child ?? const SizedBox.shrink()),
+      builder: (context, child) {
+        final body = Theme.of(context).textTheme.bodyMedium ?? const TextStyle();
+        return DefaultTextStyle(
+          style: body,
+          child: OfflineBanner(child: child ?? const SizedBox.shrink()),
+        );
+      },
     );
   }
 }

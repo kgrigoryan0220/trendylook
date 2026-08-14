@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_theme.dart';
+
 /// Pill-кнопка с обводкой/стеклом (glassmorphism на тёмном фоне).
 class SecondaryButton extends StatelessWidget {
   const SecondaryButton({
@@ -39,7 +41,8 @@ class SecondaryButton extends StatelessWidget {
                 ],
                 Text(
                   label,
-                  style: TextStyle(
+                  style: AppTheme.body(
+                    context,
                     fontWeight: FontWeight.w700,
                     fontSize: 14.5,
                     color: foregroundColor,

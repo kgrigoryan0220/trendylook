@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/analytics/analytics_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../l10n/gen/app_localizations.dart';
 import '../../../shared/widgets/score_ring.dart';
 import 'onboarding_prefs.dart';
@@ -175,7 +176,7 @@ class _SlideView extends StatelessWidget {
         Text(
           data.title,
           textAlign: TextAlign.center,
-          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 24, height: 1.25),
+          style: AppTheme.heading(context, fontSize: 24, height: 1.25),
         ),
         const SizedBox(height: 8),
         Text(

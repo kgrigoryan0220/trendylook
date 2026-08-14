@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_theme.dart';
 
 /// Score Ring — круговой прогресс с числом по центру (4.2, 4.3 Result).
 /// Score "накручивается" от 0 до N% при появлении (4.2 анимационные принципы).
@@ -44,9 +45,9 @@ class ScoreRing extends StatelessWidget {
                 children: [
                   Text(
                     '${value.round()}%',
-                    style: TextStyle(
+                    style: AppTheme.heading(
+                      context,
                       fontSize: size * 0.32,
-                      fontWeight: FontWeight.w800,
                       height: 1,
                       color: Colors.white,
                     ),
@@ -54,10 +55,10 @@ class ScoreRing extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     label.toUpperCase(),
-                    style: TextStyle(
+                    style: AppTheme.heading(
+                      context,
                       fontSize: 12,
                       letterSpacing: 2,
-                      fontWeight: FontWeight.w800,
                       color: color,
                     ),
                   ),

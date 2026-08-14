@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_theme.dart';
 
 /// Pill-кнопка. Без `background` — заливка градиентом pink→violet (primary
 /// CTA по всему приложению); с `background` — сплошная заливка (напр. Google).
@@ -30,7 +31,8 @@ class PrimaryButton extends StatelessWidget {
           )
         : Text(
             label,
-            style: TextStyle(
+            style: AppTheme.body(
+              context,
               fontWeight: FontWeight.w700,
               fontSize: 15.5,
               color: foregroundColor,

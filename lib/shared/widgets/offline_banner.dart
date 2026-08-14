@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_theme.dart';
 
 /// 4.15 «Нет соединения» — компактный баннер поверх текущего экрана.
 class OfflineBanner extends StatefulWidget {
@@ -41,10 +42,15 @@ class _OfflineBannerState extends State<OfflineBanner> {
                 width: double.infinity,
                 color: AppColors.error,
                 padding: const EdgeInsets.symmetric(vertical: 6),
-                child: const Text(
+                child: Text(
                   'Нет соединения',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+                  style: AppTheme.body(
+                    context,
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),

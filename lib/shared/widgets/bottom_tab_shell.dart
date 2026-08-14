@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_theme.dart';
 import '../../l10n/gen/app_localizations.dart';
 
 /// 4.3.0 Навигационная оболочка — bottom tab bar (Главная/История/Профиль).
@@ -77,7 +78,15 @@ class _TabItem extends StatelessWidget {
           children: [
             Icon(icon, color: color, size: 22),
             const SizedBox(height: 4),
-            Text(label, style: TextStyle(color: color, fontSize: 10.5, fontWeight: FontWeight.w700)),
+            Text(
+              label,
+              style: AppTheme.body(
+                context,
+                color: color,
+                fontSize: 10.5,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_theme.dart';
 
 /// Plan Card (Paywall) — цена, период, опциональный бейдж, разд. 4.3/5.
 class PlanCard extends StatelessWidget {
@@ -55,7 +56,7 @@ class PlanCard extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     price,
-                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+                    style: AppTheme.heading(context, fontSize: 22),
                   ),
                   const SizedBox(height: 2),
                   Text(

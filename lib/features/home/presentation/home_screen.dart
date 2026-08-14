@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../core/analytics/analytics_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../l10n/gen/app_localizations.dart';
 import '../../../shared/providers/billing_provider.dart';
 import '../../../shared/widgets/history_item_tile.dart';
@@ -76,7 +77,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(l10n.homeTitle, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 22)),
+                    Text(l10n.homeTitle, style: AppTheme.heading(context, fontSize: 22)),
                     if (billing?.isPro == true)
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -208,7 +209,7 @@ class _HeroCard extends StatelessWidget {
           Text(
             l10n.homeHeroTitle,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 22),
+            style: AppTheme.heading(context, fontSize: 22),
           ),
           const SizedBox(height: 6),
           Text(

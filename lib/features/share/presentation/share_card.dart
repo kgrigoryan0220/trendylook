@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../l10n/gen/app_localizations.dart';
 import '../../check/data/models/check_record.dart';
 
@@ -46,9 +47,9 @@ class ShareCard extends StatelessWidget {
               left: 16,
               child: ShaderMask(
                 shaderCallback: (bounds) => AppColors.gradientPrimary.createShader(bounds),
-                child: const Text(
+                child: Text(
                   'Trendy Look',
-                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13, color: Colors.white),
+                  style: AppTheme.heading(context, fontSize: 13, color: Colors.white),
                 ),
               ),
             ),
@@ -66,12 +67,13 @@ class ShareCard extends StatelessWidget {
                     children: [
                       Text(
                         '${record.trendScore}%',
-                        style: TextStyle(fontWeight: FontWeight.w800, fontSize: 40, color: color),
+                        style: AppTheme.heading(context, fontSize: 40, color: color),
                       ),
                       const SizedBox(width: 6),
                       Text(
                         record.trendLabel.toUpperCase(),
-                        style: const TextStyle(
+                        style: AppTheme.heading(
+                          context,
                           fontSize: 11,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,

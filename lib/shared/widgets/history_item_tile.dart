@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_theme.dart';
 import '../../features/check/data/models/check_record.dart';
 
 /// History Item — thumbnail + score badge + дата (разд. 4.3/5, 4.11).
@@ -74,7 +75,7 @@ class HistoryItemTile extends StatelessWidget {
               ),
               Text(
                 '${check.trendScore}%',
-                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: color),
+                style: AppTheme.heading(context, fontSize: 16, color: color),
               ),
             ],
           ),
