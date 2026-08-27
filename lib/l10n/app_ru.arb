@@ -109,6 +109,19 @@
   "paywallBenefit3": "Ранний доступ к трендам",
   "paywallBestValue": "BEST VALUE",
 
+  "promoCodeSectionTitle": "Есть промокод?",
+  "promoCodeHint": "Введите код",
+  "promoCodeApply": "Активировать",
+  "promoRedeemedUntil": "Промокод активирован! Pro-доступ до {date}",
+  "@promoRedeemedUntil": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "promoCodeNotFound": "Такой промокод не найден",
+  "promoCodeExpired": "Промокод больше не действует",
+  "promoCodeExhausted": "Промокод исчерпан",
+  "promoCodeAlreadyRedeemed": "Ты уже активировал(а) этот промокод",
+  "promoRedeemError": "Не получилось активировать промокод. Попробуй ещё раз",
+
   "offlineBanner": "Нет соединения",
 
   "bottomTabHome": "Главная",

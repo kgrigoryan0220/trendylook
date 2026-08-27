@@ -134,6 +134,19 @@
   "paywallBenefit3": "Early access to trends",
   "paywallBestValue": "BEST VALUE",
 
+  "promoCodeSectionTitle": "Have a promo code?",
+  "promoCodeHint": "Enter code",
+  "promoCodeApply": "Apply",
+  "promoRedeemedUntil": "Promo code applied! Pro access until {date}",
+  "@promoRedeemedUntil": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "promoCodeNotFound": "This promo code wasn't found",
+  "promoCodeExpired": "This promo code is no longer valid",
+  "promoCodeExhausted": "This promo code has been fully redeemed",
+  "promoCodeAlreadyRedeemed": "You've already redeemed this code",
+  "promoRedeemError": "Couldn't apply the promo code. Try again",
+
   "offlineBanner": "No connection",
 
   "bottomTabHome": "Home",

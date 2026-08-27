@@ -10,6 +10,12 @@
 // grace-период (PAY-05) НЕ выставляется этим вебхуком напрямую — переход
 // active -> grace / grace -> expired выполняется по расписанию через pg_cron
 // (см. миграцию grace_period_scheduler), а также лениво проверяется в analyze-look.
+//
+// PROMO_CODES_PLAN.md, разд. 5.4: промокоды выдаются через RevenueCat Grant
+// Promotional Entitlement API (см. redeem-promo) — RC шлёт такой грант сюда как
+// обычное активное событие (NON_RENEWING_PURCHASE), но product_id у него синтетический
+// (rc_promo_...) и никогда не совпадает с реальным товаром из PRODUCT_TO_PLAN —
+// такой случай трактуется как plan='promo'/source='promo', а не игнорируется.
 
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -20,6 +26,9 @@ function jsonResponse(body: unknown, status = 200): Response {
     headers: { "Content-Type": "application/json" },
   });
 }
+
+type Plan = "weekly" | "halfyear" | "promo";
+type Source = "revenuecat" | "promo";
 
 const PRODUCT_TO_PLAN: Record<string, "weekly" | "halfyear"> = {
   weekly_unlimited: "weekly",
@@ -50,16 +59,27 @@ async function upsertActiveSubscription(
   // deno-lint-ignore no-explicit-any
   supabase: any,
   userId: string,
-  plan: "weekly" | "halfyear",
+  plan: Plan,
+  source: Source,
   expiresAt: string | null,
   revenuecatId: string | undefined,
 ) {
   const { data: existing } = await supabase
     .from("subscriptions")
-    .select("id")
+    .select("id, expires_at")
     .eq("user_id", userId)
     .in("status", ["active", "grace"])
     .maybeSingle();
+
+  // Защита от регресса даты: не откатываем expires_at назад, если новое
+  // событие (например, повторный promo-grant или гонка вебхуков из-за
+  // внешней доставки) короче уже действующего срока (PROMO_CODES_PLAN.md 5.4).
+  let finalExpiresAt = expiresAt;
+  if (existing?.expires_at && expiresAt) {
+    finalExpiresAt = new Date(existing.expires_at) > new Date(expiresAt)
+      ? existing.expires_at
+      : expiresAt;
+  }
 
   if (existing) {
     await supabase
@@ -67,9 +87,10 @@ async function upsertActiveSubscription(
       .update({
         plan,
         status: "active",
-        expires_at: expiresAt,
+        expires_at: finalExpiresAt,
         grace_expires_at: null,
         revenuecat_id: revenuecatId,
+        source,
         updated_at: new Date().toISOString(),
       })
       .eq("id", existing.id);
@@ -78,8 +99,9 @@ async function upsertActiveSubscription(
       user_id: userId,
       plan,
       status: "active",
-      expires_at: expiresAt,
+      expires_at: finalExpiresAt,
       revenuecat_id: revenuecatId,
+      source,
     });
   }
 }
@@ -125,11 +147,23 @@ Deno.serve(async (req: Request) => {
   );
 
   if (ACTIVE_EVENT_TYPES.has(event.type)) {
-    const plan = event.product_id ? PRODUCT_TO_PLAN[event.product_id] : undefined;
-    if (!plan) {
+    const knownPlan = event.product_id ? PRODUCT_TO_PLAN[event.product_id] : undefined;
+
+    let plan: Plan;
+    let source: Source;
+    if (knownPlan) {
+      plan = knownPlan;
+      source = "revenuecat";
+    } else if (event.expiration_at_ms) {
+      // Нет известного product_id, но есть срок действия — трактуем как
+      // promotional grant от redeem-promo.
+      plan = "promo";
+      source = "promo";
+    } else {
       console.error(`Unknown product_id in RevenueCat event: ${event.product_id}`);
       return jsonResponse({ received: true, ignored: "unknown_product_id" });
     }
+
     const expiresAt = event.expiration_at_ms
       ? new Date(event.expiration_at_ms).toISOString()
       : null;
@@ -137,6 +171,7 @@ Deno.serve(async (req: Request) => {
       supabase,
       event.app_user_id,
       plan,
+      source,
       expiresAt,
       event.original_transaction_id ?? event.transaction_id,
     );

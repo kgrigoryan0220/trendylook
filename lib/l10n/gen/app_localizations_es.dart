@@ -313,6 +313,36 @@ class AppLocalizationsEs extends AppLocalizations {
   String get paywallBestValue => 'MEJOR OFERTA';
 
   @override
+  String get promoCodeSectionTitle => '¿Tienes un código promocional?';
+
+  @override
+  String get promoCodeHint => 'Introduce el código';
+
+  @override
+  String get promoCodeApply => 'Aplicar';
+
+  @override
+  String promoRedeemedUntil(String date) {
+    return '¡Código aplicado! Acceso Pro hasta $date';
+  }
+
+  @override
+  String get promoCodeNotFound => 'No se encontró este código promocional';
+
+  @override
+  String get promoCodeExpired => 'Este código ya no es válido';
+
+  @override
+  String get promoCodeExhausted => 'Este código ya se ha agotado';
+
+  @override
+  String get promoCodeAlreadyRedeemed => 'Ya has usado este código';
+
+  @override
+  String get promoRedeemError =>
+      'No se pudo aplicar el código. Inténtalo de nuevo';
+
+  @override
   String get offlineBanner => 'Sin conexión';
 
   @override

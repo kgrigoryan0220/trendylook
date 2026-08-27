@@ -660,6 +660,60 @@ abstract class AppLocalizations {
   /// **'BEST VALUE'**
   String get paywallBestValue;
 
+  /// No description provided for @promoCodeSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Have a promo code?'**
+  String get promoCodeSectionTitle;
+
+  /// No description provided for @promoCodeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter code'**
+  String get promoCodeHint;
+
+  /// No description provided for @promoCodeApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get promoCodeApply;
+
+  /// No description provided for @promoRedeemedUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Promo code applied! Pro access until {date}'**
+  String promoRedeemedUntil(String date);
+
+  /// No description provided for @promoCodeNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This promo code wasn\'t found'**
+  String get promoCodeNotFound;
+
+  /// No description provided for @promoCodeExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This promo code is no longer valid'**
+  String get promoCodeExpired;
+
+  /// No description provided for @promoCodeExhausted.
+  ///
+  /// In en, this message translates to:
+  /// **'This promo code has been fully redeemed'**
+  String get promoCodeExhausted;
+
+  /// No description provided for @promoCodeAlreadyRedeemed.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve already redeemed this code'**
+  String get promoCodeAlreadyRedeemed;
+
+  /// No description provided for @promoRedeemError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t apply the promo code. Try again'**
+  String get promoRedeemError;
+
   /// No description provided for @offlineBanner.
   ///
   /// In en, this message translates to:

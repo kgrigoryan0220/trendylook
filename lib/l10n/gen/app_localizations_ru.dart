@@ -308,6 +308,36 @@ class AppLocalizationsRu extends AppLocalizations {
   String get paywallBestValue => 'BEST VALUE';
 
   @override
+  String get promoCodeSectionTitle => 'Есть промокод?';
+
+  @override
+  String get promoCodeHint => 'Введите код';
+
+  @override
+  String get promoCodeApply => 'Активировать';
+
+  @override
+  String promoRedeemedUntil(String date) {
+    return 'Промокод активирован! Pro-доступ до $date';
+  }
+
+  @override
+  String get promoCodeNotFound => 'Такой промокод не найден';
+
+  @override
+  String get promoCodeExpired => 'Промокод больше не действует';
+
+  @override
+  String get promoCodeExhausted => 'Промокод исчерпан';
+
+  @override
+  String get promoCodeAlreadyRedeemed => 'Ты уже активировал(а) этот промокод';
+
+  @override
+  String get promoRedeemError =>
+      'Не получилось активировать промокод. Попробуй ещё раз';
+
+  @override
   String get offlineBanner => 'Нет соединения';
 
   @override

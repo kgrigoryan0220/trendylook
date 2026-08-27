@@ -21,7 +21,11 @@ class TrendyLookApp extends ConsumerStatefulWidget {
 
 class _TrendyLookAppState extends ConsumerState<TrendyLookApp> {
   DeepLinkService? _deepLinks;
-  bool _purchasesInitialized = false;
+  // app_user_id, на который сейчас залогинен RC SDK — null значит SDK ещё
+  // не сконфигурирован или разлогинен. Отслеживаем явно, а не одноразовым
+  // флагом, чтобы logout -> login другим аккаунтом переключал RC-сессию
+  // (иначе новый пользователь наследует entitlement предыдущего).
+  String? _rcUserId;
 
   @override
   void initState() {
@@ -35,14 +39,21 @@ class _TrendyLookAppState extends ConsumerState<TrendyLookApp> {
     super.dispose();
   }
 
-  void _bootstrapForUser() {
-    if (_purchasesInitialized) return;
+  void _syncPurchasesSession() {
     final user = ref.read(currentUserProvider);
-    if (user == null) return;
-    _purchasesInitialized = true;
+    final repo = ref.read(purchasesRepositoryProvider);
+    if (user == null) {
+      if (_rcUserId != null) {
+        _rcUserId = null;
+        repo.logOut();
+      }
+      return;
+    }
+    if (_rcUserId == user.id) return;
+    _rcUserId = user.id;
     // PAY-02: app_user_id в RevenueCat = Supabase user.id, чтобы revenuecat-webhook
     // мог сматчить событие с profiles.id (см. supabase/functions/revenuecat-webhook).
-    ref.read(purchasesRepositoryProvider).init(user.id);
+    repo.logIn(user.id);
   }
 
   @override
@@ -50,10 +61,8 @@ class _TrendyLookAppState extends ConsumerState<TrendyLookApp> {
     final router = ref.watch(goRouterProvider);
     _deepLinks ??= DeepLinkService(router)..init();
 
-    ref.listen(currentUserProvider, (previous, next) {
-      if (next != null) _bootstrapForUser();
-    });
-    _bootstrapForUser();
+    ref.listen(currentUserProvider, (previous, next) => _syncPurchasesSession());
+    _syncPurchasesSession();
 
     final explicitLocale = ref.watch(localeControllerProvider).valueOrNull;
     final languageCode = ref.watch(currentLanguageCodeProvider);

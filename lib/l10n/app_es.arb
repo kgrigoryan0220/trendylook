@@ -109,6 +109,19 @@
   "paywallBenefit3": "Acceso anticipado a tendencias",
   "paywallBestValue": "MEJOR OFERTA",
 
+  "promoCodeSectionTitle": "¿Tienes un código promocional?",
+  "promoCodeHint": "Introduce el código",
+  "promoCodeApply": "Aplicar",
+  "promoRedeemedUntil": "¡Código aplicado! Acceso Pro hasta {date}",
+  "@promoRedeemedUntil": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "promoCodeNotFound": "No se encontró este código promocional",
+  "promoCodeExpired": "Este código ya no es válido",
+  "promoCodeExhausted": "Este código ya se ha agotado",
+  "promoCodeAlreadyRedeemed": "Ya has usado este código",
+  "promoRedeemError": "No se pudo aplicar el código. Inténtalo de nuevo",
+
   "offlineBanner": "Sin conexión",
 
   "bottomTabHome": "Inicio",

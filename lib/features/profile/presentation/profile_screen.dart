@@ -9,6 +9,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../l10n/gen/app_localizations.dart';
 import '../../../shared/providers/billing_provider.dart';
 import '../../../shared/widgets/confirm_bottom_sheet.dart';
+import '../../../shared/widgets/promo_code_section.dart';
 import '../../auth/presentation/auth_controller.dart';
 
 const _localeEndonyms = {
@@ -116,6 +117,8 @@ class ProfileScreen extends ConsumerWidget {
           if (billing != null && !billing.isPro) ...[
             const SizedBox(height: 14),
             _UpgradeBanner(onTap: () => context.push('/paywall')),
+            const SizedBox(height: 20),
+            const PromoCodeSection(),
           ],
           const SizedBox(height: 20),
           const _SettingsList(),

@@ -10,12 +10,14 @@ class SecondaryButton extends StatelessWidget {
     required this.onPressed,
     this.icon,
     this.foregroundColor = Colors.white,
+    this.isLoading = false,
   });
 
   final String label;
   final VoidCallback? onPressed;
   final IconData? icon;
   final Color foregroundColor;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -35,19 +37,27 @@ class SecondaryButton extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (icon != null) ...[
-                  Icon(icon, size: 18, color: foregroundColor),
-                  const SizedBox(width: 8),
-                ],
-                Text(
-                  label,
-                  style: AppTheme.body(
-                    context,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 14.5,
-                    color: foregroundColor,
+                if (isLoading)
+                  SizedBox(
+                    height: 16,
+                    width: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2, color: foregroundColor),
+                  )
+                else ...[
+                  if (icon != null) ...[
+                    Icon(icon, size: 18, color: foregroundColor),
+                    const SizedBox(width: 8),
+                  ],
+                  Text(
+                    label,
+                    style: AppTheme.body(
+                      context,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14.5,
+                      color: foregroundColor,
+                    ),
                   ),
-                ),
+                ],
               ],
             ),
           ),

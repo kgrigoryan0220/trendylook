@@ -8,6 +8,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../l10n/gen/app_localizations.dart';
 import '../../../shared/widgets/plan_card.dart';
 import '../../../shared/widgets/primary_button.dart';
+import '../../../shared/widgets/promo_code_section.dart';
 import 'paywall_controller.dart';
 
 String _planTitle(AppLocalizations l10n, PlanOffer plan) =>
@@ -147,6 +148,8 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                         ),
                         const SizedBox(height: 24),
                         const _BenefitsList(),
+                        const SizedBox(height: 24),
+                        const PromoCodeSection(),
                         const SizedBox(height: 20),
                         Text(
                           l10n.paywallSocialProof,

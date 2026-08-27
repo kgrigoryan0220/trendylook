@@ -109,6 +109,19 @@
   "paywallBenefit3": "Früher Zugang zu Trends",
   "paywallBestValue": "BESTES ANGEBOT",
 
+  "promoCodeSectionTitle": "Hast du einen Promo-Code?",
+  "promoCodeHint": "Code eingeben",
+  "promoCodeApply": "Anwenden",
+  "promoRedeemedUntil": "Code angewendet! Pro-Zugang bis {date}",
+  "@promoRedeemedUntil": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "promoCodeNotFound": "Dieser Promo-Code wurde nicht gefunden",
+  "promoCodeExpired": "Dieser Code ist nicht mehr gültig",
+  "promoCodeExhausted": "Dieser Code ist bereits aufgebraucht",
+  "promoCodeAlreadyRedeemed": "Du hast diesen Code bereits eingelöst",
+  "promoRedeemError": "Code konnte nicht angewendet werden. Versuch es noch mal",
+
   "offlineBanner": "Keine Verbindung",
 
   "bottomTabHome": "Start",
