@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../l10n/gen/app_localizations.dart';
 import '../../../shared/providers/billing_provider.dart';
+import '../../home/presentation/home_history_controller.dart';
 import '../../share/presentation/share_target.dart';
 import 'check_flow_controller.dart';
 import 'result_view.dart';
@@ -28,6 +29,7 @@ class CheckResultScreen extends ConsumerWidget {
           : const ColoredBox(color: Colors.black12),
       onClose: () {
         ref.read(checkFlowControllerProvider.notifier).reset();
+        invalidateHomeHistory(ref);
         context.go('/home');
       },
       onShare: () {

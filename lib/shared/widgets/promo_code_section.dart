@@ -82,35 +82,34 @@ class _PromoCodeSectionState extends ConsumerState<PromoCodeSection> {
           style: AppTheme.body(context, fontWeight: FontWeight.w600, fontSize: 13),
         ),
         const SizedBox(height: 10),
-        Row(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(
-              child: TextField(
-                controller: _controller,
-                enabled: !_redeeming,
-                textCapitalization: TextCapitalization.characters,
-                onSubmitted: (_) => _redeem(),
-                decoration: InputDecoration(
-                  hintText: l10n.promoCodeHint,
-                  filled: true,
-                  fillColor: Colors.white.withValues(alpha: 0.06),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(999),
-                    borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.16), width: 1.5),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(999),
-                    borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.16), width: 1.5),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(999),
-                    borderSide: const BorderSide(color: AppColors.pink, width: 1.5),
-                  ),
+            TextField(
+              controller: _controller,
+              enabled: !_redeeming,
+              textCapitalization: TextCapitalization.characters,
+              onSubmitted: (_) => _redeem(),
+              decoration: InputDecoration(
+                hintText: l10n.promoCodeHint,
+                filled: true,
+                fillColor: Colors.white.withValues(alpha: 0.06),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(999),
+                  borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.16), width: 1.5),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(999),
+                  borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.16), width: 1.5),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(999),
+                  borderSide: const BorderSide(color: AppColors.pink, width: 1.5),
                 ),
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(height: 10),
             SecondaryButton(
               label: l10n.promoCodeApply,
               isLoading: _redeeming,

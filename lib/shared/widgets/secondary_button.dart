@@ -21,44 +21,55 @@ class SecondaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.06),
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.16), width: 1.5),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
+    return SizedBox(
+      width: double.infinity,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.06),
           borderRadius: BorderRadius.circular(999),
-          onTap: onPressed,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (isLoading)
-                  SizedBox(
-                    height: 16,
-                    width: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2, color: foregroundColor),
-                  )
-                else ...[
-                  if (icon != null) ...[
-                    Icon(icon, size: 18, color: foregroundColor),
-                    const SizedBox(width: 8),
-                  ],
-                  Text(
-                    label,
-                    style: AppTheme.body(
-                      context,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14.5,
-                      color: foregroundColor,
-                    ),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.16), width: 1.5),
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(999),
+            onTap: onPressed,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+              child: Center(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (isLoading)
+                        SizedBox(
+                          height: 16,
+                          width: 16,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: foregroundColor),
+                        )
+                      else ...[
+                        if (icon != null) ...[
+                          Icon(icon, size: 18, color: foregroundColor),
+                          const SizedBox(width: 8),
+                        ],
+                        Text(
+                          label,
+                          maxLines: 1,
+                          softWrap: false,
+                          style: AppTheme.body(
+                            context,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14.5,
+                            color: foregroundColor,
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
-                ],
-              ],
+                ),
+              ),
             ),
           ),
         ),
