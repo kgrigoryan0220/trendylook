@@ -48,6 +48,7 @@ class HistoryItemTile extends StatelessWidget {
                         width: 52,
                         height: 52,
                         fit: BoxFit.cover,
+                        alignment: Alignment.topCenter,
                         errorBuilder: (_, _, _) => Container(
                           width: 52,
                           height: 52,

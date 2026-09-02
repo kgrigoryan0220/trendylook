@@ -25,7 +25,7 @@ class CheckResultScreen extends ConsumerWidget {
     return ResultView(
       record: record,
       photo: flow.photo != null
-          ? Image.file(flow.photo!, fit: BoxFit.cover)
+          ? Image.file(flow.photo!, fit: BoxFit.cover, alignment: Alignment.topCenter)
           : const ColoredBox(color: Colors.black12),
       onClose: () {
         ref.read(checkFlowControllerProvider.notifier).reset();

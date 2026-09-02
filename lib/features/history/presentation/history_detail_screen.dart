@@ -43,7 +43,7 @@ class HistoryDetailScreen extends ConsumerWidget {
         return ResultView(
           record: record,
           photo: photoAsync.when(
-            data: (url) => Image.network(url, fit: BoxFit.cover),
+            data: (url) => Image.network(url, fit: BoxFit.cover, alignment: Alignment.topCenter),
             loading: () => const ColoredBox(color: Colors.black12),
             error: (_, _) => const ColoredBox(color: Colors.black12),
           ),

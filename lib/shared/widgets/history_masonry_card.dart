@@ -144,6 +144,7 @@ class _Photo extends StatelessWidget {
     return Image.network(
       photoUrl!,
       fit: BoxFit.cover,
+      alignment: Alignment.topCenter,
       errorBuilder: (_, _, _) => ColoredBox(color: Colors.white.withValues(alpha: 0.08)),
     );
   }

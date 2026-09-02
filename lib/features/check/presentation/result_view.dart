@@ -24,6 +24,13 @@ class ResultView extends StatelessWidget {
     this.onBack,
   });
 
+  static const _photoHeight = 210.0;
+  static const _scoreRingSize = 200.0;
+  static const _scoreRingPhotoOverlap = 64.0;
+  static const _contentOverlap = 44.0;
+  /// Доля высоты фото без затемнения (как в оригинале ~40%, чуть больше для лица).
+  static const _fadeClearPhotoRatio = 0.55;
+
   final CheckRecord record;
   final Widget photo;
   final VoidCallback onShare;
@@ -36,6 +43,13 @@ class ResultView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final isIconStatus = record.trendScore >= 80;
+    final screenHeight = MediaQuery.sizeOf(context).height;
+    // Кольцо — по центру экрана; контент сохраняет исходный зазор относительно кольца.
+    final ringTranslateY = screenHeight / 2 - _scoreRingSize / 2 - _photoHeight;
+    final contentTranslateY = ringTranslateY + _scoreRingPhotoOverlap - _contentOverlap;
+    final fadeHeight = _photoHeight + ringTranslateY + _scoreRingSize;
+    final fadeStartStop =
+        (_photoHeight * _fadeClearPhotoRatio / fadeHeight).clamp(0.0, 0.92);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -46,50 +60,68 @@ class ResultView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Stack(
-                  children: [
-                    SizedBox(height: 210, width: double.infinity, child: photo),
-                    Positioned.fill(
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            stops: const [0.4, 1],
-                            colors: [
-                              Colors.transparent,
-                              AppColors.background,
-                            ],
+                SizedBox(
+                  height: _photoHeight,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: fadeHeight,
+                        child: photo,
+                      ),
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: fadeHeight,
+                        child: IgnorePointer(
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                stops: [0, fadeStartStop, 1],
+                                colors: [
+                                  Colors.transparent,
+                                  Colors.transparent,
+                                  AppColors.background,
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SafeArea(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 20, top: 8),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: _RoundBackButton(
-                            icon: onBack != null ? Icons.arrow_back_ios_new : Icons.close,
-                            onTap: onBack ?? onClose,
+                      SafeArea(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 20, top: 8),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: _RoundBackButton(
+                              icon: onBack != null ? Icons.arrow_back_ios_new : Icons.close,
+                              onTap: onBack ?? onClose,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 Transform.translate(
-                  offset: const Offset(0, -64),
+                  offset: Offset(0, ringTranslateY),
                   child: Center(
                     child: ScoreRing(
                       score: record.trendScore,
                       label: record.trendLabel,
+                      size: _scoreRingSize,
                       animate: onBack == null,
                     ),
                   ),
                 ),
                 Transform.translate(
-                  offset: const Offset(0, -44),
+                  offset: Offset(0, contentTranslateY),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
