@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -50,13 +52,17 @@ class ResultView extends StatelessWidget {
     final fadeHeight = _photoHeight + ringTranslateY + _scoreRingSize;
     final fadeStartStop =
         (_photoHeight * _fadeClearPhotoRatio / fadeHeight).clamp(0.0, 0.92);
+    // Transform.translate не меняет layout-height — компенсируем сдвиг для скролла.
+    final scrollBottomInset = math.max(0.0, contentTranslateY);
 
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Stack(
         children: [
           SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 32),
+            padding: EdgeInsets.only(
+              bottom: 32 + MediaQuery.paddingOf(context).bottom,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -171,6 +177,7 @@ class ResultView extends StatelessWidget {
                     ),
                   ),
                 ),
+                SizedBox(height: scrollBottomInset),
               ],
             ),
           ),
