@@ -229,6 +229,20 @@ class AppLocalizationsPt extends AppLocalizations {
   String get logout => 'Sair';
 
   @override
+  String get deleteAccount => 'Excluir conta';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Excluir sua conta permanentemente?';
+
+  @override
+  String get deleteAccountConfirmMessage =>
+      'Todas as fotos, o histórico e os dados da conta serão removidos. Esta ação não pode ser desfeita.';
+
+  @override
+  String get deleteAccountError =>
+      'Não foi possível excluir a conta. Tente novamente ou entre em contato com o suporte.';
+
+  @override
   String get languagePickerTitle => 'Escolha o idioma';
 
   @override

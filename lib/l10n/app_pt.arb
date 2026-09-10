@@ -78,6 +78,10 @@
   "upgradeToPro": "Assinar o Pro",
   "logoutConfirmTitle": "Sair da conta?",
   "logout": "Sair",
+  "deleteAccount": "Excluir conta",
+  "deleteAccountConfirmTitle": "Excluir sua conta permanentemente?",
+  "deleteAccountConfirmMessage": "Todas as fotos, o histórico e os dados da conta serão removidos. Esta ação não pode ser desfeita.",
+  "deleteAccountError": "Não foi possível excluir a conta. Tente novamente ou entre em contato com o suporte.",
   "languagePickerTitle": "Escolha o idioma",
   "languageSystemDefault": "Padrão do sistema",
 

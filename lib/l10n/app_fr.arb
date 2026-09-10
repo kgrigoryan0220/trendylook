@@ -78,6 +78,10 @@
   "upgradeToPro": "Passer à Pro",
   "logoutConfirmTitle": "Se déconnecter du compte ?",
   "logout": "Se déconnecter",
+  "deleteAccount": "Supprimer le compte",
+  "deleteAccountConfirmTitle": "Supprimer définitivement ton compte ?",
+  "deleteAccountConfirmMessage": "Toutes tes photos, ton historique et tes données seront supprimés. Cette action est irréversible.",
+  "deleteAccountError": "Impossible de supprimer le compte. Réessaie ou contacte l'assistance.",
   "languagePickerTitle": "Choisir la langue",
   "languageSystemDefault": "Paramètres système",
 

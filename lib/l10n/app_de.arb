@@ -78,6 +78,10 @@
   "upgradeToPro": "Auf Pro upgraden",
   "logoutConfirmTitle": "Vom Konto abmelden?",
   "logout": "Abmelden",
+  "deleteAccount": "Konto löschen",
+  "deleteAccountConfirmTitle": "Konto dauerhaft löschen?",
+  "deleteAccountConfirmMessage": "Alle Fotos, der Verlauf und Kontodaten werden gelöscht. Dies kann nicht rückgängig gemacht werden.",
+  "deleteAccountError": "Konto konnte nicht gelöscht werden. Bitte versuche es erneut oder kontaktiere den Support.",
   "languagePickerTitle": "Sprache wählen",
   "languageSystemDefault": "Systemstandard",
 

@@ -78,6 +78,10 @@
   "upgradeToPro": "Перейти на Pro",
   "logoutConfirmTitle": "Выйти из аккаунта?",
   "logout": "Выйти",
+  "deleteAccount": "Удалить аккаунт",
+  "deleteAccountConfirmTitle": "Удалить аккаунт навсегда?",
+  "deleteAccountConfirmMessage": "Все фото, история проверок и данные аккаунта будут удалены. Это действие нельзя отменить.",
+  "deleteAccountError": "Не получилось удалить аккаунт. Попробуй ещё раз или напиши в поддержку.",
   "languagePickerTitle": "Выбери язык",
   "languageSystemDefault": "Как в системе",
 

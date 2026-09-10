@@ -228,6 +228,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logout => 'Log out';
 
   @override
+  String get deleteAccount => 'Delete account';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Delete your account permanently?';
+
+  @override
+  String get deleteAccountConfirmMessage =>
+      'All your photos, check history, and account data will be removed. This cannot be undone.';
+
+  @override
+  String get deleteAccountError =>
+      'Couldn\'t delete your account. Please try again or contact support.';
+
+  @override
   String get languagePickerTitle => 'Choose language';
 
   @override

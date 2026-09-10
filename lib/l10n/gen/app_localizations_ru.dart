@@ -224,6 +224,20 @@ class AppLocalizationsRu extends AppLocalizations {
   String get logout => 'Выйти';
 
   @override
+  String get deleteAccount => 'Удалить аккаунт';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Удалить аккаунт навсегда?';
+
+  @override
+  String get deleteAccountConfirmMessage =>
+      'Все фото, история проверок и данные аккаунта будут удалены. Это действие нельзя отменить.';
+
+  @override
+  String get deleteAccountError =>
+      'Не получилось удалить аккаунт. Попробуй ещё раз или напиши в поддержку.';
+
+  @override
   String get languagePickerTitle => 'Выбери язык';
 
   @override

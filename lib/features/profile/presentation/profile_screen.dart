@@ -126,6 +126,10 @@ class ProfileScreen extends ConsumerWidget {
           _LogoutButton(
             onLoggedOut: () => context.go('/auth'),
           ),
+          const SizedBox(height: 12),
+          _DeleteAccountButton(
+            onDeleted: () => context.go('/auth'),
+          ),
         ],
       ),
     );
@@ -337,6 +341,7 @@ class _LogoutButton extends ConsumerWidget {
           context,
           title: l10n.logoutConfirmTitle,
           confirmLabel: l10n.logout,
+          cancelLabel: l10n.cancel,
         );
         if (!confirmed) return;
         await ref.read(authRepositoryProvider).signOut();
@@ -353,6 +358,73 @@ class _LogoutButton extends ConsumerWidget {
             l10n.logout,
             style: const TextStyle(color: AppColors.error, fontWeight: FontWeight.w700, fontSize: 14.5),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DeleteAccountButton extends ConsumerStatefulWidget {
+  const _DeleteAccountButton({required this.onDeleted});
+
+  final VoidCallback onDeleted;
+
+  @override
+  ConsumerState<_DeleteAccountButton> createState() => _DeleteAccountButtonState();
+}
+
+class _DeleteAccountButtonState extends ConsumerState<_DeleteAccountButton> {
+  bool _deleting = false;
+
+  Future<void> _deleteAccount() async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showConfirmBottomSheet(
+      context,
+      title: l10n.deleteAccountConfirmTitle,
+      message: l10n.deleteAccountConfirmMessage,
+      confirmLabel: l10n.deleteAccount,
+      cancelLabel: l10n.cancel,
+    );
+    if (!confirmed || !mounted) return;
+
+    setState(() => _deleting = true);
+    try {
+      await ref.read(authRepositoryProvider).deleteAccount();
+      if (!mounted) return;
+      widget.onDeleted();
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.deleteAccountError)),
+      );
+    } finally {
+      if (mounted) setState(() => _deleting = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return InkWell(
+      borderRadius: BorderRadius.circular(999),
+      onTap: _deleting ? null : _deleteAccount,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        child: Center(
+          child: _deleting
+              ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.error),
+                )
+              : Text(
+                  l10n.deleteAccount,
+                  style: TextStyle(
+                    color: AppColors.error.withValues(alpha: 0.85),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13.5,
+                  ),
+                ),
         ),
       ),
     );

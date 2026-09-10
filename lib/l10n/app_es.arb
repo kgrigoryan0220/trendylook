@@ -78,6 +78,10 @@
   "upgradeToPro": "Pasar a Pro",
   "logoutConfirmTitle": "¿Cerrar sesión?",
   "logout": "Cerrar sesión",
+  "deleteAccount": "Eliminar cuenta",
+  "deleteAccountConfirmTitle": "¿Eliminar tu cuenta permanentemente?",
+  "deleteAccountConfirmMessage": "Se eliminarán todas tus fotos, el historial y los datos de la cuenta. Esta acción no se puede deshacer.",
+  "deleteAccountError": "No se pudo eliminar la cuenta. Inténtalo de nuevo o contacta con soporte.",
   "languagePickerTitle": "Elige el idioma",
   "languageSystemDefault": "Predeterminado del sistema",
 

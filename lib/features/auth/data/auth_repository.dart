@@ -85,6 +85,15 @@ class AuthRepository {
     await _client.auth.signOut();
   }
 
+  /// GDPR: удаление аккаунта, фото и истории (Edge Function `delete-account`).
+  Future<void> deleteAccount() async {
+    final response = await _client.functions.invoke('delete-account');
+    if (response.status != 200) {
+      throw AuthException('Account deletion failed (${response.status})');
+    }
+    await _client.auth.signOut();
+  }
+
   String _generateNonce([int length = 32]) {
     const charset =
         '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';

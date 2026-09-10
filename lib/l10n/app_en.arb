@@ -94,6 +94,10 @@
   "upgradeToPro": "Upgrade to Pro",
   "logoutConfirmTitle": "Log out of your account?",
   "logout": "Log out",
+  "deleteAccount": "Delete account",
+  "deleteAccountConfirmTitle": "Delete your account permanently?",
+  "deleteAccountConfirmMessage": "All your photos, check history, and account data will be removed. This cannot be undone.",
+  "deleteAccountError": "Couldn't delete your account. Please try again or contact support.",
   "languagePickerTitle": "Choose language",
   "languageSystemDefault": "System default",
 

@@ -7,6 +7,8 @@ Future<bool> showConfirmBottomSheet(
   BuildContext context, {
   required String title,
   required String confirmLabel,
+  String? message,
+  String cancelLabel = 'Отмена',
 }) async {
   final result = await showModalBottomSheet<bool>(
     context: context,
@@ -31,13 +33,21 @@ Future<bool> showConfirmBottomSheet(
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 17),
               ),
+              if (message != null) ...[
+                const SizedBox(height: 10),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 13.5),
+                ),
+              ],
               const SizedBox(height: 20),
               Row(
                 children: [
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () => Navigator.of(context).pop(false),
-                      child: const Text('Отмена'),
+                      child: Text(cancelLabel),
                     ),
                   ),
                   const SizedBox(width: 10),
