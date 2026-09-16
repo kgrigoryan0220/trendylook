@@ -12,6 +12,12 @@
   "onboardingNext": "Suivant",
   "onboardingStart": "Commencer",
   "onboardingSkip": "Passer",
+  "onboardingTip1Title": "Ajoute un sac statement",
+  "onboardingTip1Description": "Un accessoire contrasté sublime le look immédiatement",
+  "onboardingTip2Title": "Adoucis la silhouette",
+  "onboardingTip2Description": "Essaie une couche plus claire sous le blazer",
+  "onboardingTip3Title": "Fixe les proportions",
+  "onboardingTip3Description": "Une ceinture marque la taille et affine la tenue",
 
   "authSubtitle": "Connecte-toi pour commencer",
   "authTerms": "En continuant, tu acceptes les Conditions et la Politique de confidentialité",

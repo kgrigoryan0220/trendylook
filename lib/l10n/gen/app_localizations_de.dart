@@ -41,6 +41,27 @@ class AppLocalizationsDe extends AppLocalizations {
   String get onboardingSkip => 'Überspringen';
 
   @override
+  String get onboardingTip1Title => 'Setze auf eine Statement-Bag';
+
+  @override
+  String get onboardingTip1Description =>
+      'Ein kontrastreiches Accessoire hebt den Look sofort';
+
+  @override
+  String get onboardingTip2Title => 'Weiche die Silhouette auf';
+
+  @override
+  String get onboardingTip2Description =>
+      'Probiere eine hellere Schicht unter dem Blazer';
+
+  @override
+  String get onboardingTip3Title => 'Fixiere die Proportionen';
+
+  @override
+  String get onboardingTip3Description =>
+      'Ein Gürtel betont die Taille und schärft das Outfit';
+
+  @override
   String get authSubtitle => 'Melde dich an, um loszulegen';
 
   @override

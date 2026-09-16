@@ -41,6 +41,27 @@ class AppLocalizationsPt extends AppLocalizations {
   String get onboardingSkip => 'Pular';
 
   @override
+  String get onboardingTip1Title => 'Adicione uma bolsa statement';
+
+  @override
+  String get onboardingTip1Description =>
+      'Um acessório em contraste eleva o look na hora';
+
+  @override
+  String get onboardingTip2Title => 'Suavize a silhueta';
+
+  @override
+  String get onboardingTip2Description =>
+      'Experimente uma camada mais clara sob o blazer';
+
+  @override
+  String get onboardingTip3Title => 'Feche as proporções';
+
+  @override
+  String get onboardingTip3Description =>
+      'Um cinto marca a cintura e afina o outfit';
+
+  @override
   String get authSubtitle => 'Entre para começar';
 
   @override

@@ -7,7 +7,15 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../l10n/gen/app_localizations.dart';
 import '../../../shared/widgets/score_ring.dart';
+import 'onboarding_look_carousel.dart';
 import 'onboarding_prefs.dart';
+import 'onboarding_tips_preview.dart';
+
+const _slide1Looks = [
+  'assets/onboarding/look_1.jpg',
+  'assets/onboarding/look_2.jpg',
+  'assets/onboarding/look_3.jpg',
+];
 
 /// 4.2 Onboarding (3 слайда + progress dots).
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -25,17 +33,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         _SlideData(
           title: l10n.onboardingSlide1Title,
           subtitle: l10n.onboardingSlide1Subtitle,
-          icon: Icons.camera_alt_outlined,
+          visual: _SlideVisual.lookCarousel,
         ),
         _SlideData(
           title: l10n.onboardingSlide2Title,
           subtitle: l10n.onboardingSlide2Subtitle,
-          icon: null,
+          visual: _SlideVisual.scoreRing,
         ),
         _SlideData(
           title: l10n.onboardingSlide3Title,
           subtitle: l10n.onboardingSlide3Subtitle,
-          icon: Icons.auto_awesome_outlined,
+          visual: _SlideVisual.tipsPreview,
         ),
       ];
 
@@ -71,7 +79,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         child: Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(28, 60, 28, 40),
+              padding: const EdgeInsets.fromLTRB(16, 60, 16, 40),
               child: Column(
                 children: [
                   Expanded(
@@ -79,7 +87,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       controller: _pageController,
                       itemCount: slides.length,
                       onPageChanged: (i) => setState(() => _page = i),
-                      itemBuilder: (context, index) => _SlideView(data: slides[index]),
+                      itemBuilder: (context, index) => _SlideView(
+                        data: slides[index],
+                        active: index == _page,
+                      ),
                     ),
                   ),
                   Row(
@@ -99,26 +110,29 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     }),
                   ),
                   const SizedBox(height: 24),
-                  SizedBox(
-                    width: double.infinity,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        gradient: AppColors.gradientPrimary,
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: AppColors.gradientPrimary,
                           borderRadius: BorderRadius.circular(999),
-                          onTap: _next,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 17),
-                            child: Center(
-                              child: Text(
-                                _page == slides.length - 1
-                                    ? l10n.onboardingStart
-                                    : l10n.onboardingNext,
-                                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(999),
+                            onTap: _next,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 17),
+                              child: Center(
+                                child: Text(
+                                  _page == slides.length - 1
+                                      ? l10n.onboardingStart
+                                      : l10n.onboardingNext,
+                                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                                ),
                               ),
                             ),
                           ),
@@ -144,47 +158,75 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 }
 
+enum _SlideVisual { lookCarousel, scoreRing, tipsPreview }
+
 class _SlideData {
-  const _SlideData({required this.title, required this.subtitle, this.icon});
+  const _SlideData({
+    required this.title,
+    required this.subtitle,
+    required this.visual,
+  });
   final String title;
   final String subtitle;
-  final IconData? icon;
+  final _SlideVisual visual;
 }
 
 class _SlideView extends StatelessWidget {
-  const _SlideView({required this.data});
+  const _SlideView({required this.data, required this.active});
   final _SlideData data;
+  final bool active;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        if (data.icon != null)
-          Container(
-            width: 220,
-            height: 180,
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(24),
+    final l10n = AppLocalizations.of(context);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                switch (data.visual) {
+                  _SlideVisual.lookCarousel => const OnboardingLookCarousel(
+                      images: _slide1Looks,
+                      height: 268,
+                    ),
+                  _SlideVisual.scoreRing => ScoreRing(
+                      score: 82,
+                      label: 'Trendy',
+                      size: 200,
+                      animate: active,
+                    ),
+                  _SlideVisual.tipsPreview => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: OnboardingTipsPreview(l10n: l10n, play: active),
+                    ),
+                },
+                const SizedBox(height: 28),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Text(
+                    data.title,
+                    textAlign: TextAlign.center,
+                    style: AppTheme.heading(context, fontSize: 24, height: 1.25),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Text(
+                    data.subtitle,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                  ),
+                ),
+              ],
             ),
-            child: Icon(data.icon, size: 56, color: AppColors.textSecondary),
-          )
-        else
-          const ScoreRing(score: 82, label: 'Trendy', size: 200, animate: false),
-        const SizedBox(height: 32),
-        Text(
-          data.title,
-          textAlign: TextAlign.center,
-          style: AppTheme.heading(context, fontSize: 24, height: 1.25),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          data.subtitle,
-          textAlign: TextAlign.center,
-          style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
-        ),
-      ],
+          ),
+        );
+      },
     );
   }
 }

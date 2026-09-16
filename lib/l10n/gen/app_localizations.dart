@@ -168,6 +168,42 @@ abstract class AppLocalizations {
   /// **'Skip'**
   String get onboardingSkip;
 
+  /// No description provided for @onboardingTip1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a statement bag'**
+  String get onboardingTip1Title;
+
+  /// No description provided for @onboardingTip1Description.
+  ///
+  /// In en, this message translates to:
+  /// **'A contrasting accessory instantly lifts the look'**
+  String get onboardingTip1Description;
+
+  /// No description provided for @onboardingTip2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Soften the silhouette'**
+  String get onboardingTip2Title;
+
+  /// No description provided for @onboardingTip2Description.
+  ///
+  /// In en, this message translates to:
+  /// **'Try a lighter layer under the blazer'**
+  String get onboardingTip2Description;
+
+  /// No description provided for @onboardingTip3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Lock in proportions'**
+  String get onboardingTip3Title;
+
+  /// No description provided for @onboardingTip3Description.
+  ///
+  /// In en, this message translates to:
+  /// **'A belt defines the waist and sharpens the outfit'**
+  String get onboardingTip3Description;
+
   /// No description provided for @authSubtitle.
   ///
   /// In en, this message translates to:

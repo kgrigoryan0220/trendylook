@@ -41,6 +41,27 @@ class AppLocalizationsEs extends AppLocalizations {
   String get onboardingSkip => 'Omitir';
 
   @override
+  String get onboardingTip1Title => 'Añade un bolso protagonista';
+
+  @override
+  String get onboardingTip1Description =>
+      'Un accesorio en contraste eleva el look al instante';
+
+  @override
+  String get onboardingTip2Title => 'Suaviza la silueta';
+
+  @override
+  String get onboardingTip2Description =>
+      'Prueba una capa más clara bajo la blazer';
+
+  @override
+  String get onboardingTip3Title => 'Define las proporciones';
+
+  @override
+  String get onboardingTip3Description =>
+      'Un cinturón marca la cintura y afina el outfit';
+
+  @override
   String get authSubtitle => 'Inicia sesión para empezar';
 
   @override

@@ -13,6 +13,12 @@
   "onboardingNext": "Next",
   "onboardingStart": "Start",
   "onboardingSkip": "Skip",
+  "onboardingTip1Title": "Add a statement bag",
+  "onboardingTip1Description": "A contrasting accessory instantly lifts the look",
+  "onboardingTip2Title": "Soften the silhouette",
+  "onboardingTip2Description": "Try a lighter layer under the blazer",
+  "onboardingTip3Title": "Lock in proportions",
+  "onboardingTip3Description": "A belt defines the waist and sharpens the outfit",
 
   "authSubtitle": "Sign in to get started",
   "authTerms": "By continuing, you agree to the Terms and Privacy Policy",

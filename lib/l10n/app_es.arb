@@ -12,6 +12,12 @@
   "onboardingNext": "Siguiente",
   "onboardingStart": "Empezar",
   "onboardingSkip": "Omitir",
+  "onboardingTip1Title": "Añade un bolso protagonista",
+  "onboardingTip1Description": "Un accesorio en contraste eleva el look al instante",
+  "onboardingTip2Title": "Suaviza la silueta",
+  "onboardingTip2Description": "Prueba una capa más clara bajo la blazer",
+  "onboardingTip3Title": "Define las proporciones",
+  "onboardingTip3Description": "Un cinturón marca la cintura y afina el outfit",
 
   "authSubtitle": "Inicia sesión para empezar",
   "authTerms": "Al continuar, aceptas los Términos y la Política de privacidad",

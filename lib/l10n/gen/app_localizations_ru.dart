@@ -39,6 +39,27 @@ class AppLocalizationsRu extends AppLocalizations {
   String get onboardingSkip => 'Пропустить';
 
   @override
+  String get onboardingTip1Title => 'Добавь акцент сумкой';
+
+  @override
+  String get onboardingTip1Description =>
+      'Контрастный аксессуар сразу поднимает образ';
+
+  @override
+  String get onboardingTip2Title => 'Смягчи силуэт';
+
+  @override
+  String get onboardingTip2Description =>
+      'Попробуй более светлый слой под пиджак';
+
+  @override
+  String get onboardingTip3Title => 'Зафиксируй пропорции';
+
+  @override
+  String get onboardingTip3Description =>
+      'Ремень подчеркнёт талию и соберёт лук';
+
+  @override
   String get authSubtitle => 'Войди, чтобы начать';
 
   @override

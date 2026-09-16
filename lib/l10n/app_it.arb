@@ -12,6 +12,12 @@
   "onboardingNext": "Avanti",
   "onboardingStart": "Inizia",
   "onboardingSkip": "Salta",
+  "onboardingTip1Title": "Aggiungi una borsa statement",
+  "onboardingTip1Description": "Un accessorio a contrasto alza subito il look",
+  "onboardingTip2Title": "Ammorbidisci la silhouette",
+  "onboardingTip2Description": "Prova uno strato più chiaro sotto la blazer",
+  "onboardingTip3Title": "Blocca le proporzioni",
+  "onboardingTip3Description": "Una cintura definisce il punto vita e raffina l'outfit",
 
   "authSubtitle": "Accedi per iniziare",
   "authTerms": "Continuando, accetti i Termini e la Privacy Policy",
