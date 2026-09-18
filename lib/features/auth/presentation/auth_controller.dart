@@ -17,6 +17,7 @@ class AuthController extends AsyncNotifier<void> {
 
   Future<void> signIn(AuthProviderKind provider) async {
     state = const AsyncLoading();
+    final providerName = provider == AuthProviderKind.apple ? 'apple' : 'google';
     try {
       final repo = ref.read(authRepositoryProvider);
       if (provider == AuthProviderKind.apple) {
@@ -25,12 +26,20 @@ class AuthController extends AsyncNotifier<void> {
         await repo.signInWithGoogle();
       }
       ref.read(analyticsServiceProvider).track('auth_success', {
-        'provider': provider == AuthProviderKind.apple ? 'apple' : 'google',
+        'provider': providerName,
       });
       state = const AsyncData(null);
     } on AuthException catch (e) {
+      ref.read(analyticsServiceProvider).track('auth_failed', {
+        'provider': providerName,
+        'error': e.message,
+      });
       state = AsyncError(e, StackTrace.current);
     } catch (e, st) {
+      ref.read(analyticsServiceProvider).track('auth_failed', {
+        'provider': providerName,
+        'error': e.runtimeType.toString(),
+      });
       state = AsyncError(e, st);
     }
   }

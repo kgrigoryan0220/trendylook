@@ -149,7 +149,8 @@ Product IDs должны **совпадать** в коде, сторах и RC:
 | `REVENUECAT_API_KEY_ANDROID` | да (Android) |
 | `GOOGLE_SERVER_CLIENT_ID` | да (Google Sign-In) |
 | `SENTRY_DSN` | опционально |
-| `POSTHOG_API_KEY` | опционально |
+| `POSTHOG_API_KEY` | **да** для prod analytics (EU) — см. [`POSTHOG.md`](POSTHOG.md) |
+| `POSTHOG_HOST` | `https://eu.i.posthog.com` (default в AppConfig; явно в CI) |
 
 Supabase URL / anon key уже зашиты в `AppConfig` по умолчанию (это клиентские ключи).
 

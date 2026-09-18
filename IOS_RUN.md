@@ -34,14 +34,22 @@ flutter devices
 open -a Simulator
 
 flutter run \
-  --dart-define=GOOGLE_SERVER_CLIENT_ID=296414004775-pdog1isingjoa3f2spfnia6cekg9dhok.apps.googleusercontent.com
+  --dart-define-from-file=dart_defines.dev.json
+```
+
+Файл `dart_defines.dev.json` в корне (в `.gitignore`) — там PostHog Project API Key и Google Web Client ID. Без файла:
+
+```bash
+flutter run \
+  --dart-define=GOOGLE_SERVER_CLIENT_ID=296414004775-pdog1isingjoa3f2spfnia6cekg9dhok.apps.googleusercontent.com \
+  --dart-define=POSTHOG_API_KEY=phc_...
 ```
 
 Если устройств несколько:
 
 ```bash
 flutter run -d <simulator_id> \
-  --dart-define=GOOGLE_SERVER_CLIENT_ID=296414004775-pdog1isingjoa3f2spfnia6cekg9dhok.apps.googleusercontent.com
+  --dart-define-from-file=dart_defines.dev.json
 ```
 
 На симуляторе: **Войти через Google** → выбрать аккаунт (при необходимости войти в Google через Safari).
@@ -59,7 +67,7 @@ flutter devices
 
 ```bash
 flutter run -d <iphone_id> \
-  --dart-define=GOOGLE_SERVER_CLIENT_ID=296414004775-pdog1isingjoa3f2spfnia6cekg9dhok.apps.googleusercontent.com
+  --dart-define-from-file=dart_defines.dev.json
 ```
 
 4. При первой установке: **Настройки → Основные → VPN и управление устройством** → доверить сертификат разработчика.
@@ -68,7 +76,9 @@ flutter run -d <iphone_id> \
 
 | Тема | Детали |
 |---|---|
-| `GOOGLE_SERVER_CLIENT_ID` | Всегда **Web** Client ID, на каждом cold start debug |
+| `GOOGLE_SERVER_CLIENT_ID` | Всегда **Web** Client ID; удобнее через `dart_defines.dev.json` |
+| `POSTHOG_API_KEY` | Project API Key (`phc_…`) в `dart_defines.dev.json` — без него аналитика no-op |
+| `POSTHOG_HOST` | EU Cloud: `https://eu.i.posthog.com` (уже default в `AppConfig` + в `dart_defines.dev.json`) |
 | iOS Client ID | Уже в `ios/Runner/Info.plist` |
 | Signing Team | Обязателен для реального iPhone; для симулятора лучше тоже выставить |
 | Sign in with Apple | Отдельная настройка; для теста Google не нужна |

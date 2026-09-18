@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/analytics/analytics_service.dart';
 import '../../../core/l10n/locale_controller.dart';
 import '../../../core/supabase/supabase_providers.dart';
 import '../../../core/theme/app_colors.dart';
@@ -112,11 +113,11 @@ class ProfileScreen extends ConsumerWidget {
           ),
           if (billing?.isGrace == true) ...[
             const SizedBox(height: 14),
-            _GraceBanner(onTap: () => context.push('/paywall')),
+            _GraceBanner(onTap: () => context.push('/paywall?trigger=grace')),
           ],
           if (billing != null && !billing.isPro) ...[
             const SizedBox(height: 14),
-            _UpgradeBanner(onTap: () => context.push('/paywall')),
+            _UpgradeBanner(onTap: () => context.push('/paywall?trigger=profile')),
             const SizedBox(height: 20),
             const PromoCodeSection(),
           ],
@@ -344,6 +345,7 @@ class _LogoutButton extends ConsumerWidget {
           cancelLabel: l10n.cancel,
         );
         if (!confirmed) return;
+        ref.read(analyticsServiceProvider).track('logout_tapped');
         await ref.read(authRepositoryProvider).signOut();
         onLoggedOut();
       },
@@ -389,11 +391,13 @@ class _DeleteAccountButtonState extends ConsumerState<_DeleteAccountButton> {
 
     setState(() => _deleting = true);
     try {
+      ref.read(analyticsServiceProvider).track('account_deleted');
       await ref.read(authRepositoryProvider).deleteAccount();
       if (!mounted) return;
       widget.onDeleted();
     } catch (_) {
       if (!mounted) return;
+      ref.read(analyticsServiceProvider).track('account_delete_failed');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(l10n.deleteAccountError)),
       );

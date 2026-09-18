@@ -53,9 +53,12 @@ flutter run \
   --dart-define=REVENUECAT_API_KEY_IOS=... \
   --dart-define=REVENUECAT_API_KEY_ANDROID=... \
   --dart-define=GOOGLE_SERVER_CLIENT_ID=... \
-  --dart-define=SENTRY_DSN=... \
-  --dart-define=POSTHOG_API_KEY=...
+  --dart-define=POSTHOG_API_KEY=... \
+  --dart-define=POSTHOG_HOST=https://eu.i.posthog.com \
+  --dart-define=SENTRY_DSN=...
 ```
+
+Локально удобнее: `--dart-define-from-file=dart_defines.dev.json` (файл в `.gitignore`). PostHog: см. [`POSTHOG.md`](POSTHOG.md).
 
 Supabase URL/publishable key уже зашиты в `lib/core/config/app_config.dart`
 как значения по умолчанию (это не секреты — они предназначены для клиента).

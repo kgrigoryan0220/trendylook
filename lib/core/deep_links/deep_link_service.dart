@@ -39,7 +39,7 @@ class DeepLinkService {
     }
     switch (segments.first) {
       case 'paywall':
-        _router.push('/paywall');
+        _router.push('/paywall?trigger=deeplink');
       case 'history':
         _router.go('/history');
       case 'check':

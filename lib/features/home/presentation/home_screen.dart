@@ -119,7 +119,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Future<void> _startCamera() async {
     if (!await _canCheck()) {
-      if (mounted) context.push('/paywall');
+      if (mounted) context.push('/paywall?trigger=limit_reached');
       return;
     }
     ref.read(checkFlowControllerProvider.notifier).reset();
@@ -129,7 +129,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Future<void> _startGallery() async {
     if (!await _canCheck()) {
-      if (mounted) context.push('/paywall');
+      if (mounted) context.push('/paywall?trigger=limit_reached');
       return;
     }
     final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -200,7 +200,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             if (billing?.isGrace == true)
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                child: _GraceBanner(onTap: () => context.push('/paywall')),
+                child: _GraceBanner(onTap: () => context.push('/paywall?trigger=grace')),
               ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),

@@ -21,7 +21,10 @@ String _planSubtitle(AppLocalizations l10n, PlanOffer plan) {
 
 /// 4.9 Paywall — PAY-01/02/06.
 class PaywallScreen extends ConsumerStatefulWidget {
-  const PaywallScreen({super.key});
+  const PaywallScreen({super.key, this.trigger = 'unknown'});
+
+  /// Источник открытия: limit_reached | profile | grace | result | check_limit | deeplink …
+  final String trigger;
 
   @override
   ConsumerState<PaywallScreen> createState() => _PaywallScreenState();
@@ -30,13 +33,29 @@ class PaywallScreen extends ConsumerStatefulWidget {
 class _PaywallScreenState extends ConsumerState<PaywallScreen> {
   bool _purchasing = false;
   bool _success = false;
+  bool _converted = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(analyticsServiceProvider).track('paywall_shown', {'trigger': 'limit_reached'});
+      ref.read(analyticsServiceProvider).track('paywall_shown', {
+        'trigger': widget.trigger,
+      });
     });
+  }
+
+  void _dismiss() {
+    if (!_converted) {
+      ref.read(analyticsServiceProvider).track('paywall_dismissed', {
+        'trigger': widget.trigger,
+      });
+    }
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go('/home');
+    }
   }
 
   Future<void> _continue() async {
@@ -47,6 +66,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
       setState(() {
         _purchasing = false;
         _success = true;
+        _converted = true;
       });
     } on PurchasesNotConfiguredException {
       if (!mounted) return;
@@ -57,6 +77,10 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
     } catch (e) {
       if (!mounted) return;
       setState(() => _purchasing = false);
+      ref.read(analyticsServiceProvider).track('subscription_purchase_failed', {
+        'trigger': widget.trigger,
+        'error': e.runtimeType.toString(),
+      });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(AppLocalizations.of(context).paywallPurchaseError(e.toString()))),
       );
@@ -67,6 +91,9 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
     try {
       await ref.read(paywallControllerProvider.notifier).restore();
       if (!mounted) return;
+      ref.read(analyticsServiceProvider).track('purchases_restored', {
+        'trigger': widget.trigger,
+      });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(AppLocalizations.of(context).paywallRestoreSuccess)),
       );
@@ -77,6 +104,9 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
       );
     } catch (e) {
       if (!mounted) return;
+      ref.read(analyticsServiceProvider).track('purchases_restore_failed', {
+        'error': e.runtimeType.toString(),
+      });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(AppLocalizations.of(context).paywallRestoreError(e.toString()))),
       );
@@ -186,7 +216,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                   padding: const EdgeInsets.all(20),
                   child: InkWell(
                     customBorder: const CircleBorder(),
-                    onTap: () => context.canPop() ? context.pop() : context.go('/home'),
+                    onTap: _dismiss,
                     child: Container(
                       width: 36,
                       height: 36,

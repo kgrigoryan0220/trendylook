@@ -26,11 +26,20 @@ class _TrendyLookAppState extends ConsumerState<TrendyLookApp> {
   // флагом, чтобы logout -> login другим аккаунтом переключал RC-сессию
   // (иначе новый пользователь наследует entitlement предыдущего).
   String? _rcUserId;
+  String? _analyticsUserId;
+  bool _analyticsReady = false;
 
   @override
   void initState() {
     super.initState();
-    ref.read(analyticsServiceProvider).init();
+    _bootstrapAnalytics();
+  }
+
+  Future<void> _bootstrapAnalytics() async {
+    await ref.read(analyticsServiceProvider).init();
+    if (!mounted) return;
+    _analyticsReady = true;
+    _syncAnalyticsIdentity();
   }
 
   @override
@@ -56,13 +65,42 @@ class _TrendyLookAppState extends ConsumerState<TrendyLookApp> {
     repo.logIn(user.id);
   }
 
+  void _syncAnalyticsIdentity() {
+    if (!_analyticsReady) return;
+    final user = ref.read(currentUserProvider);
+    final analytics = ref.read(analyticsServiceProvider);
+    if (user == null) {
+      if (_analyticsUserId != null) {
+        _analyticsUserId = null;
+        analytics.track('logout');
+        analytics.reset();
+      }
+      return;
+    }
+    if (_analyticsUserId == user.id) return;
+    _analyticsUserId = user.id;
+    final email = user.email;
+    analytics.identify(
+      user.id,
+      properties: {
+        if (email != null && email.isNotEmpty) 'email': email,
+        if (user.appMetadata['provider'] != null)
+          'auth_provider': '${user.appMetadata['provider']}',
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final router = ref.watch(goRouterProvider);
     _deepLinks ??= DeepLinkService(router)..init();
 
-    ref.listen(currentUserProvider, (previous, next) => _syncPurchasesSession());
+    ref.listen(currentUserProvider, (previous, next) {
+      _syncPurchasesSession();
+      _syncAnalyticsIdentity();
+    });
     _syncPurchasesSession();
+    _syncAnalyticsIdentity();
 
     final explicitLocale = ref.watch(localeControllerProvider).valueOrNull;
     final languageCode = ref.watch(currentLanguageCodeProvider);

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../core/analytics/analytics_navigator_observer.dart';
+import '../core/analytics/analytics_service.dart';
 import '../core/supabase/supabase_providers.dart';
 import '../features/auth/presentation/auth_screen.dart';
 import '../features/check/presentation/camera_screen.dart';
@@ -40,12 +42,14 @@ class _GoRouterRefreshStream extends ChangeNotifier {
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   final client = ref.watch(supabaseClientProvider);
+  final analytics = ref.watch(analyticsServiceProvider);
   final refreshStream = _GoRouterRefreshStream(client.auth.onAuthStateChange);
   ref.onDispose(refreshStream.dispose);
 
   return GoRouter(
     initialLocation: '/splash',
     refreshListenable: refreshStream,
+    observers: [AnalyticsNavigatorObserver(analytics)],
     redirect: (context, state) {
       final loggedIn = client.auth.currentSession != null;
       final loc = state.matchedLocation;
@@ -68,7 +72,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/check/result', builder: (context, state) => const CheckResultScreen()),
       GoRoute(path: '/check/error', builder: (context, state) => const CheckErrorScreen()),
       GoRoute(path: '/share', builder: (context, state) => const ShareScreen()),
-      GoRoute(path: '/paywall', builder: (context, state) => const PaywallScreen()),
+      GoRoute(
+        path: '/paywall',
+        builder: (context, state) => PaywallScreen(
+          trigger: state.uri.queryParameters['trigger'] ?? 'unknown',
+        ),
+      ),
       GoRoute(
         path: '/history/:id',
         builder: (context, state) =>

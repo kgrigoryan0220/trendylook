@@ -59,7 +59,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen>
     if (state.result != null) {
       context.replace('/check/result');
     } else if (state.error is PaywallException) {
-      context.replace('/paywall');
+      context.replace('/paywall?trigger=check_limit');
     } else {
       context.replace('/check/error');
     }

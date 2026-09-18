@@ -47,7 +47,7 @@ class CheckResultScreen extends ConsumerWidget {
           ref.read(checkFlowControllerProvider.notifier).reset();
           context.go('/check/camera');
         } else {
-          context.push('/paywall');
+          context.push('/paywall?trigger=result');
         }
       },
     );

@@ -32,9 +32,10 @@ class AppConfig {
       String.fromEnvironment('GOOGLE_SERVER_CLIENT_ID');
 
   static const postHogApiKey = String.fromEnvironment('POSTHOG_API_KEY');
+  /// EU Cloud project — override via `--dart-define=POSTHOG_HOST=...` if needed.
   static const postHogHost = String.fromEnvironment(
     'POSTHOG_HOST',
-    defaultValue: 'https://app.posthog.com',
+    defaultValue: 'https://eu.i.posthog.com',
   );
 
   static const sentryDsn = String.fromEnvironment('SENTRY_DSN');
