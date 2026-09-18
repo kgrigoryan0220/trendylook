@@ -28,6 +28,7 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final _pageController = PageController();
   int _page = 0;
+  final _viewedSteps = <int>{};
 
   List<_SlideData> _slides(AppLocalizations l10n) => [
         _SlideData(
@@ -47,18 +48,49 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         ),
       ];
 
-  Future<void> _finish() async {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _trackStepViewed(0));
+  }
+
+  void _trackStepViewed(int pageIndex) {
+    final step = pageIndex + 1;
+    if (!_viewedSteps.add(step)) return;
+    ref.read(analyticsServiceProvider).track('onboarding_step_viewed', {
+      'step': step,
+      'step_total': _slideCount,
+    });
+  }
+
+  Future<void> _complete({required String method}) async {
     await ref.read(onboardingPrefsProvider).markSeen();
-    ref.read(analyticsServiceProvider).track('onboarding_complete');
+    ref.read(analyticsServiceProvider).track('onboarding_complete', {
+      'method': method, // start | skip
+      'last_step': _page + 1,
+      'steps_viewed': _viewedSteps.length,
+    });
     if (mounted) context.go('/auth');
+  }
+
+  Future<void> _skip() async {
+    ref.read(analyticsServiceProvider).track('onboarding_skipped', {
+      'from_step': _page + 1,
+      'steps_viewed': _viewedSteps.length,
+    });
+    await _complete(method: 'skip');
   }
 
   static const _slideCount = 3;
 
   void _next() {
     if (_page == _slideCount - 1) {
-      _finish();
+      _complete(method: 'start');
     } else {
+      ref.read(analyticsServiceProvider).track('onboarding_next_tapped', {
+        'from_step': _page + 1,
+        'to_step': _page + 2,
+      });
       _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
     }
   }
@@ -86,7 +118,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     child: PageView.builder(
                       controller: _pageController,
                       itemCount: slides.length,
-                      onPageChanged: (i) => setState(() => _page = i),
+                      onPageChanged: (i) {
+                        setState(() => _page = i);
+                        _trackStepViewed(i);
+                      },
                       itemBuilder: (context, index) => _SlideView(
                         data: slides[index],
                         active: index == _page,
@@ -147,7 +182,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               top: 8,
               right: 0,
               child: TextButton(
-                onPressed: _finish,
+                onPressed: _skip,
                 child: Text(l10n.onboardingSkip, style: const TextStyle(color: AppColors.textSecondary)),
               ),
             ),

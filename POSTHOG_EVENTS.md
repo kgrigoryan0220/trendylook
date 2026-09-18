@@ -22,13 +22,23 @@ Host: `https://eu.i.posthog.com`
 
 | Event | Когда | Properties |
 |-------|--------|------------|
-| `onboarding_complete` | «Начать» или «Пропустить» на онбординге | — |
+| `onboarding_step_viewed` | Показан слайд 1 / 2 / 3 (один раз на шаг за сессию онбординга) | `step` (1–3), `step_total` (3) |
+| `onboarding_next_tapped` | Нажато «Далее» (не на последнем слайде) | `from_step`, `to_step` |
+| `onboarding_skipped` | Нажато «Пропустить» | `from_step`, `steps_viewed` |
+| `onboarding_complete` | Уход на auth после онбординга | `method`: `start` \| `skip`, `last_step`, `steps_viewed` |
 | `auth_success` | Успешный Sign in with Apple / Google | `provider`: `apple` \| `google` |
 | `auth_failed` | Ошибка входа | `provider`, `error` |
 | `logout_tapped` | Пользователь подтвердил выход в Profile | — |
 | `logout` | Сессия стала `null` (после signOut / delete) | — |
 | `account_deleted` | Перед вызовом delete-account | — |
 | `account_delete_failed` | Ошибка удаления аккаунта | — |
+
+### Воронка онбординга (рекомендуемый порядок в PostHog)
+
+1. `onboarding_step_viewed` where `step = 1`
+2. `onboarding_step_viewed` where `step = 2` *(или `onboarding_skipped` с `from_step = 1`)*
+3. `onboarding_step_viewed` where `step = 3`
+4. `onboarding_complete` where `method = start` *(или `onboarding_skipped` / `method = skip`)*
 
 ---
 
