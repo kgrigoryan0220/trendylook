@@ -17,8 +17,6 @@ class ShareCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = AppColors.colorForScore(record.trendScore);
-    final topRec =
-        record.analysis.recommendations.isNotEmpty ? record.analysis.recommendations.first : null;
 
     return AspectRatio(
       aspectRatio: 9 / 16,
@@ -81,15 +79,6 @@ class ShareCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  if (topRec != null) ...[
-                    const SizedBox(height: 6),
-                    Text(
-                      topRec.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 12, color: Colors.white, height: 1.3),
-                    ),
-                  ],
                   const SizedBox(height: 8),
                   Text(
                     AppLocalizations.of(context).shareChallengeHook,

@@ -162,13 +162,16 @@ class ResultView extends StatelessWidget {
                         Row(
                           children: [
                             Expanded(
-                              child: SecondaryButton(label: l10n.share, onPressed: onShare),
+                              child: SecondaryButton(
+                                label: primaryActionLabel,
+                                onPressed: onPrimaryAction,
+                              ),
                             ),
                             const SizedBox(width: 10),
                             Expanded(
                               child: PrimaryButton(
-                                label: primaryActionLabel,
-                                onPressed: onPrimaryAction,
+                                label: l10n.share,
+                                onPressed: onShare,
                               ),
                             ),
                           ],
