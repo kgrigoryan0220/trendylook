@@ -63,6 +63,7 @@
   "historyTitle": "Histórico",
   "historyLoadError": "Não foi possível carregar o histórico: {error}",
   "deleteCheckTitle": "Excluir esta verificação?",
+  "deleteCheckError": "Não foi possível excluir a verificação. Tente de novo.",
   "delete": "Excluir",
   "historyEmpty": "Seu histórico de verificações vai aparecer aqui",
   "historyEmptyCta": "Faça sua primeira verificação",

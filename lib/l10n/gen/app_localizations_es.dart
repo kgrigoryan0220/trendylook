@@ -186,6 +186,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get deleteCheckTitle => '¿Eliminar esta comprobación?';
 
   @override
+  String get deleteCheckError =>
+      'No se pudo eliminar la comprobación. Inténtalo de nuevo.';
+
+  @override
   String get delete => 'Eliminar';
 
   @override

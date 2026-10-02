@@ -91,7 +91,9 @@ class AppTheme {
         style: TextButton.styleFrom(textStyle: buttonText),
       ),
       snackBarTheme: SnackBarThemeData(
+        backgroundColor: AppColors.surface,
         contentTextStyle: coloredUi.bodyMedium?.copyWith(color: Colors.white),
+        behavior: SnackBarBehavior.floating,
       ),
       listTileTheme: ListTileThemeData(
         titleTextStyle: coloredUi.titleMedium?.copyWith(

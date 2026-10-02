@@ -18,6 +18,13 @@ class HistoryCache {
     await box.put(_key, jsonEncode(items.map((c) => c.toJson()).toList()));
   }
 
+  Future<void> removeById(String id) async {
+    final items = await load();
+    final next = items.where((c) => c.id != id).toList();
+    if (next.length == items.length) return;
+    await save(next);
+  }
+
   Future<List<CheckRecord>> load() async {
     final box = await _box();
     final raw = box.get(_key);

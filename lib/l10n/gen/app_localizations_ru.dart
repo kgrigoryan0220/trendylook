@@ -181,6 +181,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get deleteCheckTitle => 'Удалить эту проверку?';
 
   @override
+  String get deleteCheckError =>
+      'Не удалось удалить проверку. Попробуй ещё раз.';
+
+  @override
   String get delete => 'Удалить';
 
   @override

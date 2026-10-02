@@ -187,6 +187,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get deleteCheckTitle => 'Supprimer cette analyse ?';
 
   @override
+  String get deleteCheckError =>
+      'Impossible de supprimer l\'analyse. Réessaie.';
+
+  @override
   String get delete => 'Supprimer';
 
   @override

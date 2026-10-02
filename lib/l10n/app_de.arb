@@ -63,6 +63,7 @@
   "historyTitle": "Verlauf",
   "historyLoadError": "Verlauf konnte nicht geladen werden: {error}",
   "deleteCheckTitle": "Diesen Check löschen?",
+  "deleteCheckError": "Check konnte nicht gelöscht werden. Bitte erneut versuchen.",
   "delete": "Löschen",
   "historyEmpty": "Hier erscheint dein Check-Verlauf",
   "historyEmptyCta": "Mach deinen ersten Check",

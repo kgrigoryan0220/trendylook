@@ -185,6 +185,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteCheckTitle => 'Delete this check?';
 
   @override
+  String get deleteCheckError =>
+      'Couldn\'t delete the check. Please try again.';
+
+  @override
   String get delete => 'Delete';
 
   @override

@@ -70,6 +70,15 @@ class HomeHistoryController extends AsyncNotifier<HomeHistoryState> {
     state = const AsyncLoading();
     state = await AsyncValue.guard(build);
   }
+
+  /// Drop a check from local home state after History soft-delete.
+  void removeLocally(String id) {
+    final current = state.valueOrNull;
+    if (current == null) return;
+    final next = current.items.where((c) => c.id != id).toList();
+    if (next.length == current.items.length) return;
+    state = AsyncData(current.copyWith(items: next));
+  }
 }
 
 final homeHistoryControllerProvider =

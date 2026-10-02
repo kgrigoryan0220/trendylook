@@ -63,6 +63,7 @@
   "historyTitle": "История",
   "historyLoadError": "Не удалось загрузить историю: {error}",
   "deleteCheckTitle": "Удалить эту проверку?",
+  "deleteCheckError": "Не удалось удалить проверку. Попробуй ещё раз.",
   "delete": "Удалить",
   "historyEmpty": "Здесь появится твоя история проверок",
   "historyEmptyCta": "Сделать первую проверку",

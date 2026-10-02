@@ -186,6 +186,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get deleteCheckTitle => 'Excluir esta verificação?';
 
   @override
+  String get deleteCheckError =>
+      'Não foi possível excluir a verificação. Tente de novo.';
+
+  @override
   String get delete => 'Excluir';
 
   @override

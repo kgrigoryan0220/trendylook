@@ -73,6 +73,7 @@
     "placeholders": { "error": { "type": "String" } }
   },
   "deleteCheckTitle": "Delete this check?",
+  "deleteCheckError": "Couldn't delete the check. Please try again.",
   "delete": "Delete",
   "historyEmpty": "Your check history will appear here",
   "historyEmptyCta": "Do your first check",

@@ -82,23 +82,25 @@ class CheckRepository {
     return CheckRecord.fromJson(row);
   }
 
-  /// HIST-01: paginated (20/page), исключая soft-deleted.
+  /// HIST-01: paginated (20/page), excluding soft-deleted (RLS + client filter).
   Future<List<CheckRecord>> fetchHistory({int page = 0}) async {
     final from = page * AppConstants.historyPageSize;
     final to = from + AppConstants.historyPageSize - 1;
     final rows = await _client
         .from('checks')
         .select()
+        .filter('deleted_at', 'is', null)
         .order('created_at', ascending: false)
         .range(from, to);
     return (rows as List).map((r) => CheckRecord.fromJson(r)).toList();
   }
 
-  /// HIST-03: soft delete.
+  /// HIST-03: soft delete via RPC. Raises if the row was not updated.
   Future<void> softDeleteCheck(String id) async {
-    await _client
-        .from('checks')
-        .update({'deleted_at': DateTime.now().toIso8601String()}).eq('id', id);
+    await _client.rpc(
+      'soft_delete_check',
+      params: {'p_id': id},
+    );
   }
 
   Future<String> getSignedUrl(String path, {int expiresIn = 3600}) async {

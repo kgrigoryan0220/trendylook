@@ -11,3 +11,8 @@ class AnalysisFailedException implements Exception {
   const AnalysisFailedException(this.message);
   final String message;
 }
+
+/// Soft-delete did not update any row (RLS / already deleted / wrong id).
+class SoftDeleteFailedException implements Exception {
+  const SoftDeleteFailedException();
+}

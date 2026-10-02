@@ -63,6 +63,7 @@
   "historyTitle": "Historique",
   "historyLoadError": "Impossible de charger l'historique : {error}",
   "deleteCheckTitle": "Supprimer cette analyse ?",
+  "deleteCheckError": "Impossible de supprimer l'analyse. Réessaie.",
   "delete": "Supprimer",
   "historyEmpty": "Ton historique d'analyses apparaîtra ici",
   "historyEmptyCta": "Fais ta première analyse",

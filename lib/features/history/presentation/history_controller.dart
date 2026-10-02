@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../check/data/models/check_record.dart';
 import '../../check/presentation/check_flow_controller.dart';
+import '../../home/presentation/home_history_controller.dart';
 import '../data/history_cache.dart';
 
 final historyCacheProvider = Provider<HistoryCache>((ref) => HistoryCache());
@@ -72,16 +73,25 @@ class HistoryController extends AsyncNotifier<HistoryState> {
     );
   }
 
-  Future<void> delete(String id) async {
+  /// Soft-deletes [id]. Returns `true` on success.
+  /// On failure restores previous list and returns `false`.
+  Future<bool> delete(String id) async {
     final current = state.valueOrNull;
-    if (current == null) return;
+    if (current == null) return false;
     final previousItems = current.items;
-    state = AsyncData(current.copyWith(items: previousItems.where((c) => c.id != id).toList()));
+    final nextItems = previousItems.where((c) => c.id != id).toList();
+    state = AsyncData(current.copyWith(items: nextItems));
+
     try {
       await ref.read(checkRepositoryProvider).softDeleteCheck(id);
-    } catch (_) {
-      // Откатываем при ошибке.
+      unawaited(ref.read(historyCacheProvider).removeById(id));
+      ref.read(homeHistoryControllerProvider.notifier).removeLocally(id);
+      return true;
+    } catch (e, st) {
+      // ignore: avoid_print
+      print('soft_delete_check failed id=$id error=$e\n$st');
       state = AsyncData(current.copyWith(items: previousItems));
+      return false;
     }
   }
 

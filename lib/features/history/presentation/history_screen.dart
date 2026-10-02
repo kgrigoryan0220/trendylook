@@ -105,8 +105,16 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                     title: l10n.deleteCheckTitle,
                     confirmLabel: l10n.delete,
                   ),
-                  onDismissed: (_) =>
-                      ref.read(historyControllerProvider.notifier).delete(item.id),
+                  onDismissed: (_) async {
+                    final ok = await ref
+                        .read(historyControllerProvider.notifier)
+                        .delete(item.id);
+                    if (!ok && context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(l10n.deleteCheckError)),
+                      );
+                    }
+                  },
                   child: HistoryItemTile(
                     check: item,
                     photoUrl: _signedUrls[item.imagePath],

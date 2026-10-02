@@ -426,6 +426,12 @@ abstract class AppLocalizations {
   /// **'Delete this check?'**
   String get deleteCheckTitle;
 
+  /// No description provided for @deleteCheckError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t delete the check. Please try again.'**
+  String get deleteCheckError;
+
   /// No description provided for @delete.
   ///
   /// In en, this message translates to:

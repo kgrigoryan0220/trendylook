@@ -12,6 +12,7 @@ Future<bool> showConfirmBottomSheet(
 }) async {
   final result = await showModalBottomSheet<bool>(
     context: context,
+    backgroundColor: AppColors.surface,
     builder: (context) {
       return SafeArea(
         child: Padding(
@@ -31,7 +32,11 @@ Future<bool> showConfirmBottomSheet(
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 17),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 17,
+                  color: AppColors.textPrimary,
+                ),
               ),
               if (message != null) ...[
                 const SizedBox(height: 10),

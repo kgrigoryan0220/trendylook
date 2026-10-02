@@ -63,6 +63,7 @@
   "historyTitle": "Historial",
   "historyLoadError": "No se pudo cargar el historial: {error}",
   "deleteCheckTitle": "¿Eliminar esta comprobación?",
+  "deleteCheckError": "No se pudo eliminar la comprobación. Inténtalo de nuevo.",
   "delete": "Eliminar",
   "historyEmpty": "Aquí aparecerá tu historial de comprobaciones",
   "historyEmptyCta": "Haz tu primera comprobación",

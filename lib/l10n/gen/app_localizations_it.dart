@@ -186,6 +186,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get deleteCheckTitle => 'Eliminare questo controllo?';
 
   @override
+  String get deleteCheckError => 'Impossibile eliminare il controllo. Riprova.';
+
+  @override
   String get delete => 'Elimina';
 
   @override

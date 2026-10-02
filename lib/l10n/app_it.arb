@@ -63,6 +63,7 @@
   "historyTitle": "Cronologia",
   "historyLoadError": "Impossibile caricare la cronologia: {error}",
   "deleteCheckTitle": "Eliminare questo controllo?",
+  "deleteCheckError": "Impossibile eliminare il controllo. Riprova.",
   "delete": "Elimina",
   "historyEmpty": "Qui apparirà la cronologia dei tuoi controlli",
   "historyEmptyCta": "Fai il tuo primo controllo",
