@@ -400,8 +400,9 @@ const promisePoints = [
   </section>
 
   <!-- ============ 05 INSIDE THE APP ============ -->
-  <section id="inside" class="relative overflow-x-clip py-20 md:py-28" aria-labelledby="inside-title">
+  <section id="inside" class="gallery-section relative overflow-x-clip py-20 md:py-28" aria-labelledby="inside-title" data-gallery-section>
     <div class="glow glow-magenta top-1/4 left-1/2 h-[26rem] w-[40rem] -translate-x-1/2 !opacity-20" aria-hidden="true"></div>
+    <div class="gallery-pin" data-gallery-pin>
     <div class="relative mx-auto flex max-w-6xl items-end justify-between gap-6 px-4 sm:px-6">
       <SectionHeading eyebrow="05 — Inside the app" id="inside-title">
         Take a look <em>inside</em>
@@ -436,7 +437,7 @@ const promisePoints = [
       aria-label="App screenshots, scroll horizontally"
       data-gallery
     >
-      <ul class="flex w-max gap-5 sm:gap-8">
+      <ul class="flex w-max gap-5 sm:gap-8" data-gallery-track>
         {
           gallery.map((item) => (
             <li class="w-[13.5rem] shrink-0 snap-start sm:w-[16rem]" data-gallery-item>
@@ -448,6 +449,7 @@ const promisePoints = [
           ))
         }
       </ul>
+    </div>
     </div>
   </section>
 
@@ -659,6 +661,29 @@ const promisePoints = [
     .gallery {
       --gutter: max(1.5rem, calc((100% - 72rem) / 2 + 1.5rem));
     }
+  }
+  /* Pinned mode (set by src/scripts/gallery.ts): vertical scroll drives the gallery sideways */
+  .gallery-section.is-pinned {
+    padding-block: 0;
+  }
+  .gallery-section.is-pinned .gallery-pin {
+    position: sticky;
+    top: 0;
+    height: var(--pin-h, 100vh);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: var(--header-h, 4.5rem);
+  }
+  .gallery-section.is-pinned .gallery-pin > * {
+    width: 100%;
+  }
+  .gallery-section.is-pinned .gallery {
+    overflow-x: hidden;
+    scroll-snap-type: none;
+  }
+  .gallery-section.is-pinned [data-gallery-track] {
+    will-change: transform;
   }
   .gallery:focus-visible {
     outline-offset: -4px;
