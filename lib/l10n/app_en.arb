@@ -85,11 +85,10 @@
   "profileTitle": "Profile",
   "defaultUserName": "User",
   "subscriptionStatusLabel": "Subscription status",
-  "proUntil": "Pro until {date}",
-  "@proUntil": {
+  "subscriptionActiveUntil": "Active until {date}",
+  "@subscriptionActiveUntil": {
     "placeholders": { "date": { "type": "String" } }
   },
-  "proStatus": "Pro",
   "freeStatus": "Free",
   "graceStatus": "Grace period",
   "notifications": "Notifications",

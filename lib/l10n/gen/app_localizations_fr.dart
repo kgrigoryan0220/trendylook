@@ -214,12 +214,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get subscriptionStatusLabel => 'Statut de l\'abonnement';
 
   @override
-  String proUntil(String date) {
-    return 'Pro jusqu\'au $date';
+  String subscriptionActiveUntil(String date) {
+    return 'Active jusqu\'au $date';
   }
-
-  @override
-  String get proStatus => 'Pro';
 
   @override
   String get freeStatus => 'Gratuit';

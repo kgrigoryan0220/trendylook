@@ -474,17 +474,11 @@ abstract class AppLocalizations {
   /// **'Subscription status'**
   String get subscriptionStatusLabel;
 
-  /// No description provided for @proUntil.
+  /// No description provided for @subscriptionActiveUntil.
   ///
   /// In en, this message translates to:
-  /// **'Pro until {date}'**
-  String proUntil(String date);
-
-  /// No description provided for @proStatus.
-  ///
-  /// In en, this message translates to:
-  /// **'Pro'**
-  String get proStatus;
+  /// **'Active until {date}'**
+  String subscriptionActiveUntil(String date);
 
   /// No description provided for @freeStatus.
   ///

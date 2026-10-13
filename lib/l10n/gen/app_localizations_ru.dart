@@ -208,12 +208,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get subscriptionStatusLabel => 'Статус подписки';
 
   @override
-  String proUntil(String date) {
-    return 'Pro до $date';
+  String subscriptionActiveUntil(String date) {
+    return 'Активна до $date';
   }
-
-  @override
-  String get proStatus => 'Pro';
 
   @override
   String get freeStatus => 'Free';
