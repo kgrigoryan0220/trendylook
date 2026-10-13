@@ -3,7 +3,7 @@ import Logo from "./Logo.astro";
 import Icon from "./Icon.astro";
 
 /** On the landing page anchors are local; on other pages they point back to the landing. */
-const isHome = Astro.url.pathname === "/" || Astro.url.pathname === "";
+const isHome = ["/", "", "/index", "/index.html"].includes(Astro.url.pathname);
 const base = isHome ? "" : "/";
 
 const links = [
