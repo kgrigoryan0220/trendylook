@@ -1,0 +1,21 @@
+---
+import { APP_ICON, SITE_NAME } from "../config";
+
+interface Props {
+  href?: string;
+  class?: string;
+}
+
+const { href = "/", class: className } = Astro.props;
+---
+
+<a href={href} class:list={["group inline-flex items-center gap-2.5 rounded-xl", className]} aria-label={`${SITE_NAME} home`}>
+  <img
+    src={APP_ICON}
+    alt=""
+    width="36"
+    height="36"
+    class="size-9 rounded-[10px] shadow-[0_6px_20px_-6px_rgb(255_61_138/0.7)] transition-transform duration-300 group-hover:rotate-[-6deg]"
+  />
+  <span class="font-display text-[0.95rem] font-extrabold tracking-[0.08em] text-white">TRENDY LOOK</span>
+</a>

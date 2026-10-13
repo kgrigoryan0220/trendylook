@@ -1,0 +1,98 @@
+---
+import Logo from "./Logo.astro";
+import Icon from "./Icon.astro";
+
+/** On the landing page anchors are local; on other pages they point back to the landing. */
+const isHome = Astro.url.pathname === "/" || Astro.url.pathname === "";
+const base = isHome ? "" : "/";
+
+const links = [
+  { href: `${base}#how-it-works`, label: "How it works" },
+  { href: `${base}#features`, label: "Features" },
+  { href: `${base}#pricing`, label: "Pricing" },
+  { href: `${base}#faq`, label: "FAQ" },
+];
+---
+
+<header class="sticky top-0 z-50 border-b border-line bg-bg/70 backdrop-blur-xl" data-header>
+  <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 md:h-[4.5rem]">
+    <Logo />
+
+    <nav aria-label="Main" class="hidden md:block">
+      <ul class="flex items-center gap-1">
+        {
+          links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="rounded-full px-3.5 py-2 text-sm font-medium text-muted transition-colors hover:bg-white/5 hover:text-white"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a href={`${base}#download`} class="btn btn-primary !min-h-10 !px-4 text-sm sm:!px-5">Download</a>
+      <button
+        type="button"
+        class="inline-flex size-10 items-center justify-center rounded-full border border-line-strong text-white transition-colors hover:bg-white/5 md:hidden"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        data-menu-toggle
+      >
+        <span class="sr-only" data-menu-label>Open menu</span>
+        <Icon name="menu" size={20} class="menu-open-icon" />
+        <Icon name="close" size={20} class="menu-close-icon hidden" />
+      </button>
+    </div>
+  </div>
+
+  <nav id="mobile-menu" aria-label="Mobile" class="hidden border-t border-line bg-bg/95 backdrop-blur-xl md:hidden" data-menu>
+    <ul class="mx-auto flex max-w-6xl flex-col px-4 py-3">
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class="flex items-center justify-between rounded-xl px-3 py-3.5 font-display text-lg font-semibold text-white hover:bg-white/5"
+              data-menu-link
+            >
+              {link.label}
+              <Icon name="arrowRight" size={18} class="text-pink" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+  const menu = document.querySelector<HTMLElement>("[data-menu]");
+  const label = document.querySelector<HTMLElement>("[data-menu-label]");
+
+  if (toggle && menu) {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute("aria-expanded", String(open));
+      menu.classList.toggle("hidden", !open);
+      toggle.querySelector(".menu-open-icon")?.classList.toggle("hidden", open);
+      toggle.querySelector(".menu-close-icon")?.classList.toggle("hidden", !open);
+      if (label) label.textContent = open ? "Close menu" : "Open menu";
+    };
+
+    toggle.addEventListener("click", () => setOpen(toggle.getAttribute("aria-expanded") !== "true"));
+    menu.querySelectorAll("[data-menu-link]").forEach((link) => link.addEventListener("click", () => setOpen(false)));
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+    window.matchMedia("(min-width: 768px)").addEventListener("change", (e) => e.matches && setOpen(false));
+  }
+</script>

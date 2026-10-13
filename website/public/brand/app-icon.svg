@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- TEMPORARY placeholder app icon. Replace with app-icon.png (1024x1024) and update APP_ICON in src/config.ts. -->
+  <defs>
+    <linearGradient id="tl-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FF3D8A"/>
+      <stop offset="1" stop-color="#7B5CFF"/>
+    </linearGradient>
+    <radialGradient id="tl-shine" cx="0.3" cy="0.2" r="0.8">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="229" fill="url(#tl-bg)"/>
+  <rect width="1024" height="1024" rx="229" fill="url(#tl-shine)"/>
+  <g fill="none" stroke="#FFFFFF" stroke-linecap="round">
+    <!-- outer score ring, open at the top right like a progress ring -->
+    <path d="M 672 290 A 270 270 0 1 0 760 400" stroke-width="56"/>
+    <!-- inner lens -->
+    <circle cx="512" cy="512" r="118" stroke-width="44"/>
+  </g>
+  <!-- lens highlight -->
+  <circle cx="742" cy="314" r="34" fill="#FFFFFF"/>
+</svg>
