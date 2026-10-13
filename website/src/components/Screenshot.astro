@@ -1,0 +1,32 @@
+---
+import { Picture } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+/** App screenshot (transparent PNG in an iPhone frame) → responsive AVIF/WebP with a soft glow behind it. */
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  sizes: string;
+  eager?: boolean;
+  glow?: boolean;
+  class?: string;
+  imgClass?: string;
+}
+
+const { src, alt, sizes, eager = false, glow = true, class: className, imgClass } = Astro.props;
+---
+
+<div class:list={[glow && "phone", className]}>
+  <Picture
+    src={src}
+    alt={alt}
+    formats={["avif", "webp"]}
+    widths={[240, 360, 480, 640, 800]}
+    sizes={sizes}
+    loading={eager ? "eager" : "lazy"}
+    decoding={eager ? "sync" : "async"}
+    fetchpriority={eager ? "high" : "auto"}
+    quality={80}
+    class={imgClass}
+  />
+</div>

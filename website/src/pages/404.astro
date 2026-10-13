@@ -1,0 +1,20 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ScoreRing from "../components/ScoreRing.astro";
+---
+
+<BaseLayout title="Page not found" description="This page doesn't exist." noindex>
+  <section class="relative overflow-x-clip py-20 md:py-32" aria-labelledby="nf-title">
+    <div class="glow glow-violet -top-32 -left-32 h-[26rem] w-[26rem] !opacity-40" aria-hidden="true"></div>
+    <div class="glow glow-pink -right-32 -bottom-32 h-[26rem] w-[26rem] !opacity-35" aria-hidden="true"></div>
+    <div class="relative mx-auto flex max-w-xl flex-col items-center px-4 text-center sm:px-6">
+      <ScoreRing id="404" value={4} label="Needs Work" color="#FF5C5C" class="w-40 sm:w-48" numberClass="text-5xl" />
+      <p class="eyebrow mt-10">Error 404</p>
+      <h1 id="nf-title" class="mt-4 text-[2.5rem] leading-[1.05] font-extrabold sm:text-6xl">
+        This page is <span class="text-lime">not the look.</span>
+      </h1>
+      <p class="mt-5 text-lg text-muted">The page you're looking for doesn't exist or has moved.</p>
+      <a href="/" class="btn btn-primary mt-9">Back to home</a>
+    </div>
+  </section>
+</BaseLayout>

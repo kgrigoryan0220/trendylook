@@ -1,0 +1,64 @@
+---
+import Logo from "./Logo.astro";
+import Icon from "./Icon.astro";
+import { INSTAGRAM_URL, SUPPORT_EMAIL, TIKTOK_URL } from "../config";
+
+const socials = [
+  { url: INSTAGRAM_URL, label: "Trendy Look on Instagram", icon: "instagram" as const },
+  { url: TIKTOK_URL, label: "Trendy Look on TikTok", icon: "tiktok" as const },
+].filter((s) => s.url);
+
+const links = [
+  { href: "/privacy", label: "Privacy Policy" },
+  { href: "/terms", label: "Terms of Use" },
+  { href: `mailto:${SUPPORT_EMAIL}`, label: "Contact" },
+];
+---
+
+<footer class="relative overflow-hidden border-t border-line">
+  <div class="glow glow-violet -bottom-40 left-1/2 h-72 w-[40rem] -translate-x-1/2 !opacity-25" aria-hidden="true"></div>
+  <div class="relative mx-auto flex max-w-6xl flex-col gap-10 px-4 py-12 sm:px-6 md:flex-row md:items-start md:justify-between">
+    <div class="max-w-xs">
+      <Logo />
+      <p class="mt-4 text-sm text-muted">AI that rates the trend of your look.</p>
+    </div>
+
+    <div class="flex flex-col gap-6 md:items-end">
+      <nav aria-label="Footer">
+        <ul class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+          {
+            links.map((link) => (
+              <li>
+                <a href={link.href} class="text-muted underline-offset-4 transition-colors hover:text-white hover:underline">
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      {
+        socials.length > 0 && (
+          <ul class="flex gap-3" aria-label="Social media">
+            {socials.map((s) => (
+              <li>
+                <a
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  class="inline-flex size-10 items-center justify-center rounded-full border border-line-strong text-muted transition-colors hover:border-pink hover:text-white"
+                >
+                  <Icon name={s.icon} size={18} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+
+      <p class="font-mono text-xs tracking-wider text-muted">© 2026 Trendy Look</p>
+    </div>
+  </div>
+</footer>
