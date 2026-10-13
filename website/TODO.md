@@ -13,16 +13,15 @@ After editing, run `npm run build` (or push to deploy).
 | `GOOGLE_PLAY_URL` | `""` | Google Play listing URL | Same as above |
 | `INSTAGRAM_URL` | `""` | Instagram profile URL | Empty = icon hidden in the footer |
 | `TIKTOK_URL` | `""` | TikTok profile URL | Empty = icon hidden in the footer |
-| `APP_ICON` | `/brand/app-icon.svg` | Keep it, or point to a PNG (see section 2) | Header logo, favicon, apple-touch-icon, OG image logo |
+| `APP_ICON` | `/brand/app-icon.png` | Keep (final icon) | Source for the header/footer logo, favicons, apple-touch-icon and the logo in the OG image |
 
-## 2. App icon (done: logo mark from the case study)
+## 2. App icon (done)
 
-- **File:** `public/brand/app-icon.svg`: the logo mark from `TrendyLook_Case_Study.pdf` (pink → violet rounded square,
-  white ring, lime dot), redrawn as a vector so it stays sharp at any size. The favicon, the 180x180
-  `apple-touch-icon.png`, the 32x32 PNG favicon and the logo in the OG image are generated from it at build time.
-- **To confirm:** the app repository has a different icon, `assets/brand/app_icon_1024.png` (a ring with a lime
-  sparkle). If the App Store / Google Play icon will be that one, copy it to `website/public/brand/app-icon.png` and set
-  `APP_ICON = "/brand/app-icon.png"` in `src/config.ts`, so the site and the store listing match.
+- **File:** `public/brand/app-icon.png`: the app's icon (`assets/brand/app_icon_1024.png` from the app repo), cropped to
+  the icon itself without the outer glow, with rounded corners and a transparent background.
+- Generated from it at build time: `icon-192.png` (header/footer logo and favicon), `favicon-32.png`,
+  `apple-touch-icon.png` (full square, iOS rounds it itself) and the logo in `og.png`.
+- **To replace later:** overwrite `public/brand/app-icon.png` with a new 1024x1024 PNG. Nothing else to change.
 
 ## 3. Values from the legal texts that should go into `src/config.ts`
 

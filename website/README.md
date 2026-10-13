@@ -38,9 +38,9 @@ npm run check      # TypeScript / Astro diagnostics
 | Legal page layout and typography | `src/layouts/LegalLayout.astro` |
 | Design tokens (colors, fonts, radii) and global styles | `src/styles/global.css` |
 | App screenshots (optimized at build time) | `src/assets/screens/*.png` |
-| App icon (logo mark) | `public/brand/app-icon.svg` |
+| App icon (source for logo and favicons) | `public/brand/app-icon.png` |
 | OG image (1200x630, generated at build time) | `src/pages/og.png.ts` → `/og.png` |
-| apple-touch-icon / PNG favicon (generated from the app icon) | `src/pages/apple-touch-icon.png.ts`, `src/pages/favicon-32.png.ts` |
+| Logo, favicons, apple-touch-icon (generated from the app icon) | `src/pages/icon-192.png.ts`, `src/pages/favicon-32.png.ts`, `src/pages/apple-touch-icon.png.ts` |
 | robots.txt (uses `SITE_URL`) | `src/pages/robots.txt.ts` |
 | sitemap | `@astrojs/sitemap` → `/sitemap-index.xml` |
 | Cloudflare response headers (caching, security) | `public/_headers` |

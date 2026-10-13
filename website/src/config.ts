@@ -18,11 +18,10 @@ export const INSTAGRAM_URL = "";
 export const TIKTOK_URL = "";
 
 /**
- * App icon, relative to /public. Used for the header logo, favicon, apple-touch-icon and OG image.
- * Currently the logo mark from the case study (SVG). To use a PNG instead: drop public/brand/app-icon.png (1024x1024)
- * and change this to "/brand/app-icon.png".
+ * App icon source, relative to /public (1024x1024 PNG with rounded corners, or an SVG).
+ * The header/footer logo, favicons, apple-touch-icon and the logo in the OG image are generated from it at build time.
  */
-export const APP_ICON = "/brand/app-icon.svg";
+export const APP_ICON = "/brand/app-icon.png";
 
 export const SITE_NAME = "Trendy Look";
 export const SITE_TITLE = "Trendy Look: How trendy is your look?";
