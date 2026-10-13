@@ -548,10 +548,12 @@ const promisePoints = [
         {
           faqs.map((item) => (
             <details class="faq card group overflow-hidden transition-colors open:border-line-strong">
-              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-[22px] p-5 font-display text-base font-semibold sm:p-6 sm:text-lg">
-                {item.q}
-                <span class="inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-line-strong text-pink faq-chevron transition-[rotate] duration-300 group-open:rotate-180">
-                  <Icon name="chevronDown" size={18} />
+              <summary class="block cursor-pointer list-none rounded-[22px] p-5 font-display text-base font-semibold sm:p-6 sm:text-lg">
+                <span class="flex items-center justify-between gap-4">
+                  <span>{item.q}</span>
+                  <span class="inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-line-strong text-pink faq-chevron transition-[rotate] duration-300 group-open:rotate-180">
+                    <Icon name="chevronDown" size={18} />
+                  </span>
                 </span>
               </summary>
               <div class="faq-body overflow-hidden">
@@ -561,14 +563,14 @@ const promisePoints = [
           ))
         }
         <details class="faq card group overflow-hidden transition-colors open:border-line-strong">
-          <summary
-            class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-[22px] p-5 font-display text-base font-semibold sm:p-6 sm:text-lg"
-          >
-            How do I contact you?
-            <span
-              class="inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-line-strong text-pink faq-chevron transition-[rotate] duration-300 group-open:rotate-180"
-            >
-              <Icon name="chevronDown" size={18} />
+          <summary class="block cursor-pointer list-none rounded-[22px] p-5 font-display text-base font-semibold sm:p-6 sm:text-lg">
+            <span class="flex items-center justify-between gap-4">
+              <span>How do I contact you?</span>
+              <span
+                class="inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-line-strong text-pink faq-chevron transition-[rotate] duration-300 group-open:rotate-180"
+              >
+                <Icon name="chevronDown" size={18} />
+              </span>
             </span>
           </summary>
           <div class="faq-body overflow-hidden">
@@ -633,8 +635,14 @@ const promisePoints = [
 </BaseLayout>
 
 <style>
-  .faq summary::-webkit-details-marker {
+  /* Safari can't lay out <summary> as a flex container, so the row lives in an inner span */
+  .faq summary {
+    list-style: none;
+  }
+  .faq summary::-webkit-details-marker,
+  .faq summary::marker {
     display: none;
+    content: "";
   }
   /* Chevron turns back as soon as the close animation starts */
   .faq[data-closing] .faq-chevron {
