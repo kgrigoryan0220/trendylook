@@ -12,7 +12,6 @@ import resultImg from "../assets/screens/result.png";
 import snapImg from "../assets/screens/snap.png";
 import resultTrendyImg from "../assets/screens/result-trendy.png";
 import tipsImg from "../assets/screens/tips.png";
-import shareImg from "../assets/screens/share.png";
 import homeImg from "../assets/screens/home.png";
 import storyLookImg from "../assets/photos/story-look.jpg";
 
@@ -62,11 +61,6 @@ const gallery = [
     img: tipsImg,
     caption: "Personal tips to level up your look.",
     alt: "Trendy Look result screen with category scores and four numbered AI style recommendations.",
-  },
-  {
-    img: shareImg,
-    caption: "Your result, ready for Stories.",
-    alt: "Trendy Look share screen with a 9:16 story card: outfit photo, 80% Icon Status and the top tip.",
   },
 ];
 
@@ -151,7 +145,7 @@ const promisePoints = [
       <div class="relative mx-auto w-full max-w-[19rem] sm:max-w-[21rem]">
         <span
           class="pointer-events-none absolute top-[38%] left-1/2 -z-0 -translate-x-1/2 -translate-y-1/2 font-display text-[11rem] leading-none font-extrabold tracking-tighter text-transparent select-none [-webkit-text-stroke:1.5px_rgb(255_255_255/0.07)] sm:text-[15rem]"
-          aria-hidden="true">85%</span
+          aria-hidden="true">80%</span
         >
         <Screenshot
           src={resultImg}
@@ -165,7 +159,7 @@ const promisePoints = [
         >
           <ScoreRing
             id="hero"
-            value={85}
+            value={80}
             label="Icon Status"
             animate
             numberClass="text-[2rem] sm:text-[2.5rem]"
@@ -359,7 +353,7 @@ const promisePoints = [
         <div
           class="relative z-10 w-[46%] -rotate-[5deg] rounded-[26px] bg-[image:var(--grad-brand)] p-[3px] shadow-[0_30px_80px_-20px_rgb(255_61_138/0.6)]"
           role="img"
-          aria-label="Example 9:16 story card: outfit photo, 85% score, Icon Status, top tip, trendylook.app"
+          aria-label="Example 9:16 story card: outfit photo, 80% score, Icon Status, top tip, trendylook.app"
         >
           <div class="relative flex aspect-[9/16] flex-col overflow-hidden rounded-[23px] bg-bg">
             <Picture
@@ -377,7 +371,7 @@ const promisePoints = [
             </p>
             <div class="relative mt-auto px-3 pb-3 text-center">
               <p class="text-gradient font-display text-[2.6rem] leading-none font-extrabold tracking-tighter sm:text-[3.4rem]">
-                85%
+                80%
               </p>
               <p class="mt-1 font-mono text-[0.5rem] font-bold tracking-[0.2em] text-lime sm:text-[0.6rem]">ICON STATUS</p>
               <div class="mt-2.5 rounded-xl border border-line-strong bg-white/[0.06] px-2 py-1.5 text-left sm:mt-3 sm:px-2.5 sm:py-2">
@@ -389,8 +383,8 @@ const promisePoints = [
           </div>
         </div>
         <Screenshot
-          src={shareImg}
-          alt="Trendy Look share screen with a ready-made 9:16 story card showing an 80% Icon Status score."
+          src={resultImg}
+          alt="Trendy Look result screen with an 80% Icon Status score, ready to share as a story card."
           sizes="(min-width: 640px) 200px, 160px"
           class="w-[44%] translate-y-6 rotate-[4deg]"
         />
@@ -598,7 +592,7 @@ const promisePoints = [
     </div>
     <span
       class="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display text-[12rem] leading-none font-extrabold tracking-tighter text-white/[0.04] select-none sm:text-[22rem]"
-      aria-hidden="true">85%</span
+      aria-hidden="true">80%</span
     >
     <div class="relative mx-auto max-w-3xl px-4 text-center sm:px-6" data-reveal>
       <p class="eyebrow !text-white">Get the app</p>
