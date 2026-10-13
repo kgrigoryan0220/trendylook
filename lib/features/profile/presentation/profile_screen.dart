@@ -27,14 +27,11 @@ const _localeEndonyms = {
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
-  String _subStatusText(AppLocalizations l10n, String languageCode, dynamic billing) {
+  /// Активный Pro показывается отдельной карточкой (_ProCard) — сюда
+  /// попадают только Free и grace.
+  String _subStatusText(AppLocalizations l10n, dynamic billing) {
     if (billing == null) return '—';
     if (billing.isGrace) return l10n.graceStatus;
-    if (billing.isPro && billing.expiresAt != null) {
-      return l10n.proUntil(
-          DateFormat('d MMM yyyy', languageCode).format(billing.expiresAt!));
-    }
-    if (billing.isPro) return l10n.proStatus;
     return l10n.freeStatus;
   }
 
@@ -83,34 +80,37 @@ class ProfileScreen extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 20),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.subscriptionStatusLabel,
-                  style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  _subStatusText(l10n, languageCode, billing),
-                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
-                ),
-                if (billing != null && !billing.isPro) ...[
-                  const SizedBox(height: 6),
+          if (billing != null && billing.isPro && !billing.isGrace)
+            _ProCard(expiresAt: billing.expiresAt, languageCode: languageCode)
+          else
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                    l10n.freeChecksLeft(billing.freeChecksLeft),
-                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 12.5),
+                    l10n.subscriptionStatusLabel,
+                    style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, fontWeight: FontWeight.w600),
                   ),
+                  const SizedBox(height: 4),
+                  Text(
+                    _subStatusText(l10n, billing),
+                    style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                  ),
+                  if (billing != null && !billing.isPro) ...[
+                    const SizedBox(height: 6),
+                    Text(
+                      l10n.freeChecksLeft(billing.freeChecksLeft),
+                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 12.5),
+                    ),
+                  ],
                 ],
-              ],
+              ),
             ),
-          ),
           if (billing?.isGrace == true) ...[
             const SizedBox(height: 14),
             _GraceBanner(onTap: () => context.push('/paywall?trigger=grace')),
@@ -222,6 +222,70 @@ class _GraceBanner extends StatelessWidget {
                 style: const TextStyle(color: AppColors.warning, fontWeight: FontWeight.w800, fontSize: 12.5)),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Карточка активного Pro — в той же стилистике, что _UpgradeBanner у Free
+/// (розово-фиолетовый градиент), с бейджем PRO как на главной.
+class _ProCard extends StatelessWidget {
+  const _ProCard({required this.expiresAt, required this.languageCode});
+
+  final DateTime? expiresAt;
+  final String languageCode;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            AppColors.pink.withValues(alpha: 0.18),
+            AppColors.violet.withValues(alpha: 0.18),
+          ],
+        ),
+        border: Border.all(color: AppColors.pink.withValues(alpha: 0.3)),
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.subscriptionStatusLabel,
+                  style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    gradient: AppColors.gradientPrimary,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: const Text(
+                    'PRO',
+                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 11),
+                  ),
+                ),
+                if (expiresAt != null) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    l10n.subscriptionActiveUntil(
+                      DateFormat('d MMM yyyy', languageCode).format(expiresAt!.toLocal()),
+                    ),
+                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 12.5),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          const Icon(Icons.workspace_premium_rounded, color: AppColors.pink, size: 32),
+        ],
       ),
     );
   }

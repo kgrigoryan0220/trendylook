@@ -7,13 +7,13 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../features/paywall/data/promo_exceptions.dart';
 import '../../features/paywall/data/promo_repository.dart';
-import '../../features/paywall/presentation/paywall_controller.dart';
+import '../../features/paywall/data/purchases_repository.dart';
 import '../../l10n/gen/app_localizations.dart';
 import '../providers/billing_provider.dart';
 import 'secondary_button.dart';
 
-/// Ввод и активация промокода (PROMO_CODES_PLAN.md, разд. 7.2) — переиспользуется
-/// на Paywall и в Профиле.
+/// Ввод и активация промокода (PROMO_CODES_PLAN.md, разд. 7.2) — только в
+/// Профиле: пейвол рендерит RevenueCat, своё поле туда не встраивается.
 class PromoCodeSection extends ConsumerStatefulWidget {
   const PromoCodeSection({super.key});
 
@@ -48,10 +48,10 @@ class _PromoCodeSectionState extends ConsumerState<PromoCodeSection> {
       if (!mounted) return;
       _controller.clear();
       // Grant в RC применяется мгновенно, но SDK и subscriptions узнают о нём
-      // через sync/webhook — синхронизируем явно перед обновлением статуса,
-      // чтобы billing-status не увидел устаревшее состояние.
+      // через sync/webhook — синхронизируем SDK и ждём, пока вебхук запишет
+      // Pro в subscriptions, иначе billing-status вернёт устаревший статус.
       await ref.read(purchasesRepositoryProvider).syncPurchases();
-      await ref.read(billingControllerProvider.notifier).refresh();
+      await ref.read(billingControllerProvider.notifier).refreshUntilPro();
       ref.read(analyticsServiceProvider).track('promo_redeemed', {'extended': result.extended});
       if (!mounted) return;
       final formattedDate = DateFormat('d MMM yyyy', languageCode).format(result.expiresAt);

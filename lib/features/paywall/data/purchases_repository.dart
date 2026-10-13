@@ -1,17 +1,16 @@
 import 'dart:io';
 
-import 'package:collection/collection.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '../../../core/config/app_config.dart';
-import '../../../core/constants/app_constants.dart';
 
 /// PAY-02/06 (TECH_SPEC_v1.2.md 5.5, 6.2) — RevenueCat (purchases_flutter).
 ///
 /// Остаётся выключенным (`isConfigured == false`), пока не заданы
-/// REVENUECAT_API_KEY_IOS/ANDROID через --dart-define — тогда покупки не
-/// вызываются вовсе, вместо падения без ключей. Остальной код готов к работе,
-/// как только ключи появятся.
+/// REVENUECAT_API_KEY_IOS/ANDROID через --dart-define. Сам пейвол, выбор
+/// пакета, покупку и restore рендерит RevenueCat (PaywallView), здесь —
+/// только жизненный цикл SDK и привязка app_user_id к Supabase user.id.
 class PurchasesRepository {
   bool _configured = false;
   bool get isConfigured => _configured;
@@ -48,35 +47,13 @@ class PurchasesRepository {
 
   /// Синхронизирует локальный кэш RC с сервером — используется после
   /// успешного redeem промокода (grant применяется на стороне RC мгновенно,
-  /// но SDK о нём узнаёт только через sync/restore) и после restore.
+  /// но SDK о нём узнаёт только через sync/restore).
   Future<void> syncPurchases() async {
     if (!_configured) return;
     await Purchases.syncPurchases();
   }
-
-  Future<Offerings?> fetchOfferings() async {
-    if (!_configured) return null;
-    return Purchases.getOfferings();
-  }
-
-  Package? weeklyPackage(Offerings offerings) {
-    return offerings.current?.availablePackages
-        .where((p) => p.storeProduct.identifier.contains(AppConstants.weeklyProductId))
-        .firstOrNull;
-  }
-
-  Package? halfyearPackage(Offerings offerings) {
-    return offerings.current?.availablePackages
-        .where((p) => p.storeProduct.identifier.contains(AppConstants.halfyearProductId))
-        .firstOrNull;
-  }
-
-  Future<CustomerInfo> purchasePackage(Package package) async {
-    final result = await Purchases.purchase(PurchaseParams.package(package));
-    return result.customerInfo;
-  }
-
-  Future<CustomerInfo> restorePurchases() async {
-    return Purchases.restorePurchases();
-  }
 }
+
+final purchasesRepositoryProvider = Provider<PurchasesRepository>((ref) {
+  return PurchasesRepository();
+});

@@ -85,11 +85,10 @@
   "profileTitle": "Profile",
   "defaultUserName": "User",
   "subscriptionStatusLabel": "Subscription status",
-  "proUntil": "Pro until {date}",
-  "@proUntil": {
+  "subscriptionActiveUntil": "Active until {date}",
+  "@subscriptionActiveUntil": {
     "placeholders": { "date": { "type": "String" } }
   },
-  "proStatus": "Pro",
   "freeStatus": "Free",
   "graceStatus": "Grace period",
   "notifications": "Notifications",
@@ -115,35 +114,7 @@
     "placeholders": { "score": { "type": "int" }, "id": { "type": "String" } }
   },
 
-  "paywallTitle": "Unlock unlimited",
-  "paywallSubtitle": "Unlimited outfit checks every day",
-  "paywallSocialProof": "12,000+ checks today",
-  "paywallContinue": "Continue",
-  "paywallRestore": "Restore purchases",
   "paywallNotConfigured": "Payments aren't set up yet — add RevenueCat keys",
-  "paywallPurchaseError": "Couldn't complete the purchase: {error}",
-  "@paywallPurchaseError": {
-    "placeholders": { "error": { "type": "String" } }
-  },
-  "paywallRestoreSuccess": "Purchases restored",
-  "paywallRestoreError": "Couldn't restore purchases: {error}",
-  "@paywallRestoreError": {
-    "placeholders": { "error": { "type": "String" } }
-  },
-  "paywallOfferError": "Error: {error}",
-  "@paywallOfferError": {
-    "placeholders": { "error": { "type": "String" } }
-  },
-  "paywallSuccessTitle": "Done! You now have unlimited access 🎉",
-  "paywallSuccessCta": "Great",
-  "paywallPlanWeekly": "Weekly",
-  "paywallPlanHalfyear": "Half-year",
-  "paywallPeriodWeek": "7 days",
-  "paywallPeriodHalfyear": "6 months",
-  "paywallBenefit1": "Unlimited outfit checks",
-  "paywallBenefit2": "Priority AI analysis",
-  "paywallBenefit3": "Early access to trends",
-  "paywallBestValue": "BEST VALUE",
 
   "promoCodeSectionTitle": "Have a promo code?",
   "promoCodeHint": "Enter code",

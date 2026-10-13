@@ -13,9 +13,9 @@
 //
 // PROMO_CODES_PLAN.md, разд. 5.4: промокоды выдаются через RevenueCat Grant
 // Promotional Entitlement API (см. redeem-promo) — RC шлёт такой грант сюда как
-// обычное активное событие (NON_RENEWING_PURCHASE), но product_id у него синтетический
-// (rc_promo_...) и никогда не совпадает с реальным товаром из PRODUCT_TO_PLAN —
-// такой случай трактуется как plan='promo'/source='promo', а не игнорируется.
+// обычное активное событие, но со store=PROMOTIONAL и синтетическим product_id
+// (rc_promo_...) — он трактуется как plan='promo'/source='promo'. Прочие
+// неизвестные product_id игнорируются, чтобы не маскироваться под промокод.
 
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -50,9 +50,14 @@ interface RevenueCatEvent {
   type: string;
   app_user_id: string;
   product_id?: string;
+  store?: string;
   expiration_at_ms?: number | null;
   original_transaction_id?: string;
   transaction_id?: string;
+}
+
+function isPromotionalGrant(event: RevenueCatEvent): boolean {
+  return event.store === "PROMOTIONAL" || !!event.product_id?.startsWith("rc_promo");
 }
 
 async function upsertActiveSubscription(
@@ -154,9 +159,7 @@ Deno.serve(async (req: Request) => {
     if (knownPlan) {
       plan = knownPlan;
       source = "revenuecat";
-    } else if (event.expiration_at_ms) {
-      // Нет известного product_id, но есть срок действия — трактуем как
-      // promotional grant от redeem-promo.
+    } else if (isPromotionalGrant(event)) {
       plan = "promo";
       source = "promo";
     } else {

@@ -208,12 +208,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get subscriptionStatusLabel => 'Статус подписки';
 
   @override
-  String proUntil(String date) {
-    return 'Pro до $date';
+  String subscriptionActiveUntil(String date) {
+    return 'Активна до $date';
   }
-
-  @override
-  String get proStatus => 'Pro';
 
   @override
   String get freeStatus => 'Free';
@@ -280,71 +277,8 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get paywallTitle => 'Открой безлимит';
-
-  @override
-  String get paywallSubtitle => 'Безграничные проверки образов каждый день';
-
-  @override
-  String get paywallSocialProof => '12 000+ проверок сегодня';
-
-  @override
-  String get paywallContinue => 'Продолжить';
-
-  @override
-  String get paywallRestore => 'Восстановить покупки';
-
-  @override
   String get paywallNotConfigured =>
       'Оплата ещё не настроена — добавьте ключи RevenueCat';
-
-  @override
-  String paywallPurchaseError(String error) {
-    return 'Не получилось оформить подписку: $error';
-  }
-
-  @override
-  String get paywallRestoreSuccess => 'Покупки восстановлены';
-
-  @override
-  String paywallRestoreError(String error) {
-    return 'Не получилось восстановить покупки: $error';
-  }
-
-  @override
-  String paywallOfferError(String error) {
-    return 'Ошибка: $error';
-  }
-
-  @override
-  String get paywallSuccessTitle => 'Готово! Теперь у тебя безлимит 🎉';
-
-  @override
-  String get paywallSuccessCta => 'Отлично';
-
-  @override
-  String get paywallPlanWeekly => 'Weekly';
-
-  @override
-  String get paywallPlanHalfyear => 'Half-year';
-
-  @override
-  String get paywallPeriodWeek => '7 дней';
-
-  @override
-  String get paywallPeriodHalfyear => '6 месяцев';
-
-  @override
-  String get paywallBenefit1 => 'Безлимитные проверки образов';
-
-  @override
-  String get paywallBenefit2 => 'Приоритетный AI-анализ';
-
-  @override
-  String get paywallBenefit3 => 'Ранний доступ к трендам';
-
-  @override
-  String get paywallBestValue => 'BEST VALUE';
 
   @override
   String get promoCodeSectionTitle => 'Есть промокод?';

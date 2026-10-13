@@ -212,12 +212,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get subscriptionStatusLabel => 'Stato dell\'abbonamento';
 
   @override
-  String proUntil(String date) {
-    return 'Pro fino al $date';
+  String subscriptionActiveUntil(String date) {
+    return 'Attiva fino al $date';
   }
-
-  @override
-  String get proStatus => 'Pro';
 
   @override
   String get freeStatus => 'Free';
@@ -285,71 +282,8 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get paywallTitle => 'Sblocca l\'illimitato';
-
-  @override
-  String get paywallSubtitle => 'Controlli look illimitati ogni giorno';
-
-  @override
-  String get paywallSocialProof => 'Oltre 12.000 controlli oggi';
-
-  @override
-  String get paywallContinue => 'Continua';
-
-  @override
-  String get paywallRestore => 'Ripristina acquisti';
-
-  @override
   String get paywallNotConfigured =>
       'I pagamenti non sono ancora configurati — aggiungi le chiavi RevenueCat';
-
-  @override
-  String paywallPurchaseError(String error) {
-    return 'Impossibile completare l\'acquisto: $error';
-  }
-
-  @override
-  String get paywallRestoreSuccess => 'Acquisti ripristinati';
-
-  @override
-  String paywallRestoreError(String error) {
-    return 'Impossibile ripristinare gli acquisti: $error';
-  }
-
-  @override
-  String paywallOfferError(String error) {
-    return 'Errore: $error';
-  }
-
-  @override
-  String get paywallSuccessTitle => 'Fatto! Ora hai accesso illimitato 🎉';
-
-  @override
-  String get paywallSuccessCta => 'Ottimo';
-
-  @override
-  String get paywallPlanWeekly => 'Settimanale';
-
-  @override
-  String get paywallPlanHalfyear => 'Semestrale';
-
-  @override
-  String get paywallPeriodWeek => '7 giorni';
-
-  @override
-  String get paywallPeriodHalfyear => '6 mesi';
-
-  @override
-  String get paywallBenefit1 => 'Controlli look illimitati';
-
-  @override
-  String get paywallBenefit2 => 'Analisi IA prioritaria';
-
-  @override
-  String get paywallBenefit3 => 'Accesso anticipato alle tendenze';
-
-  @override
-  String get paywallBestValue => 'MIGLIOR OFFERTA';
 
   @override
   String get promoCodeSectionTitle => 'Hai un codice promozionale?';

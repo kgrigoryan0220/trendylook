@@ -1,25 +1,21 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 
 import '../../../core/analytics/analytics_service.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
 import '../../../l10n/gen/app_localizations.dart';
-import '../../../shared/widgets/plan_card.dart';
-import '../../../shared/widgets/primary_button.dart';
-import '../../../shared/widgets/promo_code_section.dart';
-import 'paywall_controller.dart';
+import '../../../shared/providers/billing_provider.dart';
+import '../data/purchases_repository.dart';
 
-String _planTitle(AppLocalizations l10n, PlanOffer plan) =>
-    plan.planId == 'weekly' ? l10n.paywallPlanWeekly : l10n.paywallPlanHalfyear;
-
-String _planSubtitle(AppLocalizations l10n, PlanOffer plan) {
-  final period = plan.planId == 'weekly' ? l10n.paywallPeriodWeek : l10n.paywallPeriodHalfyear;
-  return plan.hasPackage ? period : '${plan.fallbackPriceLabel} / $period';
-}
-
-/// 4.9 Paywall — PAY-01/02/06.
+/// 4.9 Paywall — PAY-01/02/06. Вёрстку, тексты, локализацию, выбор пакета,
+/// покупку и restore рендерит RevenueCat (пейвол, привязанный к current
+/// Offering в RC Dashboard). Entitlement на сервере выставляет
+/// revenuecat-webhook — здесь только аналитика и ожидание billing-status.
 class PaywallScreen extends ConsumerStatefulWidget {
   const PaywallScreen({super.key, this.trigger = 'unknown'});
 
@@ -31,26 +27,30 @@ class PaywallScreen extends ConsumerStatefulWidget {
 }
 
 class _PaywallScreenState extends ConsumerState<PaywallScreen> {
-  bool _purchasing = false;
-  bool _success = false;
   bool _converted = false;
+  bool _closed = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(analyticsServiceProvider).track('paywall_shown', {
-        'trigger': widget.trigger,
-      });
+      _track('paywall_shown');
     });
   }
 
-  void _dismiss() {
-    if (!_converted) {
-      ref.read(analyticsServiceProvider).track('paywall_dismissed', {
-        'trigger': widget.trigger,
-      });
-    }
+  void _track(String event, [Map<String, Object> extra = const {}]) {
+    ref.read(analyticsServiceProvider).track(event, {'trigger': widget.trigger, ...extra});
+  }
+
+  void _markClosed() {
+    if (_closed) return;
+    _closed = true;
+    if (!_converted) _track('paywall_dismissed');
+  }
+
+  void _close() {
+    if (_closed) return;
+    _markClosed();
     if (context.canPop()) {
       context.pop();
     } else {
@@ -58,235 +58,82 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
     }
   }
 
-  Future<void> _continue() async {
-    setState(() => _purchasing = true);
-    try {
-      await ref.read(paywallControllerProvider.notifier).purchase();
-      if (!mounted) return;
-      setState(() {
-        _purchasing = false;
-        _success = true;
-        _converted = true;
-      });
-    } on PurchasesNotConfiguredException {
-      if (!mounted) return;
-      setState(() => _purchasing = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context).paywallNotConfigured)),
-      );
-    } catch (e) {
-      if (!mounted) return;
-      setState(() => _purchasing = false);
-      ref.read(analyticsServiceProvider).track('subscription_purchase_failed', {
-        'trigger': widget.trigger,
-        'error': e.runtimeType.toString(),
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context).paywallPurchaseError(e.toString()))),
-      );
-    }
+  void _onPurchaseCompleted(CustomerInfo customerInfo, StoreTransaction transaction) {
+    _converted = true;
+    _track('subscription_purchased', {'product_id': transaction.productIdentifier});
+    unawaited(ref.read(billingControllerProvider.notifier).refreshUntilPro());
+    // PaywallView сам вызывает onDismiss после успешной покупки.
   }
 
-  Future<void> _restore() async {
-    try {
-      await ref.read(paywallControllerProvider.notifier).restore();
-      if (!mounted) return;
-      ref.read(analyticsServiceProvider).track('purchases_restored', {
-        'trigger': widget.trigger,
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context).paywallRestoreSuccess)),
-      );
-    } on PurchasesNotConfiguredException {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context).paywallNotConfigured)),
-      );
-    } catch (e) {
-      if (!mounted) return;
-      ref.read(analyticsServiceProvider).track('purchases_restore_failed', {
-        'error': e.runtimeType.toString(),
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context).paywallRestoreError(e.toString()))),
-      );
-    }
+  void _onRestoreCompleted(CustomerInfo customerInfo) {
+    _track('purchases_restored');
+    if (customerInfo.entitlements.active.isEmpty) return;
+    _converted = true;
+    unawaited(ref.read(billingControllerProvider.notifier).refreshUntilPro());
+    _close();
   }
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final offerAsync = ref.watch(paywallControllerProvider);
-    final selectedPlan = ref.watch(selectedPlanProvider);
+    final configured = ref.watch(purchasesRepositoryProvider).isConfigured;
 
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: DecoratedBox(
-        decoration: const BoxDecoration(
-          gradient: RadialGradient(
-            center: Alignment(0, -1),
-            radius: 0.9,
-            colors: [Color(0x387B5CFF), AppColors.background],
-          ),
-        ),
-        child: SafeArea(
-          child: Stack(
-            children: [
-              if (_success)
-                _SuccessView(onDone: () => context.go('/home'))
-              else
-                offerAsync.when(
-                  loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (e, _) => Center(child: Text(l10n.paywallOfferError(e.toString()))),
-                  data: (offer) => SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(24, 64, 24, 32),
-                    child: Column(
-                      children: [
-                        Text(
-                          l10n.paywallTitle,
-                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontSize: 26),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          l10n.paywallSubtitle,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(color: AppColors.textSecondary, fontSize: 13.5),
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            PlanCard(
-                              title: _planTitle(l10n, offer.weekly),
-                              price: offer.weekly.priceText,
-                              subtitle: _planSubtitle(l10n, offer.weekly),
-                              selected: selectedPlan == 'weekly',
-                              onTap: () =>
-                                  ref.read(selectedPlanProvider.notifier).state = 'weekly',
-                            ),
-                            const SizedBox(width: 12),
-                            PlanCard(
-                              title: _planTitle(l10n, offer.halfyear),
-                              price: offer.halfyear.priceText,
-                              subtitle: _planSubtitle(l10n, offer.halfyear),
-                              selected: selectedPlan == 'halfyear',
-                              badgeText: l10n.paywallBestValue,
-                              onTap: () =>
-                                  ref.read(selectedPlanProvider.notifier).state = 'halfyear',
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 24),
-                        const _BenefitsList(),
-                        const SizedBox(height: 24),
-                        const PromoCodeSection(),
-                        const SizedBox(height: 20),
-                        Text(
-                          l10n.paywallSocialProof,
-                          style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
-                        ),
-                        const SizedBox(height: 20),
-                        PrimaryButton(
-                          label: l10n.paywallContinue,
-                          isLoading: _purchasing,
-                          onPressed: _purchasing ? null : _continue,
-                        ),
-                        const SizedBox(height: 14),
-                        TextButton(
-                          onPressed: _restore,
-                          child: Text(
-                            l10n.paywallRestore,
-                            style: const TextStyle(color: AppColors.textSecondary),
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          '${l10n.termsOfService} · ${l10n.privacyPolicy}',
-                          style: const TextStyle(color: Color(0xFF5C5C68), fontSize: 11),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              // Крестик — последним в Stack, чтобы быть поверх скролл-контента
-              // и реально ловить тапы (иначе SingleChildScrollView перехватывает их).
-              Align(
-                alignment: Alignment.topRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: InkWell(
-                    customBorder: const CircleBorder(),
-                    onTap: _dismiss,
-                    child: Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white.withValues(alpha: 0.08),
-                      ),
-                      child: const Icon(Icons.close, size: 14, color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+    return PopScope(
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) _markClosed();
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.background,
+        body: configured
+            ? PaywallView(
+                onPurchaseCompleted: _onPurchaseCompleted,
+                onPurchaseCancelled: () =>
+                    _track('subscription_purchase_failed', {'error': 'cancelled'}),
+                onPurchaseError: (error) =>
+                    _track('subscription_purchase_failed', {'error': error.code.name}),
+                onRestoreCompleted: _onRestoreCompleted,
+                onRestoreError: (error) =>
+                    _track('purchases_restore_failed', {'error': error.code.name}),
+                onDismiss: _close,
+              )
+            : _NotConfiguredView(onClose: _close),
       ),
     );
   }
 }
 
-class _BenefitsList extends StatelessWidget {
-  const _BenefitsList();
+/// RevenueCat SDK не сконфигурирован (нет REVENUECAT_API_KEY_* в
+/// --dart-define) — честно сообщаем, а не показываем пустой экран.
+class _NotConfiguredView extends StatelessWidget {
+  const _NotConfiguredView({required this.onClose});
+
+  final VoidCallback onClose;
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final items = [l10n.paywallBenefit1, l10n.paywallBenefit2, l10n.paywallBenefit3];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: items
-          .map(
-            (text) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6),
-              child: Row(
-                children: [
-                  const Icon(Icons.check, color: AppColors.lime, size: 18),
-                  const SizedBox(width: 10),
-                  Expanded(child: Text(text, style: const TextStyle(fontSize: 13.5))),
-                ],
+    return SafeArea(
+      child: Stack(
+        children: [
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Text(
+                AppLocalizations.of(context).paywallNotConfigured,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
               ),
             ),
-          )
-          .toList(),
-    );
-  }
-}
-
-class _SuccessView extends StatelessWidget {
-  const _SuccessView({required this.onDone});
-
-  final VoidCallback onDone;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              l10n.paywallSuccessTitle,
-              textAlign: TextAlign.center,
-              style: AppTheme.heading(context, fontSize: 22),
+          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: IconButton(
+                onPressed: onClose,
+                icon: const Icon(Icons.close, color: Colors.white),
+              ),
             ),
-            const SizedBox(height: 20),
-            PrimaryButton(label: l10n.paywallSuccessCta, onPressed: onDone),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
