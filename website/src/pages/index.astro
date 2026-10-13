@@ -81,20 +81,20 @@ const plans = [
     featured: false,
   },
   {
-    name: "Weekly",
-    price: "$4.99",
-    period: "/week",
-    features: ["Unlimited checks", "Priority AI analysis", "Early access to trends"],
-    cta: "Go Weekly",
-    featured: false,
-  },
-  {
     name: "Half-year",
     price: "$29.99",
     period: "/6 months",
     features: ["Same benefits as Weekly", "Unlimited checks", "Priority AI analysis", "Early access to trends"],
     cta: "Go Half-year",
     featured: true,
+  },
+  {
+    name: "Weekly",
+    price: "$4.99",
+    period: "/week",
+    features: ["Unlimited checks", "Priority AI analysis", "Early access to trends"],
+    cta: "Go Weekly",
+    featured: false,
   },
 ];
 
@@ -625,6 +625,11 @@ const promisePoints = [
       </div>
     </div>
   </section>
+
+  <script>
+    import "../scripts/hero-ring";
+    import "../scripts/gallery";
+  </script>
 </BaseLayout>
 
 <style>
@@ -665,7 +670,3 @@ const promisePoints = [
   }
 </style>
 
-<script>
-  import "../scripts/hero-ring";
-  import "../scripts/gallery";
-</script>
