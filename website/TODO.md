@@ -13,16 +13,16 @@ After editing, run `npm run build` (or push to deploy).
 | `GOOGLE_PLAY_URL` | `""` | Google Play listing URL | Same as above |
 | `INSTAGRAM_URL` | `""` | Instagram profile URL | Empty = icon hidden in the footer |
 | `TIKTOK_URL` | `""` | TikTok profile URL | Empty = icon hidden in the footer |
-| `APP_ICON` | `/brand/app-icon.svg` | `/brand/app-icon.png` once the real icon exists | Header logo, favicon, apple-touch-icon, OG image logo |
+| `APP_ICON` | `/brand/app-icon.svg` | Keep it, or point to a PNG (see section 2) | Header logo, favicon, apple-touch-icon, OG image logo |
 
-## 2. App icon (temporary placeholder)
+## 2. App icon (done: logo mark from the case study)
 
-- **File:** `public/brand/app-icon.svg`: pink → violet rounded square with a white ring/lens glyph.
-- **To replace:** drop the real icon at `public/brand/app-icon.png` (1024x1024, square, no transparency needed) and set
-  `APP_ICON = "/brand/app-icon.png"` in `src/config.ts`. The favicon, the 180x180 `apple-touch-icon.png`, the 32x32 PNG
-  favicon and the logo in the OG image are generated from it at build time. Nothing else to change.
-- Note: the app repository already has `assets/brand/app_icon_1024.png` (a pink/violet ring with a lime sparkle). If that is
-  the final icon, copy it to `website/public/brand/app-icon.png` and switch the path.
+- **File:** `public/brand/app-icon.svg`: the logo mark from `TrendyLook_Case_Study.pdf` (pink → violet rounded square,
+  white ring, lime dot), redrawn as a vector so it stays sharp at any size. The favicon, the 180x180
+  `apple-touch-icon.png`, the 32x32 PNG favicon and the logo in the OG image are generated from it at build time.
+- **To confirm:** the app repository has a different icon, `assets/brand/app_icon_1024.png` (a ring with a lime
+  sparkle). If the App Store / Google Play icon will be that one, copy it to `website/public/brand/app-icon.png` and set
+  `APP_ICON = "/brand/app-icon.png"` in `src/config.ts`, so the site and the store listing match.
 
 ## 3. Values from the legal texts that should go into `src/config.ts`
 

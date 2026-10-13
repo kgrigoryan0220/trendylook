@@ -19,7 +19,8 @@ export const TIKTOK_URL = "";
 
 /**
  * App icon, relative to /public. Used for the header logo, favicon, apple-touch-icon and OG image.
- * To use the real icon: drop public/brand/app-icon.png (1024x1024) and change this to "/brand/app-icon.png".
+ * Currently the logo mark from the case study (SVG). To use a PNG instead: drop public/brand/app-icon.png (1024x1024)
+ * and change this to "/brand/app-icon.png".
  */
 export const APP_ICON = "/brand/app-icon.svg";
 
