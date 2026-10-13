@@ -31,11 +31,10 @@ const img = (src: string, width: number, height: number, style: Record<string, u
 
 export const GET: APIRoute = async () => {
   const phoneW = 296;
-  const phoneH = Math.round((phoneW * 3148) / 1600);
-  const phone = await sharp(path.join(process.cwd(), "src/assets/screens/result.png"))
-    .resize(phoneW * 2)
-    .png()
-    .toBuffer();
+  const screen = sharp(path.join(process.cwd(), "src/assets/screens/result.png"));
+  const meta = await screen.metadata();
+  const phoneH = Math.round((phoneW * (meta.height ?? 3148)) / (meta.width ?? 1600));
+  const phone = await screen.resize(phoneW * 2).png().toBuffer();
   const icon = await appIconPng(112);
 
   const tree = h(

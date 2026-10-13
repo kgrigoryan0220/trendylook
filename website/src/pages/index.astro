@@ -9,12 +9,11 @@ import Icon from "../components/Icon.astro";
 import { SUPPORT_EMAIL } from "../config";
 
 import resultImg from "../assets/screens/result.png";
-import onboardingPhotoImg from "../assets/screens/onboarding-photo.png";
-import onboardingScoreImg from "../assets/screens/onboarding-score.png";
-import onboardingTipsImg from "../assets/screens/onboarding-tips.png";
+import snapImg from "../assets/screens/snap.png";
+import resultTrendyImg from "../assets/screens/result-trendy.png";
+import tipsImg from "../assets/screens/tips.png";
+import shareImg from "../assets/screens/share.png";
 import homeImg from "../assets/screens/home.png";
-import historyImg from "../assets/screens/history.png";
-import paywallImg from "../assets/screens/paywall.png";
 import storyLookImg from "../assets/photos/story-look.jpg";
 
 const steps = [
@@ -45,29 +44,29 @@ const tips = [
 
 const gallery = [
   {
-    img: onboardingPhotoImg,
+    img: snapImg,
     caption: "Snap. Score. Style.",
-    alt: "Trendy Look onboarding screen inviting you to snap your look, with an outfit photo.",
+    alt: "Trendy Look camera screen framing a full-length outfit photo, with Retake and Confirm buttons.",
   },
   {
     img: homeImg,
     caption: "Check a new look or revisit old ones.",
-    alt: "Trendy Look home screen with the Check your look button and a grid of recent checks.",
+    alt: "Trendy Look home screen with Take a photo and From gallery buttons and a grid of recent checks.",
   },
   {
     img: resultImg,
     caption: "Score ring, 4 categories and AI tips.",
-    alt: "Trendy Look result screen: 85% Icon Status score ring over an outfit photo, category bars and AI tips.",
+    alt: "Trendy Look result screen: 80% Icon Status score ring over an outfit photo, with category bars below.",
   },
   {
-    img: historyImg,
-    caption: "Every check, color-coded by verdict.",
-    alt: "Trendy Look history list with past outfit checks, each score colored by its verdict.",
+    img: tipsImg,
+    caption: "Personal tips to level up your look.",
+    alt: "Trendy Look result screen with category scores and four numbered AI style recommendations.",
   },
   {
-    img: paywallImg,
-    caption: "Unlimited checks whenever you want.",
-    alt: "Trendy Look paywall with Weekly and Half-year plans for unlimited outfit checks.",
+    img: shareImg,
+    caption: "Your result, ready for Stories.",
+    alt: "Trendy Look share screen with a 9:16 story card: outfit photo, 80% Icon Status and the top tip.",
   },
 ];
 
@@ -156,7 +155,7 @@ const promisePoints = [
         >
         <Screenshot
           src={resultImg}
-          alt="Trendy Look result screen: an outfit photo with an 85% Icon Status trend score ring and confetti."
+          alt="Trendy Look result screen: an outfit photo with an 80% Icon Status trend score ring and category bars."
           sizes="(min-width: 640px) 336px, 304px"
           eager
           class="relative"
@@ -182,8 +181,8 @@ const promisePoints = [
     <div class="glow glow-magenta top-10 -left-48 h-[26rem] w-[26rem] !opacity-30" aria-hidden="true"></div>
     <div class="relative mx-auto grid max-w-6xl items-center gap-14 px-4 sm:px-6 md:grid-cols-[0.8fr_1.2fr] lg:gap-20">
       <Screenshot
-        src={onboardingPhotoImg}
-        alt="Trendy Look onboarding screen: Snap your look, with a full-length outfit photo."
+        src={snapImg}
+        alt="Trendy Look camera screen framing a full-length outfit photo, with Retake and Confirm buttons."
         sizes="(min-width: 768px) 320px, 272px"
         class="order-2 mx-auto w-full max-w-[15rem] sm:max-w-[17rem] md:order-1 md:max-w-[20rem]"
       />
@@ -265,8 +264,8 @@ const promisePoints = [
         </ul>
       </div>
       <Screenshot
-        src={onboardingScoreImg}
-        alt="Trendy Look onboarding screen with an 82% Trendy score ring."
+        src={resultTrendyImg}
+        alt="Trendy Look result screen with a 75% Trendy score ring in pink over an outfit photo."
         sizes="(min-width: 768px) 320px, 272px"
         class="mx-auto w-full max-w-[15rem] sm:max-w-[17rem] md:max-w-[20rem]"
       />
@@ -278,8 +277,8 @@ const promisePoints = [
     <div class="glow glow-pink -top-20 -left-40 h-[28rem] w-[28rem] !opacity-30" aria-hidden="true"></div>
     <div class="relative mx-auto grid max-w-6xl items-center gap-14 px-4 sm:px-6 md:grid-cols-[0.8fr_1.2fr] lg:gap-20">
       <Screenshot
-        src={onboardingTipsImg}
-        alt="Trendy Look onboarding screen with three AI style tip cards."
+        src={tipsImg}
+        alt="Trendy Look result screen with category bars and four numbered AI style recommendations."
         sizes="(min-width: 768px) 320px, 272px"
         class="order-2 mx-auto w-full max-w-[15rem] sm:max-w-[17rem] md:order-1 md:max-w-[20rem]"
       />
@@ -390,8 +389,8 @@ const promisePoints = [
           </div>
         </div>
         <Screenshot
-          src={resultImg}
-          alt="Trendy Look result screen with an 85% Icon Status score that you can share as a story card."
+          src={shareImg}
+          alt="Trendy Look share screen with a ready-made 9:16 story card showing an 80% Icon Status score."
           sizes="(min-width: 640px) 200px, 160px"
           class="w-[44%] translate-y-6 rotate-[4deg]"
         />

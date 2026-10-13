@@ -35,12 +35,12 @@ After editing, run `npm run build` (or push to deploy).
 
 | Item | File | Why |
 |---|---|---|
-| **Story card "top tip"**: copy says the 9:16 card has "your photo, score and top tip", and the coded mockup shows a "TOP TIP" box | `src/pages/index.astro` (section `#stories`) | The latest app commit (`478c3d4`, "drop tip from share card") removed the tip from the real share card. Either restore it in the app or change the copy to "your photo and score" and delete the TOP TIP box from the mockup. |
+| **Story card "top tip"**: copy says the 9:16 card has "your photo, score and top tip", and the coded mockup shows a "TOP TIP" box | `src/pages/index.astro` (section `#stories`) | The share screenshot (`share.png`, taken Sep 16) still shows the tip, but the later app commit `478c3d4` (Oct 2, "drop tip from share card") removed it. Either restore it in the app, or change the copy to "your photo and score", delete the TOP TIP box from the mockup and retake `share.png`. |
 | `trendylook.app` text on the story-card mockup | `src/pages/index.astro` (section `#stories`) | Hard-coded as specified. Change it if the final domain is different. |
 | Story-card photo | `src/assets/photos/story-look.jpg` | Copied from the app's onboarding photo (`assets/onboarding/look_1.jpg`). Replace it if you'd rather use another photo. Confirm you have the rights to use it on the web. |
-| **Paywall screenshot shows "12,000+ checks today"** | `src/assets/screens/paywall.png` | That line is the app's `paywallSocialProof` string. The site itself invents no numbers, but the screenshot shows one. If the number isn't real yet, retake the screenshot or crop that line. |
 | Prices $4.99/week and $29.99/6 months | `src/pages/index.astro` (`plans`) | Must match App Store Connect / Play Console. The small print already says prices may vary by region. |
-| Screenshots | `src/assets/screens/*.png` | Russian UI, as agreed. To swap one, replace the PNG with the same filename (transparent PNG, iPhone frame, ~1600x3148). |
+| Screenshots | `src/assets/screens/*.png` | English UI: `result.png` (hero, gallery, OG image), `snap.png` (How it works), `result-trendy.png` (Score scale), `tips.png` (What the AI checks), `share.png` (Made for Stories), `home.png` (gallery). There are no English History or Paywall screens yet, so the gallery shows 5 screens. To swap one, replace the PNG with the same filename (transparent PNG in an iPhone frame). |
+| Hero numbers: the floating ring and the faint background number say **85%**, the hero screenshot shows **80%** | `src/pages/index.astro` (hero) | 85% is from the brief. Change `value={85}` on the hero `ScoreRing` (and the background "85%") if you want them to match the screenshot. |
 | Document naming: the site says **"Terms of Use"**, the document heading says **"Terms of Service"** | `src/components/Footer.astro`, `src/content/legal/terms.md` (frontmatter `title`) | Pick one name everywhere (see LEGAL_REVIEW.md). |
 
 ## 5. Deploy settings (one-time)
