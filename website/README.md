@@ -77,7 +77,7 @@ The site lives in the `website/` folder of this repository, so set **Root direct
 3. **Save and Deploy.** Every push to the production branch redeploys, and other branches get preview URLs.
 4. **Custom domain.** Project → **Custom domains** → **Set up a custom domain** → enter your domain. The domain is
    already on Cloudflare, so DNS records are created automatically.
-5. Set `SITE_URL` in `src/config.ts` to the final domain (for example `https://trendylook.app`) and push, so canonical
+5. `SITE_URL` in `src/config.ts` is set to `https://trendylook.app`. If the domain ever changes, update it and push, so canonical
    URLs, Open Graph tags, the sitemap and robots.txt point to it.
 
 ### Option B: Direct upload with Wrangler

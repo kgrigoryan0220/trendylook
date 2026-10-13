@@ -4,10 +4,10 @@
  */
 
 /** Production URL, no trailing slash. Used for canonical URLs, Open Graph, sitemap and robots.txt. */
-export const SITE_URL = "https://example.com";
+export const SITE_URL = "https://trendylook.app";
 
 /** Public support address. Used in the footer, the contact block and the FAQ. */
-export const SUPPORT_EMAIL = "hello@example.com";
+export const SUPPORT_EMAIL = "trendylook2026@outlook.com";
 
 /** Store links. Leave empty ("") to show the button with a "Coming soon" label instead of a link. */
 export const APP_STORE_URL = "";

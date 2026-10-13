@@ -16,8 +16,8 @@ or with the other document · **UNCLEAR** = covered, but vague or hedged.
 
 1. **CONTRADICTS: deleting a single check.** The policy implies individually deleted checks are deleted. In the app it is a
    soft delete (`soft_delete_check` sets `deleted_at`): the row and the photo stay until the account is deleted.
-2. **CONTRADICTS: contact email.** Both documents use `trendylook2026@outlook.com`, but the site's `SUPPORT_EMAIL` is
-   still `hello@example.com`.
+2. **Resolved: contact email.** The site's `SUPPORT_EMAIL` is now `trendylook2026@outlook.com`, the same as in both
+   documents.
 3. **Template leftovers** visible to users: the "(Optional: If you prefer arbitration…)" note in Terms §17.3 and the
    internal "must match this Policy" note in Privacy §16.
 4. **MISSING: what happens after cancellation** (Pro stays until the end of the paid period, then the account returns to
@@ -113,7 +113,7 @@ or with the other document · **UNCLEAR** = covered, but vague or hedged.
 | Item | Status | Relevant line | Suggested fix |
 |---|---|---|---|
 | Email consistent between documents | **OK** | `trendylook2026@outlook.com` in Privacy §1, §11.1, §14 and Terms §1, §4.2, §4.4, §17.1, §22. | None. |
-| Email consistent with `SUPPORT_EMAIL` | **CONTRADICTS** | `src/config.ts`: `SUPPORT_EMAIL = "hello@example.com"` (placeholder). | Set `SUPPORT_EMAIL = "trendylook2026@outlook.com"`, or move all three to a domain address (see TODO.md §3). |
+| Email consistent with `SUPPORT_EMAIL` | **OK** (resolved) | `src/config.ts`: `SUPPORT_EMAIL = "trendylook2026@outlook.com"`. | None. If you move to a domain address later, change it in all three places. |
 | Company / controller name consistent | **OK** | "Artur Arzumanian" in both documents. | Note: "Trendy Look" in the site footer (© 2026 Trendy Look) is the brand, not the legal party. That's fine. The App Store / Play seller name should match "Artur Arzumanian". |
 | "Last updated" date | **OK** | Both: "**Effective date:** September 10, 2026 · **Last updated:** September 10, 2026". | Update both whenever you apply the fixes from this report. |
 | Document name | **UNCLEAR** | The document is titled "Terms of Service" (and Privacy §5.1 says "see Terms of Service"), but the site navigation and page title say "Terms of Use", as the brief asked. | Pick one name and use it everywhere: the document heading, the footer link and the store listings. |
