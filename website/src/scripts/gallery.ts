@@ -55,9 +55,12 @@ if (section && pin && gallery && track && prev && next) {
       const headerH = header?.offsetHeight ?? 72;
       const contentH = pin.offsetHeight; // natural height, measured before pinning
       const fits = contentH + headerH + 32 <= window.innerHeight;
+      // Only pin when the window itself scrolls (an auto-height embed would report the whole page as the viewport).
+      const windowScrolls =
+        document.documentElement.scrollHeight > window.innerHeight + 100 && window.innerHeight <= 2000;
       distance = Math.max(0, gallery.scrollWidth - gallery.clientWidth);
 
-      if (fits && distance > 40) {
+      if (fits && windowScrolls && distance > 40) {
         pinned = true;
         section.style.setProperty("--pin-h", `${window.innerHeight}px`);
         section.style.setProperty("--header-h", `${headerH}px`);
