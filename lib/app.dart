@@ -7,7 +7,7 @@ import 'core/deep_links/deep_link_service.dart';
 import 'core/l10n/locale_controller.dart';
 import 'core/supabase/supabase_providers.dart';
 import 'core/theme/app_theme.dart';
-import 'features/paywall/presentation/paywall_controller.dart';
+import 'features/paywall/data/purchases_repository.dart';
 import 'l10n/gen/app_localizations.dart';
 import 'routing/app_router.dart';
 import 'shared/widgets/offline_banner.dart';

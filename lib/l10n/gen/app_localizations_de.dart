@@ -285,72 +285,8 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get paywallTitle => 'Unbegrenzt freischalten';
-
-  @override
-  String get paywallSubtitle => 'Jeden Tag unbegrenzt Looks checken';
-
-  @override
-  String get paywallSocialProof => 'Über 12.000 Checks heute';
-
-  @override
-  String get paywallContinue => 'Weiter';
-
-  @override
-  String get paywallRestore => 'Käufe wiederherstellen';
-
-  @override
   String get paywallNotConfigured =>
       'Zahlungen sind noch nicht eingerichtet — RevenueCat-Schlüssel hinzufügen';
-
-  @override
-  String paywallPurchaseError(String error) {
-    return 'Kauf konnte nicht abgeschlossen werden: $error';
-  }
-
-  @override
-  String get paywallRestoreSuccess => 'Käufe wiederhergestellt';
-
-  @override
-  String paywallRestoreError(String error) {
-    return 'Käufe konnten nicht wiederhergestellt werden: $error';
-  }
-
-  @override
-  String paywallOfferError(String error) {
-    return 'Fehler: $error';
-  }
-
-  @override
-  String get paywallSuccessTitle =>
-      'Fertig! Du hast jetzt unbegrenzten Zugriff 🎉';
-
-  @override
-  String get paywallSuccessCta => 'Super';
-
-  @override
-  String get paywallPlanWeekly => 'Wöchentlich';
-
-  @override
-  String get paywallPlanHalfyear => 'Halbjährlich';
-
-  @override
-  String get paywallPeriodWeek => '7 Tage';
-
-  @override
-  String get paywallPeriodHalfyear => '6 Monate';
-
-  @override
-  String get paywallBenefit1 => 'Unbegrenzte Look-Checks';
-
-  @override
-  String get paywallBenefit2 => 'Priorisierte KI-Analyse';
-
-  @override
-  String get paywallBenefit3 => 'Früher Zugang zu Trends';
-
-  @override
-  String get paywallBestValue => 'BESTES ANGEBOT';
 
   @override
   String get promoCodeSectionTitle => 'Hast du einen Promo-Code?';

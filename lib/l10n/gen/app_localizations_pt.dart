@@ -285,73 +285,8 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get paywallTitle => 'Desbloqueie o ilimitado';
-
-  @override
-  String get paywallSubtitle =>
-      'Verificações de looks ilimitadas todos os dias';
-
-  @override
-  String get paywallSocialProof => 'Mais de 12 mil verificações hoje';
-
-  @override
-  String get paywallContinue => 'Continuar';
-
-  @override
-  String get paywallRestore => 'Restaurar compras';
-
-  @override
   String get paywallNotConfigured =>
       'Os pagamentos ainda não foram configurados — adicione as chaves do RevenueCat';
-
-  @override
-  String paywallPurchaseError(String error) {
-    return 'Não foi possível concluir a compra: $error';
-  }
-
-  @override
-  String get paywallRestoreSuccess => 'Compras restauradas';
-
-  @override
-  String paywallRestoreError(String error) {
-    return 'Não foi possível restaurar as compras: $error';
-  }
-
-  @override
-  String paywallOfferError(String error) {
-    return 'Erro: $error';
-  }
-
-  @override
-  String get paywallSuccessTitle =>
-      'Pronto! Agora você tem acesso ilimitado 🎉';
-
-  @override
-  String get paywallSuccessCta => 'Ótimo';
-
-  @override
-  String get paywallPlanWeekly => 'Semanal';
-
-  @override
-  String get paywallPlanHalfyear => 'Semestral';
-
-  @override
-  String get paywallPeriodWeek => '7 dias';
-
-  @override
-  String get paywallPeriodHalfyear => '6 meses';
-
-  @override
-  String get paywallBenefit1 => 'Verificações de looks ilimitadas';
-
-  @override
-  String get paywallBenefit2 => 'Análise de IA prioritária';
-
-  @override
-  String get paywallBenefit3 => 'Acesso antecipado às tendências';
-
-  @override
-  String get paywallBestValue => 'MELHOR OFERTA';
 
   @override
   String get promoCodeSectionTitle => 'Tem um código promocional?';

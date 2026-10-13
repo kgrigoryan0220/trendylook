@@ -284,71 +284,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get paywallTitle => 'Unlock unlimited';
-
-  @override
-  String get paywallSubtitle => 'Unlimited outfit checks every day';
-
-  @override
-  String get paywallSocialProof => '12,000+ checks today';
-
-  @override
-  String get paywallContinue => 'Continue';
-
-  @override
-  String get paywallRestore => 'Restore purchases';
-
-  @override
   String get paywallNotConfigured =>
       'Payments aren\'t set up yet — add RevenueCat keys';
-
-  @override
-  String paywallPurchaseError(String error) {
-    return 'Couldn\'t complete the purchase: $error';
-  }
-
-  @override
-  String get paywallRestoreSuccess => 'Purchases restored';
-
-  @override
-  String paywallRestoreError(String error) {
-    return 'Couldn\'t restore purchases: $error';
-  }
-
-  @override
-  String paywallOfferError(String error) {
-    return 'Error: $error';
-  }
-
-  @override
-  String get paywallSuccessTitle => 'Done! You now have unlimited access 🎉';
-
-  @override
-  String get paywallSuccessCta => 'Great';
-
-  @override
-  String get paywallPlanWeekly => 'Weekly';
-
-  @override
-  String get paywallPlanHalfyear => 'Half-year';
-
-  @override
-  String get paywallPeriodWeek => '7 days';
-
-  @override
-  String get paywallPeriodHalfyear => '6 months';
-
-  @override
-  String get paywallBenefit1 => 'Unlimited outfit checks';
-
-  @override
-  String get paywallBenefit2 => 'Priority AI analysis';
-
-  @override
-  String get paywallBenefit3 => 'Early access to trends';
-
-  @override
-  String get paywallBestValue => 'BEST VALUE';
 
   @override
   String get promoCodeSectionTitle => 'Have a promo code?';

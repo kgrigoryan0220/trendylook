@@ -11,7 +11,4 @@ class AppConstants {
   static const analysisTimeout = Duration(seconds: 30); // CHECK-07
 
   static const lookPhotosBucket = 'look-photos';
-
-  static const weeklyProductId = 'weekly_unlimited'; // PAY-02
-  static const halfyearProductId = 'halfyear_unlimited'; // PAY-02
 }
