@@ -7,8 +7,8 @@ After editing, run `npm run build` (or push to deploy).
 
 | Constant | Current value | What to put there | Effect |
 |---|---|---|---|
-| `SITE_URL` | `https://example.com` | Final production URL, no trailing slash (e.g. `https://trendylook.app`) | Canonical URLs, Open Graph/Twitter URLs, `og:image`, sitemap, robots.txt |
-| `SUPPORT_EMAIL` | `hello@example.com` | Real support address (see section 3) | Footer "Contact" link, contact block, FAQ "How do I contact you?" |
+| `SITE_URL` | `https://trendylook.app` | Done | Canonical URLs, Open Graph/Twitter URLs, `og:image`, sitemap, robots.txt |
+| `SUPPORT_EMAIL` | `trendylook2026@outlook.com` | Done (same as in the legal texts) | Footer "Contact" link, contact block, FAQ "How do I contact you?" |
 | `APP_STORE_URL` | `""` | App Store listing URL | Empty = button shows **Coming soon** and is not a link. Filled = real link |
 | `GOOGLE_PLAY_URL` | `""` | Google Play listing URL | Same as above |
 | `INSTAGRAM_URL` | `""` | Instagram profile URL | Empty = icon hidden in the footer |
@@ -27,7 +27,7 @@ After editing, run `npm run build` (or push to deploy).
 
 | Value in the legal texts | Where it appears | Suggested change |
 |---|---|---|
-| Email **`trendylook2026@outlook.com`** | Privacy §1, §11.1, §14 · Terms §1, §4.2, §4.4, §17.1, §22 | Set `SUPPORT_EMAIL = "trendylook2026@outlook.com"`, **or** if you switch to a domain address (e.g. `hello@trendylook.app`), update both legal documents too, so the site and the policies show the same email. |
+| Email **`trendylook2026@outlook.com`** | Privacy §1, §11.1, §14 · Terms §1, §4.2, §4.4, §17.1, §22 | Done: `SUPPORT_EMAIL` uses it. If you later switch to a domain address (e.g. `hello@trendylook.app`), change it in `src/config.ts` and in both legal documents. |
 | Data controller / contracting party **`Artur Arzumanian`** (individual) with the Tbilisi address | Privacy §1, §14 · Terms §1, §16, §18, §19, §22 | No config constant uses it today. The footer says "© 2026 Trendy Look" as requested. If you want the legal name in the footer (e.g. "© 2026 Artur Arzumanian"), add a `COMPANY_NAME` constant and use it in `src/components/Footer.astro`. |
 
 ## 4. Content and copy to confirm
@@ -35,7 +35,6 @@ After editing, run `npm run build` (or push to deploy).
 | Item | File | Why |
 |---|---|---|
 | **Story card "top tip"**: copy says the 9:16 card has "your photo, score and top tip", and the coded mockup shows a "TOP TIP" box | `src/pages/index.astro` (section `#stories`) | The share screenshot (`share.png`, taken Sep 16) still shows the tip, but the later app commit `478c3d4` (Oct 2, "drop tip from share card") removed it. Either restore it in the app, or change the copy to "your photo and score" and delete the TOP TIP box from the mockup. `share.png` is off the site until this is decided. |
-| `trendylook.app` text on the story-card mockup | `src/pages/index.astro` (section `#stories`) | Hard-coded as specified. Change it if the final domain is different. |
 | Story-card photo | `src/assets/photos/story-look.jpg` | Copied from the app's onboarding photo (`assets/onboarding/look_1.jpg`). Replace it if you'd rather use another photo. Confirm you have the rights to use it on the web. |
 | Prices $4.99/week and $29.99/6 months | `src/pages/index.astro` (`plans`) | Must match App Store Connect / Play Console. The small print already says prices may vary by region. |
 | Screenshots | `src/assets/screens/*.png` | English UI: `result.png` (hero, Made for Stories, gallery, OG image), `snap.png` (How it works), `result-trendy.png` (Score scale), `tips.png` (What the AI checks), `home.png` (gallery). There are no English History or Paywall screens yet, so the gallery shows 4 screens. To swap one, replace the PNG with the same filename (transparent PNG in an iPhone frame). |
