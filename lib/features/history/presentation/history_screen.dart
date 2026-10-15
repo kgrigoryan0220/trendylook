@@ -19,8 +19,6 @@ class HistoryScreen extends ConsumerStatefulWidget {
 }
 
 class _HistoryScreenState extends ConsumerState<HistoryScreen> {
-  final Map<String, String> _signedUrls = {};
-  final Set<String> _requested = {};
   final _scrollController = ScrollController();
 
   @override
@@ -38,17 +36,6 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
-  }
-
-  Future<void> _ensureSignedUrls(List<String> paths) async {
-    final missing = paths.where((p) => !_requested.contains(p)).toList();
-    if (missing.isEmpty) return;
-    for (final p in missing) {
-      _requested.add(p);
-    }
-    final urls = await ref.read(checkRepositoryProvider).getSignedUrls(missing);
-    if (!mounted) return;
-    setState(() => _signedUrls.addAll(urls));
   }
 
   @override
@@ -74,10 +61,6 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
               },
             );
           }
-
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            _ensureSignedUrls(data.items.map((c) => c.imagePath).toList());
-          });
 
           return RefreshIndicator(
             onRefresh: () => ref.read(historyControllerProvider.notifier).refresh(),
@@ -117,7 +100,6 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                   },
                   child: HistoryItemTile(
                     check: item,
-                    photoUrl: _signedUrls[item.imagePath],
                     onTap: () => context.push('/history/${item.id}'),
                   ),
                 );

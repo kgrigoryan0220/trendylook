@@ -5,6 +5,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../features/check/data/models/check_record.dart';
 import '../../features/home/presentation/home_history_aspect_ratio.dart';
+import 'look_photo.dart';
 
 /// Pinterest-style history card for Home masonry grid.
 class HistoryMasonryCard extends StatelessWidget {
@@ -12,7 +13,6 @@ class HistoryMasonryCard extends StatelessWidget {
     super.key,
     required this.check,
     required this.onTap,
-    this.photoUrl,
   })  : skeletonAspectRatio = null;
 
   const HistoryMasonryCard.skeleton({
@@ -20,12 +20,10 @@ class HistoryMasonryCard extends StatelessWidget {
     required double aspectRatio,
   })  : check = null,
         onTap = null,
-        photoUrl = null,
         skeletonAspectRatio = aspectRatio;
 
   final CheckRecord? check;
   final VoidCallback? onTap;
-  final String? photoUrl;
   final double? skeletonAspectRatio;
 
   @override
@@ -66,7 +64,7 @@ class HistoryMasonryCard extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                _Photo(photoUrl: photoUrl),
+                LookPhoto(imagePath: record.imagePath),
                 const DecoratedBox(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -127,25 +125,6 @@ class HistoryMasonryCard extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _Photo extends StatelessWidget {
-  const _Photo({this.photoUrl});
-
-  final String? photoUrl;
-
-  @override
-  Widget build(BuildContext context) {
-    if (photoUrl == null) {
-      return ColoredBox(color: Colors.white.withValues(alpha: 0.08));
-    }
-    return Image.network(
-      photoUrl!,
-      fit: BoxFit.cover,
-      alignment: Alignment.topCenter,
-      errorBuilder: (_, _, _) => ColoredBox(color: Colors.white.withValues(alpha: 0.08)),
     );
   }
 }

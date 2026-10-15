@@ -9,6 +9,7 @@ import 'package:uuid/uuid.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../l10n/gen/app_localizations.dart';
 import 'check_exceptions.dart';
+import 'look_photo_cache.dart';
 import 'models/check_record.dart';
 
 /// CHECK-01..08 (TECH_SPEC_v1.2.md 5.2): препроцессинг + upload + вызов
@@ -44,6 +45,10 @@ class CheckRepository {
           bytes,
           fileOptions: const FileOptions(contentType: 'image/jpeg', upsert: false),
         );
+    // Своё же фото не скачиваем обратно из Storage — сразу кладём в кэш.
+    try {
+      await LookPhotoCache.put(path, bytes);
+    } catch (_) {}
     return path;
   }
 
@@ -107,22 +112,5 @@ class CheckRepository {
     return _client.storage
         .from(AppConstants.lookPhotosBucket)
         .createSignedUrl(path, expiresIn);
-  }
-
-  Future<Map<String, String>> getSignedUrls(
-    List<String> paths, {
-    int expiresIn = 3600,
-  }) async {
-    if (paths.isEmpty) return {};
-    final results = await _client.storage
-        .from(AppConstants.lookPhotosBucket)
-        .createSignedUrlsResult(paths, expiresIn);
-    final map = <String, String>{};
-    for (final r in results) {
-      if (r is SignedUrlSuccess) {
-        map[r.path] = r.signedUrl;
-      }
-    }
-    return map;
   }
 }

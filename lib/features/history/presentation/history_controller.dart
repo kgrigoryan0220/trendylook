@@ -3,12 +3,11 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/constants/app_constants.dart';
+import '../../../core/supabase/supabase_providers.dart';
 import '../../check/data/models/check_record.dart';
 import '../../check/presentation/check_flow_controller.dart';
 import '../../home/presentation/home_history_controller.dart';
 import '../data/history_cache.dart';
-
-final historyCacheProvider = Provider<HistoryCache>((ref) => HistoryCache());
 
 /// HIST-01/03 (TECH_SPEC_v1.2.md 5.4) — пагинированная история + soft delete.
 class HistoryState {
@@ -37,23 +36,46 @@ class HistoryState {
 
 class HistoryController extends AsyncNotifier<HistoryState> {
   int _page = 0;
+  // Отбрасывает фоновое обновление, если провайдер уже пересобрался.
+  int _generation = 0;
+  String? _userId;
 
   @override
   Future<HistoryState> build() async {
     _page = 0;
-    final cache = ref.read(historyCacheProvider);
+    final generation = ++_generation;
+    final userId = ref.watch(currentUserProvider.select((u) => u?.id));
+    _userId = userId;
+    if (userId == null) return const HistoryState(hasMore: false);
+
+    // Stale-while-revalidate: сразу показываем кэш, свежую страницу — в фоне.
+    final cached = await ref.read(historyCacheProvider).load(userId);
+    if (cached.isNotEmpty) {
+      unawaited(_revalidate(userId, generation));
+      return HistoryState(
+        items: cached,
+        hasMore: cached.length >= AppConstants.historyPageSize,
+      );
+    }
+    return _fetchFirstPage(userId);
+  }
+
+  Future<HistoryState> _fetchFirstPage(String userId) async {
+    final items = await ref.read(checkRepositoryProvider).fetchHistory(page: 0);
+    unawaited(ref.read(historyCacheProvider).save(userId, items));
+    return HistoryState(items: items, hasMore: items.length >= AppConstants.historyPageSize);
+  }
+
+  Future<void> _revalidate(String userId, int generation) async {
     try {
-      final items = await ref.read(checkRepositoryProvider).fetchHistory(page: 0);
-      unawaited(cache.save(items));
-      return HistoryState(items: items, hasMore: items.length >= AppConstants.historyPageSize);
-    } catch (e) {
-      // Разд. 7 НФТ: история доступна offline — при сетевой ошибке отдаём
-      // последний закэшированный список (только для чтения, без пагинации).
-      final cached = await cache.load();
-      if (cached.isNotEmpty) {
-        return HistoryState(items: cached, hasMore: false);
-      }
-      rethrow;
+      final fresh = await _fetchFirstPage(userId);
+      final current = state.valueOrNull;
+      // Пока шла загрузка, пользователь мог уйти дальше по страницам —
+      // тогда не затираем подгруженное, свежий кэш уже сохранён.
+      if (generation != _generation || _page != 0 || current?.isLoadingMore == true) return;
+      state = AsyncData(fresh);
+    } catch (_) {
+      // Разд. 7 НФТ: офлайн остаёмся на закэшированном списке.
     }
   }
 
@@ -62,15 +84,22 @@ class HistoryController extends AsyncNotifier<HistoryState> {
     if (current == null || !current.hasMore || current.isLoadingMore) return;
     state = AsyncData(current.copyWith(isLoadingMore: true));
     final nextPage = _page + 1;
-    final more = await ref.read(checkRepositoryProvider).fetchHistory(page: nextPage);
-    _page = nextPage;
-    state = AsyncData(
-      current.copyWith(
-        items: [...current.items, ...more],
-        hasMore: more.length >= AppConstants.historyPageSize,
-        isLoadingMore: false,
-      ),
-    );
+    try {
+      final more = await ref.read(checkRepositoryProvider).fetchHistory(page: nextPage);
+      _page = nextPage;
+      // Список мог прийти из устаревшего кэша — страницы сдвигаются, отсекаем дубли.
+      final known = current.items.map((c) => c.id).toSet();
+      state = AsyncData(
+        current.copyWith(
+          items: [...current.items, ...more.where((c) => !known.contains(c.id))],
+          hasMore: more.length >= AppConstants.historyPageSize,
+          isLoadingMore: false,
+        ),
+      );
+    } catch (_) {
+      // Офлайн со списком из кэша — не зависаем в isLoadingMore.
+      state = AsyncData(current.copyWith(isLoadingMore: false));
+    }
   }
 
   /// Soft-deletes [id]. Returns `true` on success.
@@ -84,7 +113,10 @@ class HistoryController extends AsyncNotifier<HistoryState> {
 
     try {
       await ref.read(checkRepositoryProvider).softDeleteCheck(id);
-      unawaited(ref.read(historyCacheProvider).removeById(id));
+      final userId = _userId;
+      if (userId != null) {
+        unawaited(ref.read(historyCacheProvider).removeById(userId, id));
+      }
       ref.read(homeHistoryControllerProvider.notifier).removeLocally(id);
       return true;
     } catch (e, st) {
@@ -96,15 +128,13 @@ class HistoryController extends AsyncNotifier<HistoryState> {
   }
 
   Future<void> refresh() async {
+    final userId = _userId;
+    if (userId == null) return;
+    _generation++;
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
+    state = await AsyncValue.guard(() {
       _page = 0;
-      final items = await ref.read(checkRepositoryProvider).fetchHistory(page: 0);
-      unawaited(ref.read(historyCacheProvider).save(items));
-      return HistoryState(
-        items: items,
-        hasMore: items.length >= AppConstants.historyPageSize,
-      );
+      return _fetchFirstPage(userId);
     });
   }
 }

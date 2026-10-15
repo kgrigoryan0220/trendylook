@@ -12,6 +12,8 @@ import '../../../shared/providers/billing_provider.dart';
 import '../../../shared/widgets/confirm_bottom_sheet.dart';
 import '../../../shared/widgets/promo_code_section.dart';
 import '../../auth/presentation/auth_controller.dart';
+import '../../check/data/look_photo_cache.dart';
+import '../../history/data/history_cache.dart';
 
 const _localeEndonyms = {
   'en': 'English',
@@ -456,7 +458,13 @@ class _DeleteAccountButtonState extends ConsumerState<_DeleteAccountButton> {
     setState(() => _deleting = true);
     try {
       ref.read(analyticsServiceProvider).track('account_deleted');
+      final userId = ref.read(currentUserProvider)?.id;
       await ref.read(authRepositoryProvider).deleteAccount();
+      // GDPR: вместе с аккаунтом убираем и локальные копии истории и фото.
+      if (userId != null) {
+        await ref.read(historyCacheProvider).clear(userId).catchError((_) {});
+      }
+      await LookPhotoCache.instance.emptyCache().catchError((_) {});
       if (!mounted) return;
       widget.onDeleted();
     } catch (_) {
