@@ -7,6 +7,7 @@ import '../../../core/analytics/analytics_service.dart';
 import '../../../core/l10n/locale_controller.dart';
 import '../../../core/supabase/supabase_providers.dart';
 import '../../../shared/providers/billing_provider.dart';
+import '../../history/data/history_cache.dart';
 import '../data/check_repository.dart';
 import '../data/models/check_record.dart';
 
@@ -70,6 +71,13 @@ class CheckFlowController extends Notifier<CheckFlowState> {
       final locale = ref.read(currentLanguageCodeProvider);
       final imagePath = await repo.uploadPhoto(photo, locale: locale);
       final result = await repo.analyzeLook(imagePath: imagePath, locale: locale);
+      // До показа результата: Главная/История пересоберутся из кэша уже с ней.
+      final userId = ref.read(currentUserProvider)?.id;
+      if (userId != null) {
+        try {
+          await ref.read(historyCacheProvider).prepend(userId, result);
+        } catch (_) {}
+      }
       state = state.copyWith(isSubmitting: false, result: result);
       analytics.track('check_completed', {
         'score': result.trendScore,

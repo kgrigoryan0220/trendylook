@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../l10n/gen/app_localizations.dart';
 import '../../../shared/providers/billing_provider.dart';
+import '../../history/presentation/history_controller.dart';
 import '../../home/presentation/home_history_controller.dart';
 import '../../share/presentation/share_target.dart';
 import 'check_flow_controller.dart';
@@ -29,7 +30,7 @@ class CheckResultScreen extends ConsumerWidget {
           : const ColoredBox(color: Colors.black12),
       onClose: () {
         ref.read(checkFlowControllerProvider.notifier).reset();
-        invalidateHomeHistory(ref);
+        _reloadHistory(ref);
         context.go('/home');
       },
       onShare: () {
@@ -45,6 +46,7 @@ class CheckResultScreen extends ConsumerWidget {
         final canCheck = billing?.isPro == true || (billing?.freeChecksLeft ?? 0) > 0;
         if (canCheck) {
           ref.read(checkFlowControllerProvider.notifier).reset();
+          _reloadHistory(ref);
           context.go('/check/camera');
         } else {
           context.push('/paywall?trigger=result');
@@ -52,4 +54,11 @@ class CheckResultScreen extends ConsumerWidget {
       },
     );
   }
+}
+
+/// Новая проверка уже лежит в локальном кэше истории (см. CheckFlowController),
+/// так что пересборка Главной и Истории мгновенная, без ожидания сети.
+void _reloadHistory(WidgetRef ref) {
+  invalidateHomeHistory(ref);
+  ref.invalidate(historyControllerProvider);
 }

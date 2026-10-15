@@ -33,8 +33,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final _scrollController = ScrollController();
-  final Map<String, String> _thumbUrls = {};
-  final Set<String> _requestedPaths = {};
 
   bool _scrollToBottomOnNextData = false;
   bool _isLoadingMore = false;
@@ -103,15 +101,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
   }
 
-  Future<void> _ensureSignedUrls(List<String> paths) async {
-    final missing = paths.where((p) => !_requestedPaths.contains(p)).toList();
-    if (missing.isEmpty) return;
-    _requestedPaths.addAll(missing);
-    final urls = await ref.read(checkRepositoryProvider).getSignedUrls(missing);
-    if (!mounted) return;
-    setState(() => _thumbUrls.addAll(urls));
-  }
-
   Future<bool> _canCheck() async {
     final billing = ref.read(billingControllerProvider).valueOrNull;
     return billing?.isPro == true || (billing?.freeChecksLeft ?? 0) > 0;
@@ -157,7 +146,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     ref.listen(homeHistoryControllerProvider, (previous, next) {
       next.whenData((state) {
         if (state.items.isEmpty) return;
-        _ensureSignedUrls(state.items.map((c) => c.imagePath).toList());
 
         final wasLoading = previous is AsyncLoading || previous?.isLoading == true;
         if (_scrollToBottomOnNextData || wasLoading) {
@@ -281,7 +269,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       itemBuilder: (context, item) {
                                         return HistoryMasonryCard(
                                           check: item,
-                                          photoUrl: _thumbUrls[item.imagePath],
                                           onTap: () => context.push('/history/${item.id}'),
                                         );
                                       },

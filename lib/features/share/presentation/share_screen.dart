@@ -63,9 +63,7 @@ class _ShareScreenState extends ConsumerState<ShareScreen> {
 
     final photo = target.localPhoto != null
         ? Image.file(target.localPhoto!, fit: BoxFit.cover)
-        : target.photoUrl != null
-            ? Image.network(target.photoUrl!, fit: BoxFit.cover)
-            : const ColoredBox(color: Colors.black26);
+        : const ColoredBox(color: Colors.black26);
 
     return Scaffold(
       backgroundColor: AppColors.background,

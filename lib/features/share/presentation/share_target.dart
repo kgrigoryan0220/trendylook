@@ -5,14 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../check/data/models/check_record.dart';
 
 /// Данные для экрана «Поделиться» (4.10) — заполняется перед навигацией из
-/// Result (флоу) или из детального просмотра Истории (4.12), т.к. источник
-/// фото разный (локальный File vs. подписанный URL из Storage).
+/// Result (флоу) или из детального просмотра Истории (4.12). Фото — всегда
+/// локальный File: снимок из флоу или файл из дискового кэша (LookPhotoCache).
 class ShareTarget {
-  const ShareTarget({required this.record, this.localPhoto, this.photoUrl});
+  const ShareTarget({required this.record, this.localPhoto});
 
   final CheckRecord record;
   final File? localPhoto;
-  final String? photoUrl;
 }
 
 final shareTargetProvider = StateProvider<ShareTarget?>((ref) => null);

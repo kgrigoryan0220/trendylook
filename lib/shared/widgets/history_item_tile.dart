@@ -4,22 +4,20 @@ import 'package:intl/intl.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../features/check/data/models/check_record.dart';
+import 'look_photo.dart';
 
 /// History Item — thumbnail + score badge + дата (разд. 4.3/5, 4.11).
 ///
-/// `photoUrl` — уже полученный signed URL (bucket приватный, см. 6.4/6.6);
-/// разрешение подписанных ссылок делает вызывающий экран (батчем на страницу).
+/// Фото берётся из дискового кэша по `check.imagePath` (см. [LookPhoto]).
 class HistoryItemTile extends StatelessWidget {
   const HistoryItemTile({
     super.key,
     required this.check,
     required this.onTap,
-    this.photoUrl,
   });
 
   final CheckRecord check;
   final VoidCallback onTap;
-  final String? photoUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -37,24 +35,12 @@ class HistoryItemTile extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(14),
-                child: photoUrl == null
-                    ? Container(
-                        width: 52,
-                        height: 52,
-                        color: Colors.white.withValues(alpha: 0.08),
-                      )
-                    : Image.network(
-                        photoUrl!,
-                        width: 52,
-                        height: 52,
-                        fit: BoxFit.cover,
-                        alignment: Alignment.topCenter,
-                        errorBuilder: (_, _, _) => Container(
-                          width: 52,
-                          height: 52,
-                          color: Colors.white.withValues(alpha: 0.08),
-                        ),
-                      ),
+                child: LookPhoto(
+                  imagePath: check.imagePath,
+                  width: 52,
+                  height: 52,
+                  cacheWidth: (52 * MediaQuery.devicePixelRatioOf(context)).round(),
+                ),
               ),
               const SizedBox(width: 14),
               Expanded(
