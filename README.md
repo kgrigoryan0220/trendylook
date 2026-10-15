@@ -49,21 +49,26 @@ Supabase Dashboard → Project Settings → Edge Functions → Secrets:
 
 ```bash
 flutter pub get
-flutter run \
-  --dart-define=REVENUECAT_API_KEY_IOS=... \
-  --dart-define=REVENUECAT_API_KEY_ANDROID=... \
-  --dart-define=GOOGLE_SERVER_CLIENT_ID=... \
-  --dart-define=POSTHOG_API_KEY=... \
-  --dart-define=POSTHOG_HOST=https://eu.i.posthog.com \
-  --dart-define=SENTRY_DSN=...
+flutter run
 ```
 
-Локально удобнее: `--dart-define-from-file=dart_defines.dev.json` (файл в `.gitignore`). PostHog: см. [`POSTHOG.md`](POSTHOG.md).
+Для debug-запуска флаги не нужны: в `lib/core/config/app_config.dart` зашиты
+значения по умолчанию — Supabase URL/publishable key, Google Web Client ID и
+тестовый ключ RevenueCat Test Store (только debug/profile; это не секреты —
+все они предназначены для клиента). Покупки в Test Store ненастоящие.
 
-Supabase URL/publishable key уже зашиты в `lib/core/config/app_config.dart`
-как значения по умолчанию (это не секреты — они предназначены для клиента).
-Все `--dart-define` выше опциональны: без них подписки/аналитика/крэш-репортинг
-остаются выключенными (no-op), а не падают.
+Опционально (локальный `dart_defines.dev.json` в `.gitignore`):
+`POSTHOG_API_KEY`, `SENTRY_DSN` — без них аналитика и крэш-репортинг no-op.
+PostHog: см. [`POSTHOG.md`](POSTHOG.md).
+
+```bash
+flutter run --dart-define-from-file=dart_defines.dev.json
+```
+
+Release-сборки обязательно получают боевые ключи RevenueCat
+(`REVENUECAT_API_KEY_IOS=appl_…`, `REVENUECAT_API_KEY_ANDROID=goog_…`) — в release
+тестового ключа по умолчанию нет, без них покупки выключены.
+См. [`STORE_RELEASE_CHECKLIST.md`](STORE_RELEASE_CHECKLIST.md).
 
 ### Проверка
 

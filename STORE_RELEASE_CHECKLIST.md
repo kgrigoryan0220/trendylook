@@ -145,9 +145,9 @@ Product IDs должны **совпадать** в коде, сторах и RC:
 
 | Define | Обязателен |
 |--------|------------|
-| `REVENUECAT_API_KEY_IOS` | да (iOS) |
-| `REVENUECAT_API_KEY_ANDROID` | да (Android) |
-| `GOOGLE_SERVER_CLIENT_ID` | да (Google Sign-In) |
+| `REVENUECAT_API_KEY_IOS` | да (iOS), боевой `appl_…` — в release дефолта нет, без него покупки выключены |
+| `REVENUECAT_API_KEY_ANDROID` | да (Android), боевой `goog_…` — в release дефолта нет |
+| `GOOGLE_SERVER_CLIENT_ID` | нет — Web Client ID уже default в `AppConfig` |
 | `SENTRY_DSN` | опционально |
 | `POSTHOG_API_KEY` | **да** для prod analytics (EU) — см. [`POSTHOG.md`](POSTHOG.md) |
 | `POSTHOG_HOST` | `https://eu.i.posthog.com` (default в AppConfig; явно в CI) |
