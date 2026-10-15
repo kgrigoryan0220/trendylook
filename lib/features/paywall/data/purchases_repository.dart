@@ -14,6 +14,7 @@ import '../../../core/config/app_config.dart';
 class PurchasesRepository {
   bool _configured = false;
   bool get isConfigured => _configured;
+  String? _uiLocale;
 
   Future<void> init(String appUserId) async {
     final apiKey = Platform.isIOS
@@ -21,10 +22,24 @@ class PurchasesRepository {
         : AppConfig.revenueCatApiKeyAndroid;
     if (apiKey.isEmpty) return;
 
+    final locale = _uiLocale;
     await Purchases.configure(
-      PurchasesConfiguration(apiKey)..appUserID = appUserId,
+      PurchasesConfiguration(apiKey)
+        ..appUserID = appUserId
+        ..preferredUILocaleOverride = locale,
     );
     _configured = true;
+    // Язык успели сменить, пока шёл configure.
+    if (_uiLocale != locale) await Purchases.overridePreferredUILocale(_uiLocale);
+  }
+
+  /// Пейвол рендерит нативный RC SDK, а он по умолчанию берёт язык
+  /// устройства — передаём язык, выбранный в приложении (Профиль → Язык).
+  Future<void> setUiLocale(String languageCode) async {
+    if (_uiLocale == languageCode) return;
+    _uiLocale = languageCode;
+    if (!_configured) return;
+    await Purchases.overridePreferredUILocale(languageCode);
   }
 
   /// Вызывается при входе, включая смену аккаунта после logOut — SDK уже
