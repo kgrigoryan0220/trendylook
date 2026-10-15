@@ -95,6 +95,8 @@ class _TrendyLookAppState extends ConsumerState<TrendyLookApp> {
     final router = ref.watch(goRouterProvider);
     _deepLinks ??= DeepLinkService(router)..init();
 
+    // До _syncPurchasesSession: язык должен попасть уже в Purchases.configure.
+    ref.read(purchasesRepositoryProvider).setUiLocale(ref.watch(currentLanguageCodeProvider));
     ref.listen(currentUserProvider, (previous, next) {
       _syncPurchasesSession();
       _syncAnalyticsIdentity();
