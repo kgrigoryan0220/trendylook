@@ -14,15 +14,17 @@
    - выбери **Team** (свой Apple ID / Apple Developer)
 5. Для реального iPhone: устройство разблокировано, доверие компьютеру подтверждено. При первой установке может понадобиться: **Настройки → Основные → VPN и управление устройством** → доверить Developer App.
 
-## Web Client ID
+## Ключи и `--dart-define`
 
-Во всех командах ниже подставляй **Web** Client ID (не iOS):
+Для debug-запуска флаги не нужны: в `lib/core/config/app_config.dart` уже зашиты значения по умолчанию —
+Google **Web** Client ID и тестовый ключ RevenueCat **Test Store** (`test_…`, ненастоящие покупки).
+Тестовый ключ подставляется только в debug/profile; в release его нет — туда передаются боевые
+`appl_…`/`goog_…` ключи (см. `STORE_RELEASE_CHECKLIST.md`).
 
-```text
-296414004775-pdog1isingjoa3f2spfnia6cekg9dhok.apps.googleusercontent.com
-```
+iOS Client ID уже прописан в `Info.plist` (`GIDClientID` + reversed URL scheme).
 
-iOS Client ID уже прописан в `Info.plist` (`GIDClientID` + reversed URL scheme) — в `--dart-define` его передавать не нужно.
+Локальный `dart_defines.dev.json` (в `.gitignore`) нужен только для PostHog: без него аналитика — no-op,
+всё остальное работает.
 
 ## Симулятор iPhone
 
@@ -33,23 +35,19 @@ flutter devices
 
 open -a Simulator
 
-flutter run \
-  --dart-define-from-file=dart_defines.dev.json
+flutter run
 ```
 
-Файл `dart_defines.dev.json` в корне (в `.gitignore`) — там PostHog Project API Key и Google Web Client ID. Без файла:
+С аналитикой PostHog (если у тебя есть локальный `dart_defines.dev.json`):
 
 ```bash
-flutter run \
-  --dart-define=GOOGLE_SERVER_CLIENT_ID=296414004775-pdog1isingjoa3f2spfnia6cekg9dhok.apps.googleusercontent.com \
-  --dart-define=POSTHOG_API_KEY=phc_...
+flutter run --dart-define-from-file=dart_defines.dev.json
 ```
 
 Если устройств несколько:
 
 ```bash
-flutter run -d <simulator_id> \
-  --dart-define-from-file=dart_defines.dev.json
+flutter run -d <simulator_id>
 ```
 
 На симуляторе: **Войти через Google** → выбрать аккаунт (при необходимости войти в Google через Safari).
@@ -66,9 +64,10 @@ flutter devices
 3. Запусти:
 
 ```bash
-flutter run -d <iphone_id> \
-  --dart-define-from-file=dart_defines.dev.json
+flutter run -d <iphone_id> --device-timeout 60
 ```
+
+`--device-timeout 60` нужен, если iPhone подключён по Wi-Fi — беспроводные устройства находятся дольше.
 
 4. При первой установке: **Настройки → Основные → VPN и управление устройством** → доверить сертификат разработчика.
 
@@ -76,7 +75,8 @@ flutter run -d <iphone_id> \
 
 | Тема | Детали |
 |---|---|
-| `GOOGLE_SERVER_CLIENT_ID` | Всегда **Web** Client ID; удобнее через `dart_defines.dev.json` |
+| `GOOGLE_SERVER_CLIENT_ID` | **Web** Client ID; уже default в `AppConfig` |
+| `REVENUECAT_API_KEY_IOS/ANDROID` | В debug default — Test Store (`test_…`); в release передавать боевые `appl_…`/`goog_…` |
 | `POSTHOG_API_KEY` | Project API Key (`phc_…`) в `dart_defines.dev.json` — без него аналитика no-op |
 | `POSTHOG_HOST` | EU Cloud: `https://eu.i.posthog.com` (уже default в `AppConfig` + в `dart_defines.dev.json`) |
 | iOS Client ID | Уже в `ios/Runner/Info.plist` |
