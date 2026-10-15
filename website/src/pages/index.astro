@@ -7,6 +7,8 @@ import ScoreRing from "../components/ScoreRing.astro";
 import StoreButtons from "../components/StoreButtons.astro";
 import Icon from "../components/Icon.astro";
 import { SUPPORT_EMAIL } from "../config";
+import { landingJsonLd } from "../lib/structured-data";
+import { categories, contactFaq, faqs, plans, pricingNote, promise, promisePoints, steps, tiers, tips } from "../data/site";
 
 import resultImg from "../assets/screens/result.png";
 import snapImg from "../assets/screens/snap.png";
@@ -14,32 +16,6 @@ import resultTrendyImg from "../assets/screens/result-trendy.png";
 import tipsImg from "../assets/screens/tips.png";
 import homeImg from "../assets/screens/home.png";
 import storyLookImg from "../assets/photos/story-look.jpg";
-
-const steps = [
-  { n: "01", icon: "camera", title: "Snap your look", text: "Take a photo or pick one from your gallery." },
-  { n: "02", icon: "gauge", title: "Get your score", text: "AI rates how on-trend your outfit is, from 0 to 100%." },
-  { n: "03", icon: "sparkles", title: "Level it up", text: "Get personal tips you can apply right now." },
-] as const;
-
-const tiers = [
-  { value: 32, label: "Needs Work", range: "0–39", color: "#FF5C5C" },
-  { value: 45, label: "Getting There", range: "40–59", color: "#FFD23D" },
-  { value: 75, label: "Trendy", range: "60–79", color: "#FF3D8A" },
-  { value: 85, label: "Icon Status", range: "80–100", color: "#C6FF3D", note: "comes with confetti" },
-];
-
-const categories = [
-  { label: "Color palette", value: 90 },
-  { label: "Silhouette & fit", value: 80 },
-  { label: "Accessories", value: 85 },
-  { label: "Shoes", value: 80 },
-];
-
-const tips = [
-  { title: "Add a statement bag:", text: "a contrasting accessory instantly lifts the look." },
-  { title: "Soften the silhouette:", text: "try a lighter layer under the blazer." },
-  { title: "Define your proportions:", text: "a belt highlights the waist and pulls the outfit together." },
-];
 
 const gallery = [
   {
@@ -64,57 +40,11 @@ const gallery = [
   },
 ];
 
-const plans = [
-  {
-    name: "Free",
-    price: "$0",
-    period: "",
-    features: ["2 outfit checks", "Full score and AI tips", "Share to Stories"],
-    cta: "Start free",
-    featured: false,
-  },
-  {
-    name: "Half-year",
-    price: "$29.99",
-    period: "/6 months",
-    features: ["Same benefits as Weekly", "Unlimited checks", "Priority AI analysis", "Early access to trends"],
-    cta: "Go Half-year",
-    featured: true,
-  },
-  {
-    name: "Weekly",
-    price: "$4.99",
-    period: "/week",
-    features: ["Unlimited checks", "Priority AI analysis", "Early access to trends"],
-    cta: "Go Weekly",
-    featured: false,
-  },
-];
-
-const faqs = [
-  {
-    q: "How does it work?",
-    a: "Snap your outfit, the AI looks at color, silhouette, accessories and shoes, and gives you a trend score and tips in seconds.",
-  },
-  { q: "Is it free?", a: "You get 2 free checks. After that, go Pro for unlimited checks." },
-  { q: "Does the AI judge my body or face?", a: "Never. It only rates your outfit." },
-  { q: "Can I share my results?", a: "Yes, as a 9:16 card for Stories, TikTok and Reels." },
-  {
-    q: "Which languages are supported?",
-    a: "English, Russian, Spanish, Italian, German, French and Portuguese.",
-  },
-  { q: "Is it on iOS and Android?", a: "Yes, both." },
-  { q: "How do I cancel my subscription?", a: "In your App Store or Google Play subscription settings." },
-];
-
-const promisePoints = [
-  { icon: "shirt", label: "Clothes only" },
-  { icon: "lock", label: "Your data, your call" },
-  { icon: "trash", label: "Delete your account anytime" },
-] as const;
 ---
 
 <BaseLayout>
+  <script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(landingJsonLd())} />
+
   <!-- ============ HERO ============ -->
   <section class="relative overflow-x-clip" aria-labelledby="hero-title">
     <div class="glow glow-violet -top-40 -left-40 h-[28rem] w-[28rem]" aria-hidden="true"></div>
@@ -461,8 +391,7 @@ const promisePoints = [
             Style feedback. <span class="text-lime">Zero body-shaming.</span>
           </h2>
           <p class="mx-auto mt-6 max-w-2xl text-base text-muted sm:text-lg">
-            Trendy Look only looks at what you wear: clothes, colors, silhouette, accessories and shoes. Never your body,
-            face or weight.
+            {promise}
           </p>
           <ul class="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap">
             {
@@ -531,8 +460,7 @@ const promisePoints = [
       </ul>
 
       <p class="mx-auto mt-10 max-w-xl text-center text-xs leading-relaxed text-muted sm:text-sm">
-        Prices may vary by region. Subscriptions renew automatically and can be canceled anytime in your App Store or
-        Google Play settings.
+        {pricingNote}
       </p>
     </div>
   </section>
@@ -565,7 +493,7 @@ const promisePoints = [
         <details class="faq card group overflow-hidden transition-colors open:border-line-strong">
           <summary class="block cursor-pointer list-none rounded-[22px] p-5 font-display text-base font-semibold sm:p-6 sm:text-lg">
             <span class="flex items-center justify-between gap-4">
-              <span>How do I contact you?</span>
+              <span>{contactFaq.q}</span>
               <span
                 class="inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-line-strong text-pink faq-chevron transition-[rotate] duration-300 group-open:rotate-180"
               >

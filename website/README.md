@@ -42,6 +42,9 @@ npm run check      # TypeScript / Astro diagnostics
 | OG image (1200x630, generated at build time) | `src/pages/og.png.ts` → `/og.png` |
 | Logo, favicons, apple-touch-icon (generated from the app icon) | `src/pages/icon-192.png.ts`, `src/pages/favicon-32.png.ts`, `src/pages/apple-touch-icon.png.ts` |
 | robots.txt (uses `SITE_URL`) | `src/pages/robots.txt.ts` |
+| Shared landing copy (FAQ, pricing, score tiers…) used by the page, llms.txt and JSON-LD | `src/data/site.ts` |
+| llms.txt / llms-full.txt (summary and full text for AI assistants) | `src/pages/llms.txt.ts`, `src/pages/llms-full.txt.ts`, `src/lib/llms.ts` |
+| JSON-LD structured data (Organization, WebSite, MobileApplication, FAQPage) | `src/lib/structured-data.ts` |
 | sitemap | `@astrojs/sitemap` → `/sitemap-index.xml` |
 | Cloudflare response headers (caching, security) | `public/_headers` |
 
@@ -92,3 +95,27 @@ npx wrangler pages deploy dist --project-name trendylook
 
 The build uses `build.format: "file"` (`privacy.html`, `terms.html`), which Cloudflare Pages serves at clean URLs
 (`/privacy`, `/terms`). Unknown paths get `404.html` with a real 404 status.
+
+## Search engines and AI assistants
+
+Built into the site:
+
+- `sitemap-index.xml` with last-modified dates, `robots.txt` that allows everyone and points to the sitemap.
+- Canonical URLs on every page, `noindex` on the 404 page, and `X-Robots-Tag: noindex` on the `*.pages.dev`
+  copies (see `public/_headers`), so only `trendylook.app` gets indexed.
+- JSON-LD on the landing page: the organization, the website, the app (iOS/Android, prices) and the FAQ.
+- `/llms.txt` (short summary with links) and `/llms-full.txt` (all site text, including the Privacy Policy and Terms)
+  for ChatGPT, Claude, Perplexity and other assistants.
+
+One-time steps outside the code:
+
+1. **Google Search Console:** add the domain property `trendylook.app` (verify with a DNS TXT record in Cloudflare),
+   then submit `https://trendylook.app/sitemap-index.xml`.
+2. **Bing Webmaster Tools:** import the site from Search Console. Bing's index also feeds ChatGPT search and Copilot.
+3. **Cloudflare → Security → Bots:** Cloudflare can block AI crawlers by default. If you want AI assistants to read
+   the site, turn off "Block AI bots", and check that "Manage your robots.txt" doesn't add rules that block them.
+4. **Cloudflare → Caching → Configuration → Crawler Hints:** turn it on to notify search engines (IndexNow) when the
+   site changes.
+5. **www → apex redirect:** Cloudflare → Rules → Redirect Rules → "Redirect from WWW to root" template, so
+   `www.trendylook.app` sends visitors and crawlers to `trendylook.app`.
+
