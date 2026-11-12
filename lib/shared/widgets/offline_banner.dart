@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
+import '../../l10n/gen/app_localizations.dart';
 
 /// 4.15 «Нет соединения» — компактный баннер поверх текущего экрана.
 class OfflineBanner extends StatefulWidget {
@@ -43,7 +44,7 @@ class _OfflineBannerState extends State<OfflineBanner> {
                 color: AppColors.error,
                 padding: const EdgeInsets.symmetric(vertical: 6),
                 child: Text(
-                  'Нет соединения',
+                  AppLocalizations.of(context).noConnection,
                   textAlign: TextAlign.center,
                   style: AppTheme.body(
                     context,

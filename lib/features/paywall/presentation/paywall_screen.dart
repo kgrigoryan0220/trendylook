@@ -29,13 +29,29 @@ class PaywallScreen extends ConsumerStatefulWidget {
 class _PaywallScreenState extends ConsumerState<PaywallScreen> {
   bool _converted = false;
   bool _closed = false;
+  late final Future<void> _offeringsReady;
 
   @override
   void initState() {
     super.initState();
+    _offeringsReady = _refreshOfferings();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _track('paywall_shown');
     });
+  }
+
+  /// Ждёт configure RC (диплинк на холодном старте) и перезагружает
+  /// офферинги, если сменился язык: иначе PaywallView может взять из кэша RC
+  /// тексты на прежнем языке (см. PurchasesRepository.refreshOfferingsForUiLocale).
+  Future<void> _refreshOfferings() async {
+    try {
+      await ref
+          .read(purchasesRepositoryProvider)
+          .refreshOfferingsForUiLocale()
+          .timeout(const Duration(seconds: 5));
+    } catch (_) {
+      // Не блокируем пейвол: PaywallView покажет то, что есть в кэше RC.
+    }
   }
 
   void _track(String event, [Map<String, Object> extra = const {}]) {
@@ -75,7 +91,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final configured = ref.watch(purchasesRepositoryProvider).isConfigured;
+    final purchases = ref.watch(purchasesRepositoryProvider);
 
     return PopScope(
       onPopInvokedWithResult: (didPop, _) {
@@ -83,19 +99,26 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
       },
       child: Scaffold(
         backgroundColor: AppColors.background,
-        body: configured
-            ? PaywallView(
-                onPurchaseCompleted: _onPurchaseCompleted,
-                onPurchaseCancelled: () =>
-                    _track('subscription_purchase_failed', {'error': 'cancelled'}),
-                onPurchaseError: (error) =>
-                    _track('subscription_purchase_failed', {'error': error.code.name}),
-                onRestoreCompleted: _onRestoreCompleted,
-                onRestoreError: (error) =>
-                    _track('purchases_restore_failed', {'error': error.code.name}),
-                onDismiss: _close,
-              )
-            : _NotConfiguredView(onClose: _close),
+        body: FutureBuilder<void>(
+          future: _offeringsReady,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (!purchases.isConfigured) return _NotConfiguredView(onClose: _close);
+            return PaywallView(
+              onPurchaseCompleted: _onPurchaseCompleted,
+              onPurchaseCancelled: () =>
+                  _track('subscription_purchase_failed', {'error': 'cancelled'}),
+              onPurchaseError: (error) =>
+                  _track('subscription_purchase_failed', {'error': error.code.name}),
+              onRestoreCompleted: _onRestoreCompleted,
+              onRestoreError: (error) =>
+                  _track('purchases_restore_failed', {'error': error.code.name}),
+              onDismiss: _close,
+            );
+          },
+        ),
       ),
     );
   }

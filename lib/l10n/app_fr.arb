@@ -54,6 +54,7 @@
   "rateLimitedMessage": "Trop d'analyses à la suite. Attends un peu puis réessaie.",
   "fileTooLarge": "Le fichier est trop volumineux (max. 10 Mo)",
   "retry": "Réessayer",
+  "noConnection": "Pas de connexion",
 
   "recommendationsTitle": "💡 Recommandations",
   "share": "Partager",

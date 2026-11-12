@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app_links/app_links.dart';
+import 'package:collection/collection.dart';
 import 'package:go_router/go_router.dart';
 
 /// Приложение C (TECH_SPEC_v1.2.md): trendylook:// deep links.
@@ -29,21 +30,23 @@ class DeepLinkService {
 
   void _handle(Uri uri) {
     if (uri.scheme != 'trendylook') return;
-    final segments = uri.pathSegments.isNotEmpty
-        ? uri.pathSegments
-        : [uri.host].where((s) => s.isNotEmpty).toList();
+    // trendylook://history — раздел в host, trendylook:///history — в пути.
+    final section = [uri.host, ...uri.pathSegments].firstWhereOrNull((s) => s.isNotEmpty);
 
-    if (segments.isEmpty) {
-      _router.go('/home');
-      return;
-    }
-    switch (segments.first) {
+    switch (section) {
       case 'paywall':
-        _router.push('/paywall?trigger=deeplink');
+        // На холодном старте под пейволом остался бы Splash, и его таймер
+        // увёл бы на /home поверх пейвола. Поэтому go: закрытие пейвола без
+        // стека под ним само ведёт на /home.
+        final path = _router.routerDelegate.currentConfiguration.uri.path;
+        if (path.isEmpty || path == '/splash') {
+          _router.go('/paywall?trigger=deeplink');
+        } else {
+          _router.push('/paywall?trigger=deeplink');
+        }
       case 'history':
         _router.go('/history');
-      case 'check':
-      default:
+      default: // trendylook://, check, check/{id}
         _router.go('/home');
     }
   }

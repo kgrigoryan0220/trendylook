@@ -26,6 +26,9 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <!-- Ссылки разбирает только DeepLinkService (app_links). Встроенный
+                 диплинкинг Flutter отдал бы URL прямо в GoRouter. -->
+            <meta-data android:name="flutter_deeplinking_enabled" android:value="false" />
             <!-- Приложение C (TECH_SPEC_v1.2.md): trendylook:// deep links -->
             <intent-filter android:autoVerify="false">
                 <action android:name="android.intent.action.VIEW"/>

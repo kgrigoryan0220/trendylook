@@ -61,6 +61,7 @@
   "rateLimitedMessage": "Too many checks in a row. Wait a bit and try again.",
   "fileTooLarge": "File is too large (max 10 MB)",
   "retry": "Retry",
+  "noConnection": "No connection",
 
   "recommendationsTitle": "💡 Recommendations",
   "share": "Share",

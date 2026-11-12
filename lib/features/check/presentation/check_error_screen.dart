@@ -77,7 +77,7 @@ class CheckErrorScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 24),
                     PrimaryButton(
-                      label: 'Повторить',
+                      label: l10n.retry,
                       onPressed: () {
                         ref.read(checkFlowControllerProvider.notifier).submit();
                         context.replace('/check/loading');

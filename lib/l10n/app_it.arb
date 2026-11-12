@@ -54,6 +54,7 @@
   "rateLimitedMessage": "Troppi controlli di fila. Aspetta un attimo e riprova.",
   "fileTooLarge": "Il file è troppo grande (max 10 MB)",
   "retry": "Riprova",
+  "noConnection": "Nessuna connessione",
 
   "recommendationsTitle": "💡 Consigli",
   "share": "Condividi",

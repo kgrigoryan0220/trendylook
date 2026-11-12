@@ -1,0 +1,4 @@
+/* Тексты системных запросов разрешений (Info.plist). */
+"NSCameraUsageDescription" = "Trendy Look nutzt die Kamera, damit du dein Outfit fotografieren und von der KI deine Trend-% erfahren kannst.";
+"NSPhotoLibraryUsageDescription" = "Trendy Look nutzt deine Fotomediathek, damit du ein Outfit-Foto auswählen und von der KI deine Trend-% erfahren kannst.";
+"NSPhotoLibraryAddUsageDescription" = "Trendy Look speichert die Share-Karte deines Looks in deiner Fotomediathek.";

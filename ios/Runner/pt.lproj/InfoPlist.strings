@@ -1,0 +1,4 @@
+/* Тексты системных запросов разрешений (Info.plist). */
+"NSCameraUsageDescription" = "O Trendy Look usa a câmera para você fotografar seu look e descobrir com a IA seu % de tendência.";
+"NSPhotoLibraryUsageDescription" = "O Trendy Look usa suas fotos para você escolher uma foto do seu look e descobrir com a IA seu % de tendência.";
+"NSPhotoLibraryAddUsageDescription" = "O Trendy Look salva o cartão do seu look nas suas fotos.";

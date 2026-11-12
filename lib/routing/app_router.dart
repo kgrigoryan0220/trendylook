@@ -50,6 +50,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     initialLocation: '/splash',
     refreshListenable: refreshStream,
     observers: [AnalyticsNavigatorObserver(analytics)],
+    // Неизвестный адрес (в т.ч. сырой trendylook://… URL) — не тупиковая
+    // «Page Not Found», а Home; redirect ниже уведёт на /auth без сессии.
+    onException: (context, state, router) => router.go('/home'),
     redirect: (context, state) {
       final loggedIn = client.auth.currentSession != null;
       final loc = state.matchedLocation;
@@ -61,6 +64,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
+      GoRoute(path: '/', redirect: (context, state) => '/home'),
       GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
       GoRoute(path: '/onboarding', builder: (context, state) => const OnboardingScreen()),
       GoRoute(path: '/auth', builder: (context, state) => const AuthScreen()),

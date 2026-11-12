@@ -27,9 +27,23 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Камера нужна, чтобы сфотографировать твой лук для проверки (CHECK-01)</string>
+	<string>Trendy Look uses the camera so you can photograph your outfit and get its AI trend score.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Доступ к галерее нужен, чтобы выбрать фото лука для проверки (CHECK-01)</string>
+	<string>Trendy Look uses your photo library so you can pick an outfit photo and get its AI trend score.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Trendy Look saves your look's share card to your photo library.</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>de</string>
+		<string>es</string>
+		<string>fr</string>
+		<string>it</string>
+		<string>pt</string>
+		<string>ru</string>
+	</array>
+	<key>FlutterDeepLinkingEnabled</key>
+	<false/>
 	<key>GIDClientID</key>
 	<string>296414004775-6s3s19gg135jv47fjoce4166ki07ph4t.apps.googleusercontent.com</string>
 	<key>CFBundleURLTypes</key>

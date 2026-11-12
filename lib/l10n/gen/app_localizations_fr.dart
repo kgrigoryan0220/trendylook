@@ -164,6 +164,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get retry => 'Réessayer';
 
   @override
+  String get noConnection => 'Pas de connexion';
+
+  @override
   String get recommendationsTitle => '💡 Recommandations';
 
   @override
