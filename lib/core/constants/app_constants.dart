@@ -11,4 +11,9 @@ class AppConstants {
   static const analysisTimeout = Duration(seconds: 30); // CHECK-07
 
   static const lookPhotosBucket = 'look-photos';
+
+  /// Куда ведёт QR на share-карточке (4.3, SHARE-02). Лендинг со ссылками на
+  /// сторы: `https://trendylook.app/check/{id}` заработает только вместе с
+  /// Universal Links (SHARE-04, v1.1), до тех пор это была бы 404.
+  static const shareCardUrl = 'https://trendylook.app';
 }

@@ -25,9 +25,14 @@ class CropConfirmScreen extends ConsumerWidget {
               fit: StackFit.expand,
               children: [
                 if (photo != null) Image.file(photo, fit: BoxFit.cover),
-                Padding(
-                  padding: const EdgeInsets.all(36),
-                  child: CustomPaint(painter: _CornerFramePainter()),
+                // Фото — под статус-баром во весь экран, а рамка — только в
+                // безопасной зоне, иначе уголки ложатся на часы и батарею.
+                SafeArea(
+                  bottom: false,
+                  child: Padding(
+                    padding: const EdgeInsets.all(36),
+                    child: CustomPaint(painter: _CornerFramePainter()),
+                  ),
                 ),
               ],
             ),

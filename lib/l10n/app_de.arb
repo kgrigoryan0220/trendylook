@@ -54,6 +54,7 @@
   "rateLimitedMessage": "Zu viele Checks hintereinander. Warte kurz und versuch es noch mal.",
   "fileTooLarge": "Die Datei ist zu groß (max. 10 MB)",
   "retry": "Erneut versuchen",
+  "noConnection": "Keine Verbindung",
 
   "recommendationsTitle": "💡 Empfehlungen",
   "share": "Teilen",

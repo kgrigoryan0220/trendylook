@@ -64,6 +64,7 @@ dependencies:
   connectivity_plus: ^6.1.0
   purchases_ui_flutter: ^10.6.0
   flutter_cache_manager: ^3.4.5
+  qr_flutter: ^4.1.0
 
 dev_dependencies:
   flutter_test:

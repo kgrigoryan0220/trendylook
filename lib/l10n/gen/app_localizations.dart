@@ -384,6 +384,12 @@ abstract class AppLocalizations {
   /// **'Retry'**
   String get retry;
 
+  /// No description provided for @noConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'No connection'**
+  String get noConnection;
+
   /// No description provided for @recommendationsTitle.
   ///
   /// In en, this message translates to:

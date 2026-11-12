@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
+import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../l10n/gen/app_localizations.dart';
@@ -92,7 +94,21 @@ class ShareCard extends StatelessWidget {
                         'trendylook.app',
                         style: TextStyle(fontSize: 9.5, color: AppColors.textSecondary),
                       ),
-                      Container(width: 22, height: 22, color: Colors.white),
+                      // Белая подложка — «тихая зона» QR, без неё код на тёмном
+                      // фото не сканируется.
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: QrImageView(
+                          data: AppConstants.shareCardUrl,
+                          size: 40,
+                          padding: EdgeInsets.zero,
+                          errorCorrectionLevel: QrErrorCorrectLevel.M,
+                        ),
+                      ),
                     ],
                   ),
                 ],

@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../l10n/gen/app_localizations.dart';
 
 /// 4.13 / профиль: bottom sheet подтверждения деструктивного действия.
+/// [cancelLabel] по умолчанию — «Отмена» на языке приложения.
 Future<bool> showConfirmBottomSheet(
   BuildContext context, {
   required String title,
   required String confirmLabel,
   String? message,
-  String cancelLabel = 'Отмена',
+  String? cancelLabel,
 }) async {
   final result = await showModalBottomSheet<bool>(
     context: context,
@@ -52,7 +54,7 @@ Future<bool> showConfirmBottomSheet(
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () => Navigator.of(context).pop(false),
-                      child: Text(cancelLabel),
+                      child: Text(cancelLabel ?? AppLocalizations.of(context).cancel),
                     ),
                   ),
                   const SizedBox(width: 10),

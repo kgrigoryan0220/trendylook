@@ -15,6 +15,10 @@ class PurchasesRepository {
   bool _configured = false;
   bool get isConfigured => _configured;
   String? _uiLocale;
+  // Язык, на котором офферинги последний раз гарантированно загружены с сервера.
+  String? _offeringsLocale;
+  // Идущий configure: пейвол, открытый диплинком на холодном старте, ждёт его.
+  Future<void>? _configuring;
 
   Future<void> init(String appUserId) async {
     final apiKey = Platform.isIOS
@@ -42,12 +46,26 @@ class PurchasesRepository {
     await Purchases.overridePreferredUILocale(languageCode);
   }
 
+  /// Тексты пейвола приходят вместе с офферингами на том языке, с которым их
+  /// загрузили, и RC отдаёт их из кэша. После смены языка он перезагружает
+  /// офферинги не всегда: overridePreferredUILocale делает это не чаще 2 раз
+  /// в минуту, а на старте configure успевает загрузить их на языке
+  /// устройства. Тогда пейвол открывается на старом языке — поэтому перед
+  /// показом загружаем офферинги заново, если язык с прошлой загрузки сменился.
+  Future<void> refreshOfferingsForUiLocale() async {
+    await _configuring;
+    final locale = _uiLocale;
+    if (!_configured || locale == null || locale == _offeringsLocale) return;
+    await Purchases.syncAttributesAndOfferingsIfNeeded();
+    _offeringsLocale = locale;
+  }
+
   /// Вызывается при входе, включая смену аккаунта после logOut — SDK уже
   /// сконфигурирован (init() отработал при первом входе), поэтому здесь
   /// только переключаем RC app_user_id, а не конфигурируем заново.
   Future<void> logIn(String appUserId) async {
     if (!_configured) {
-      await init(appUserId);
+      await (_configuring = init(appUserId));
       return;
     }
     await Purchases.logIn(appUserId);

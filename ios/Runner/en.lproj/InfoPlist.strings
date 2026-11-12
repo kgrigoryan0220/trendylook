@@ -1,0 +1,4 @@
+/* Тексты системных запросов разрешений (Info.plist). */
+"NSCameraUsageDescription" = "Trendy Look uses the camera so you can photograph your outfit and get its AI trend score.";
+"NSPhotoLibraryUsageDescription" = "Trendy Look uses your photo library so you can pick an outfit photo and get its AI trend score.";
+"NSPhotoLibraryAddUsageDescription" = "Trendy Look saves your look's share card to your photo library.";

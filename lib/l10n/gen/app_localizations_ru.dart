@@ -141,7 +141,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get loadingPhrase3 => 'Оцениваем силуэт…';
 
   @override
-  String get loadingPhrase4 => 'Считаем итоговый score…';
+  String get loadingPhrase4 => 'Считаем итоговую оценку…';
 
   @override
   String get analysisErrorGeneric =>
@@ -156,6 +156,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get retry => 'Повторить';
+
+  @override
+  String get noConnection => 'Нет соединения';
 
   @override
   String get recommendationsTitle => '💡 Рекомендации';

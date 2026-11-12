@@ -1,0 +1,4 @@
+/* Тексты системных запросов разрешений (Info.plist). */
+"NSCameraUsageDescription" = "Trendy Look utilise l'appareil photo pour que tu prennes ton look en photo et que l'IA te donne ton % de tendance.";
+"NSPhotoLibraryUsageDescription" = "Trendy Look utilise ta photothèque pour que tu choisisses une photo de ton look et que l'IA te donne ton % de tendance.";
+"NSPhotoLibraryAddUsageDescription" = "Trendy Look enregistre la carte de ton look dans ta photothèque.";
